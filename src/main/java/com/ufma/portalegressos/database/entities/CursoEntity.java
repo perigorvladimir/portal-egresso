@@ -13,7 +13,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="curso")
-public class Curso {
+public class CursoEntity {
     @Id
     private Integer idCurso;
     @NotNull
@@ -21,5 +21,5 @@ public class Curso {
     @NotNull
     private String nivel;
     @OneToMany(mappedBy = "curso")
-    private Set<CursoEgresso> cursoEgressos;
+    private Set<CursoEgressoEntity> cursoEgressos;
 }

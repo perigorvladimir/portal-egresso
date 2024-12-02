@@ -10,7 +10,7 @@ import jakarta.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="cargo")
-public class Cargo {
+public class CargoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idCargo;
@@ -23,5 +23,5 @@ public class Cargo {
     private Integer anoFim;
     @ManyToOne
     @JoinColumn(name="id_egresso", nullable=false)
-    private Egresso egresso;
+    private EgressoEntity egresso;
 }

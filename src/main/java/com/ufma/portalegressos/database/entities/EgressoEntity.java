@@ -13,8 +13,9 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Table(name="egresso")
-public class Egresso {
+public class EgressoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idEgresso;
@@ -28,7 +29,7 @@ public class Egresso {
     private String Instagram;
     private String curriculo;
     @OneToMany(mappedBy="egresso")
-    private List<Cargo> cargos;
+    private List<CargoEntity> cargos;
     @OneToMany(mappedBy="egresso")
-    private Set<CursoEgresso> cursoEgressos;
+    private Set<CursoEgressoEntity> cursoEgressos;
 }

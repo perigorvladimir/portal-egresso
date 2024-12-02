@@ -10,10 +10,10 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="depoimento")
-public class Depoimento {
+public class DepoimentoEntity {
     @Id
     private Integer idDepoimento;
     @ManyToOne
     @JoinColumn(name="id_egresso", nullable=false)
-    private Egresso egresso;
+    private EgressoEntity egresso;
 }
