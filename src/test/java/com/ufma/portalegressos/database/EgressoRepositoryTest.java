@@ -3,21 +3,26 @@ package com.ufma.portalegressos.database;
 import com.ufma.portalegressos.database.entities.EgressoEntity;
 import com.ufma.portalegressos.database.repositories.EgressoJpaRepository;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.platform.commons.logging.Logger;
+import org.junit.platform.commons.logging.LoggerFactory;
 
+
+import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import jakarta.transaction.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ActiveProfiles("test")
 public class EgressoRepositoryTest {
+    private static final Logger logger = LoggerFactory.getLogger(EgressoRepositoryTest.class);
     @Autowired
     private EgressoJpaRepository egressoJpaRepository;
     @Test
@@ -62,4 +67,62 @@ public class EgressoRepositoryTest {
         assertEquals(1, egressoEncontrado.getIdEgresso());
         assertEquals("Igor Vladimir Cunha de Alencar", egressoEncontrado.getNome());
     }
+    @Test
+    public void naoDeveSalvarEgressoSemNomeOuEmail(){
+        // CENARIO
+        EgressoEntity egressoEntity = EgressoEntity.builder()
+                .email("igor.vladimir@discente.ufma.br")
+                .curriculo("curriculo teste curriculo teste")
+                .descricao("1223")
+                .build();
+        // ACAO e VALIDACAO
+        assertThrows(ConstraintViolationException.class, () -> egressoJpaRepository.save(egressoEntity));
+        egressoEntity.setNome("Igor Vladimir");
+        egressoEntity.setEmail(null);
+        assertThrows(ConstraintViolationException.class, () -> egressoJpaRepository.save(egressoEntity));
+    }
+
+    @Test
+    public void deveVerificarBuscarTodosEgressos(){
+        // CENARIO
+        EgressoEntity egresso1 = EgressoEntity.builder()
+                .nome("Igor Vladimir Cunha de Alencar")
+                .email("igor.vladimir@discente.ufma.br")
+                .curriculo("curriculo teste curriculo teste curriculo teste curriculo teste curriculo teste")
+                .descricao("graduando CP")
+                .linkedin("https://www.linkedin.com/in/igorvalencar/")
+                .Instagram("instagram_teste").build();
+        EgressoEntity egresso2 = EgressoEntity.builder()
+                .nome("Fulano da Silva")
+                .email("fulano.silva@discente.ufma.br")
+                .curriculo("curriculo de Fulano da Silva")
+                .descricao("descrição do FUlano da Silva")
+                .linkedin("https://www.linkedin.com/in/fulanoDaSilva/")
+                .Instagram("fulano_silva").build();
+        EgressoEntity egresso3 = EgressoEntity.builder()
+                .nome("Fulano da Silva")
+                .email("fulano.silva@discente.ufma.br")
+                .curriculo("curriculo de Fulano da Silva")
+                .descricao("descrição do FUlano da Silva")
+                .linkedin("https://www.linkedin.com/in/fulanoDaSilva/")
+                .Instagram("fulano_silva").build();
+        egressoJpaRepository.save(egresso1);
+        egressoJpaRepository.save(egresso2);
+        egressoJpaRepository.save(egresso3);
+
+        // ACAO
+        List<EgressoEntity> resultado = egressoJpaRepository.findAll();
+        logger.info(() -> "Numero lista:" + resultado.size() + " ------------------------------------------------------");
+
+        for(int i = 0; i<resultado.size(); i++){
+            final int b = i;
+            logger.info(() -> "a--"+resultado.get(b).getIdEgresso();+"---"+resultado.get(b).getNome());
+        }
+
+        // VALIDACAO
+        assertFalse(resultado.isEmpty());
+        assertEquals(3, resultado.size());
+
+    }
+
 }
