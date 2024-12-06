@@ -22,4 +22,7 @@ public class CursoEntity {
     private String nivel;
     @OneToMany(mappedBy = "curso")
     private Set<CursoEgressoEntity> cursoEgressos;
+    @ManyToOne
+    @JoinColumn(name="id_coordenador")
+    private CoordenadorEntity coordenador;
 }
