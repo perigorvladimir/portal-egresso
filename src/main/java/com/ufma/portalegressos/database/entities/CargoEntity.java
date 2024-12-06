@@ -23,5 +23,6 @@ public class CargoEntity {
     private Integer anoFim;
     @ManyToOne
     @JoinColumn(name="id_egresso", nullable=false)
+    @NotNull
     private EgressoEntity egresso;
 }

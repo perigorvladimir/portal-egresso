@@ -1,6 +1,7 @@
 package com.ufma.portalegressos.database.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,8 +19,10 @@ public class CursoEgressoEntity {
     private Integer idCursoEgresso;
     @ManyToOne
     @JoinColumn(name="id_egresso", nullable=false)
+    @NotNull
     private EgressoEntity egresso;
     @ManyToOne
     @JoinColumn(name="id_Curso", nullable=false)
+    @NotNull
     private CursoEntity curso;
 }
