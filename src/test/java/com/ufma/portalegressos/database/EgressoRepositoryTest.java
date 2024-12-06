@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +27,7 @@ public class EgressoRepositoryTest {
     @Autowired
     private EgressoJpaRepository egressoJpaRepository;
     @Test
+    @Transactional
     public void deveVerificarSalvarEgresso(){
         // CENARIO
         EgressoEntity egresso = EgressoEntity.builder()
@@ -49,6 +51,7 @@ public class EgressoRepositoryTest {
         assertEquals(egresso.getInstagram(), egressoSalvo.getInstagram());
     }
     @Test
+    @Transactional
     public void deveVerificarBuscarEgressoPorId(){
         // CENARIO
         Integer idEgresso = egressoJpaRepository.save(EgressoEntity.builder()
@@ -83,6 +86,7 @@ public class EgressoRepositoryTest {
     }
 
     @Test
+    @Transactional
     public void deveVerificarBuscarTodosEgressos(){
         // CENARIO
         EgressoEntity egresso1 = EgressoEntity.builder()
@@ -112,13 +116,6 @@ public class EgressoRepositoryTest {
 
         // ACAO
         List<EgressoEntity> resultado = egressoJpaRepository.findAll();
-        logger.info(() -> "Numero lista:" + resultado.size() + " ------------------------------------------------------");
-
-        for(int i = 0; i<resultado.size(); i++){
-            final int b = i;
-            logger.info(() -> "a--"+resultado.get(b).getIdEgresso();+"---"+resultado.get(b).getNome());
-        }
-
         // VALIDACAO
         assertFalse(resultado.isEmpty());
         assertEquals(3, resultado.size());
