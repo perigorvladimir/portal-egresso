@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 @Entity
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="cargo")

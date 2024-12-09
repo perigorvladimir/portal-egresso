@@ -15,6 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -95,5 +96,35 @@ public class DepoimentoRepositoryTest {
                 .build();
         // ACAO e VALIDACAO
         assertThrows(ConstraintViolationException.class, () -> depoimentoJpaRepository.save(depoimentoEntitySemEgresso));
+    }
+
+    @Test
+    @Transactional
+    public void deveVerificarBuscarTodosDepoimentos(){
+        // CENARIO
+        DepoimentoEntity depoimento1 = DepoimentoEntity.builder()
+                .texto("texto depoimento 1")
+                .egresso(egressoBase)
+                .data(LocalDate.now())
+                .build();
+        DepoimentoEntity depoimento2 = DepoimentoEntity.builder()
+                .texto("texto depoimento 2")
+                .egresso(egressoBase)
+                .data(LocalDate.now())
+                .build();
+        DepoimentoEntity depoimento3 = DepoimentoEntity.builder()
+                .texto("texto depoimento 3")
+                .egresso(egressoBase)
+                .data(LocalDate.now())
+                .build();
+        depoimentoJpaRepository.save(depoimento1);
+        depoimentoJpaRepository.save(depoimento2);
+        depoimentoJpaRepository.save(depoimento3);
+
+        // ACAO
+        List<DepoimentoEntity> resultado = depoimentoJpaRepository.findAll();
+        // VALIDACAO
+        assertFalse(resultado.isEmpty());
+        assertEquals(3, resultado.size());
     }
 }

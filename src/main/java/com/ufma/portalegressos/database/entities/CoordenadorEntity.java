@@ -22,7 +22,7 @@ public class CoordenadorEntity {
     @NotNull
     private String senha;
     @NotNull
-    @Column(columnDefinition = "default 'egresso'", nullable = false)
+    @Column(columnDefinition = "varchar(255) default 'egresso'", nullable = false)
     private String tipo = "egresso";
     @OneToMany(mappedBy = "coordenador")
     private Set<CursoEntity> cursos;
