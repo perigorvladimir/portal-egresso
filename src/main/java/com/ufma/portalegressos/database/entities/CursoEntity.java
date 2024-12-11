@@ -10,11 +10,13 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="curso")
 public class CursoEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idCurso;
     @NotNull
     private String nome;
