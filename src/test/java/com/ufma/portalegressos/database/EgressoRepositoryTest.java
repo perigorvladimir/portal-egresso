@@ -1,7 +1,7 @@
 package com.ufma.portalegressos.database;
 
-import com.ufma.portalegressos.database.entities.EgressoEntity;
-import com.ufma.portalegressos.database.repositories.EgressoJpaRepository;
+import com.ufma.portalegressos.infrastructure.entities.EgressoEntity;
+import com.ufma.portalegressos.infrastructure.repositories.EgressoJpaRepository;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.platform.commons.logging.Logger;
 import org.junit.platform.commons.logging.LoggerFactory;

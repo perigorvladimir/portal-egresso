@@ -1,4 +1,4 @@
-package com.ufma.portalegressos.database.entities;
+package com.ufma.portalegressos.infrastructure.entities;
 
 import lombok.*;
 import jakarta.persistence.*;

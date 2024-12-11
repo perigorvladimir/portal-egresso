@@ -1,10 +1,9 @@
 package com.ufma.portalegressos.database;
 
-import com.ufma.portalegressos.database.entities.CoordenadorEntity;
-import com.ufma.portalegressos.database.repositories.CoordenadorJpaRepository;
+import com.ufma.portalegressos.infrastructure.entities.CoordenadorEntity;
+import com.ufma.portalegressos.infrastructure.repositories.CoordenadorJpaRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.validation.ConstraintViolationException;
-import org.apache.catalina.Store;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.ufma.portalegressos.database.entities;
+package com.ufma.portalegressos.infrastructure.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

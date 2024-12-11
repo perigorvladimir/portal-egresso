@@ -1,6 +1,6 @@
-package com.ufma.portalegressos.database.repositories;
+package com.ufma.portalegressos.infrastructure.repositories;
 
-import com.ufma.portalegressos.database.entities.CargoEntity;
+import com.ufma.portalegressos.infrastructure.entities.CargoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
