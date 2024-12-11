@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -93,5 +94,35 @@ public class CursoRepositoryTest {
         curso.setNome(null);
         curso.setNivel("Graduação");
         assertThrows(ConstraintViolationException.class, () -> cursoJpaRepository.save(curso));
+    }
+
+    @Test
+    @Transactional
+    public void deveVerificarBuscarTodosCursos(){
+        CursoEntity curso1 = cursoJpaRepository.save(CursoEntity.builder()
+                .nome("curso nome 1")
+                .nivel("Graduação")
+                .coordenador(coordenadorBase)
+                .build());
+        CursoEntity curso2 = cursoJpaRepository.save(CursoEntity.builder()
+                .nome("curso nome 2")
+                .nivel("Graduação")
+                .build());
+        CursoEntity curso3 = cursoJpaRepository.save(CursoEntity.builder()
+                .nome("Design de Móveis")
+                .nivel("Técnico")
+                .coordenador(coordenadorBase)
+                .build());
+        cursoJpaRepository.save(curso1);
+        cursoJpaRepository.save(curso2);
+        cursoJpaRepository.save(curso3);
+
+        List<CursoEntity> cursos = cursoJpaRepository.findAll();
+
+        assertFalse(cursos.isEmpty());
+        assertEquals(3, cursos.size());
+        assertTrue(cursos.contains(curso1));
+        assertTrue(cursos.contains(curso2));
+        assertTrue(cursos.contains(curso3));
     }
 }
