@@ -67,7 +67,7 @@ public class EgressoRepositoryTest {
         // VERIFICACAO
         assertTrue(resultado.isPresent());
         EgressoEntity egressoEncontrado = resultado.get();
-        assertEquals(1, egressoEncontrado.getIdEgresso());
+        assertEquals(idEgresso, egressoEncontrado.getIdEgresso());
         assertEquals("Igor Vladimir Cunha de Alencar", egressoEncontrado.getNome());
     }
     @Test

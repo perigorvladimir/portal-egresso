@@ -1,18 +1,15 @@
 package com.ufma.portalegressos.database;
 
 import com.ufma.portalegressos.database.entities.CargoEntity;
-import com.ufma.portalegressos.database.entities.DepoimentoEntity;
 import com.ufma.portalegressos.database.entities.EgressoEntity;
 import com.ufma.portalegressos.database.repositories.CargoJpaRepository;
 import com.ufma.portalegressos.database.repositories.EgressoJpaRepository;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -20,7 +17,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest
 @Profile("test")
 public class CargoRepositoryTest {
@@ -110,7 +106,7 @@ public class CargoRepositoryTest {
         cargoEntity.setDescricao(null);
         assertThrows(ConstraintViolationException.class, () -> cargoJpaRepository.save(cargoEntity));
         cargoEntity.setDescricao("descricao teste");
-        cargoEntity.setAnoFim(null);
+        cargoEntity.setAnoInicio(null);
         assertThrows(ConstraintViolationException.class, () -> cargoJpaRepository.save(cargoEntity));
     }
 
@@ -145,5 +141,6 @@ public class CargoRepositoryTest {
 
         assertFalse(resposta.isEmpty());
         assertEquals(3, resposta.size());
+        assertTrue(resposta.contains(cargo1));
     }
 }

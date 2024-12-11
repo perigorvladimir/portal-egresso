@@ -3,10 +3,12 @@ package com.ufma.portalegressos.database.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
 
 import java.util.Set;
 
 @Entity
+@DynamicInsert
 @Builder
 @Getter
 @Setter
@@ -20,10 +22,10 @@ public class CoordenadorEntity {
     @NotNull
     private String login;
     @NotNull
+    @Column(nullable = false)
     private String senha;
-    @NotNull
     @Column(columnDefinition = "varchar(255) default 'egresso'", nullable = false)
-    private String tipo = "egresso";
+    private String tipo;
     @OneToMany(mappedBy = "coordenador")
     private Set<CursoEntity> cursos;
 }
