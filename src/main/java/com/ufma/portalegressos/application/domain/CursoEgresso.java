@@ -1,4 +1,4 @@
-package com.ufma.portalegressos.infrastructure.entities;
+package com.ufma.portalegressos.application.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -13,16 +13,16 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name="curso_egresso")
-public class CursoEgressoEntity {
+public class CursoEgresso {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idCursoEgresso;
     @ManyToOne
     @JoinColumn(name="id_egresso", nullable=false)
     @NotNull
-    private EgressoEntity egresso;
+    private Egresso egresso;
     @ManyToOne
     @JoinColumn(name="id_Curso", nullable=false)
     @NotNull
-    private CursoEntity curso;
+    private Curso curso;
 }

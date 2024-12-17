@@ -1,6 +1,6 @@
 package com.ufma.portalegressos.database;
 
-import com.ufma.portalegressos.infrastructure.entities.CoordenadorEntity;
+import com.ufma.portalegressos.application.domain.Coordenador;
 import com.ufma.portalegressos.infrastructure.repositories.CoordenadorJpaRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.validation.ConstraintViolationException;
@@ -29,45 +29,45 @@ public class CoordenadorRepositoryTest {
     @Test
     @Transactional
     public void deveVerificarSalvarCoordenador(){
-        CoordenadorEntity coordenadorEntity = CoordenadorEntity.builder()
+        Coordenador coordenador = Coordenador.builder()
                 .tipo("coordenador")
                 .login("login")
                 .senha("senha")
                 .build();
-        CoordenadorEntity coordenadorSalvo = coordenadorJpaRepository.save(coordenadorEntity);
+        Coordenador coordenadorSalvo = coordenadorJpaRepository.save(coordenador);
 
         assertNotNull(coordenadorSalvo);
-        assertEquals(coordenadorEntity.getTipo(), coordenadorSalvo.getTipo());
-        assertEquals(coordenadorEntity.getLogin(), coordenadorSalvo.getLogin());
-        assertEquals(coordenadorEntity.getCursos(), coordenadorSalvo.getCursos());
+        assertEquals(coordenador.getTipo(), coordenadorSalvo.getTipo());
+        assertEquals(coordenador.getLogin(), coordenadorSalvo.getLogin());
+        assertEquals(coordenador.getCursos(), coordenadorSalvo.getCursos());
         // nao verifica login pois vai ser salvo criptografado
     }
     @Test
     @Transactional
     public void deveVerificarValorDefaultDoTipo() {
-        CoordenadorEntity coordenadorEntity = CoordenadorEntity.builder()
+        Coordenador coordenador = Coordenador.builder()
                 .login("login")
                 .senha("senha")
                 .build();
 
         // Salva a entidade
-        CoordenadorEntity coordenadorSalvo = coordenadorJpaRepository.saveAndFlush(coordenadorEntity);
+        Coordenador coordenadorSalvo = coordenadorJpaRepository.saveAndFlush(coordenador);
         // precisa dar clear para limpar o cache e a entidade vir corretamente com valor default
         entityManager.clear();
         // busca para atualizar o estado da entidade
-        CoordenadorEntity coordenadorAtualizado = coordenadorJpaRepository.findById(coordenadorSalvo.getIdCoordenador())
+        Coordenador coordenadorAtualizado = coordenadorJpaRepository.findById(coordenadorSalvo.getIdCoordenador())
                 .orElseThrow(() -> new RuntimeException("Coordenador não encontrado"));
 
         assertEquals("egresso", coordenadorAtualizado.getTipo());
 
-        coordenadorEntity = CoordenadorEntity.builder()
+        coordenador = Coordenador.builder()
                 .login("login")
                 .senha("senha")
                 .tipo(null)
                 .build();
-        CoordenadorEntity coordenadorSalvo2 = coordenadorJpaRepository.saveAndFlush(coordenadorEntity);
+        Coordenador coordenadorSalvo2 = coordenadorJpaRepository.saveAndFlush(coordenador);
         entityManager.clear();
-        CoordenadorEntity coordenadorAtualizado2 = coordenadorJpaRepository.findById(coordenadorSalvo2.getIdCoordenador())
+        Coordenador coordenadorAtualizado2 = coordenadorJpaRepository.findById(coordenadorSalvo2.getIdCoordenador())
                 .orElseThrow(() -> new RuntimeException("Coordenador não encontrado"));
         assertEquals("egresso", coordenadorAtualizado2.getTipo());
     }
@@ -75,24 +75,24 @@ public class CoordenadorRepositoryTest {
     @Test
     @Transactional
     public void deveVerificarBuscarCoordenadorPorId(){
-        CoordenadorEntity coordenadorCriado1 = coordenadorJpaRepository.save(CoordenadorEntity.builder()
+        Coordenador coordenadorCriado1 = coordenadorJpaRepository.save(Coordenador.builder()
                 .login("login 1")
                 .senha("123")
                 .build());
-        CoordenadorEntity coordenadorCriado2 = coordenadorJpaRepository.save(CoordenadorEntity.builder()
+        Coordenador coordenadorCriado2 = coordenadorJpaRepository.save(Coordenador.builder()
                 .tipo("admin")
                 .login("login 2")
                 .senha("12345")
                 .build());
         entityManager.clear();
 
-        Optional<CoordenadorEntity> resultado1 = coordenadorJpaRepository.findById(coordenadorCriado1.getIdCoordenador());
-        Optional<CoordenadorEntity> resultado2 = coordenadorJpaRepository.findById(coordenadorCriado2.getIdCoordenador());
+        Optional<Coordenador> resultado1 = coordenadorJpaRepository.findById(coordenadorCriado1.getIdCoordenador());
+        Optional<Coordenador> resultado2 = coordenadorJpaRepository.findById(coordenadorCriado2.getIdCoordenador());
 
 
         // resultado 1
         assertTrue(resultado1.isPresent());
-        CoordenadorEntity coordenadorEncontrado1 = resultado1.get();
+        Coordenador coordenadorEncontrado1 = resultado1.get();
         System.out.println(coordenadorEncontrado1.getTipo());
         assertEquals(coordenadorCriado1.getIdCoordenador(), coordenadorEncontrado1.getIdCoordenador());
         assertEquals("egresso", coordenadorEncontrado1.getTipo());
@@ -100,7 +100,7 @@ public class CoordenadorRepositoryTest {
 
         // resultado 2
         assertTrue(resultado2.isPresent());
-        CoordenadorEntity coordenadorEncontrado2 = resultado2.get();
+        Coordenador coordenadorEncontrado2 = resultado2.get();
         assertEquals(coordenadorCriado2.getIdCoordenador(), coordenadorEncontrado2.getIdCoordenador());
         assertEquals(coordenadorCriado2.getTipo(), coordenadorEncontrado2.getTipo());
         assertEquals(coordenadorCriado2.getLogin(), coordenadorEncontrado2.getLogin());
@@ -108,30 +108,30 @@ public class CoordenadorRepositoryTest {
 
     @Test
     public void naoDeveSalvarSemLoginOuSenha(){
-        CoordenadorEntity coordenadorEntity = CoordenadorEntity.builder()
+        Coordenador coordenador = Coordenador.builder()
                 .login("loginteste")
                 .tipo(null)
                 .build();
 
-        assertThrows(ConstraintViolationException.class, () -> coordenadorJpaRepository.save(coordenadorEntity));
-        coordenadorEntity.setSenha("senhaTeste");
-        coordenadorEntity.setLogin(null);
-        assertThrows(ConstraintViolationException.class, () -> coordenadorJpaRepository.save(coordenadorEntity));
+        assertThrows(ConstraintViolationException.class, () -> coordenadorJpaRepository.save(coordenador));
+        coordenador.setSenha("senhaTeste");
+        coordenador.setLogin(null);
+        assertThrows(ConstraintViolationException.class, () -> coordenadorJpaRepository.save(coordenador));
     }
 
     @Test
     @Transactional
     public void deveVerificarBuscarTodosCoordenadores(){
-        CoordenadorEntity coordenador1 = CoordenadorEntity.builder()
+        Coordenador coordenador1 = Coordenador.builder()
                 .login("login")
                 .senha("123")
                 .build();
-        CoordenadorEntity coordenador2 = CoordenadorEntity.builder()
+        Coordenador coordenador2 = Coordenador.builder()
                         .login("login2")
                         .senha("1234")
                         .tipo("admin")
                         .build();
-        CoordenadorEntity coordenador3 = CoordenadorEntity.builder()
+        Coordenador coordenador3 = Coordenador.builder()
                 .login("login3")
                 .senha("12345")
                 .tipo("super-admin")
@@ -140,7 +140,7 @@ public class CoordenadorRepositoryTest {
         coordenadorJpaRepository.save(coordenador2);
         coordenadorJpaRepository.save(coordenador3);
 
-        List<CoordenadorEntity> resposta = coordenadorJpaRepository.findAll();
+        List<Coordenador> resposta = coordenadorJpaRepository.findAll();
 
         assertFalse(resposta.isEmpty());
         assertEquals(3, resposta.size());

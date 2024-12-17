@@ -1,4 +1,4 @@
-package com.ufma.portalegressos.infrastructure.entities;
+package com.ufma.portalegressos.application.domain;
 
 
 import jakarta.persistence.*;
@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="depoimento")
-public class DepoimentoEntity {
+public class Depoimento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idDepoimento;
@@ -22,5 +22,5 @@ public class DepoimentoEntity {
     @ManyToOne
     @JoinColumn(name="id_egresso", nullable=false)
     @NotNull
-    private EgressoEntity egresso;
+    private Egresso egresso;
 }

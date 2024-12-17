@@ -1,6 +1,6 @@
 package com.ufma.portalegressos.database;
 
-import com.ufma.portalegressos.infrastructure.entities.EgressoEntity;
+import com.ufma.portalegressos.application.domain.Egresso;
 import com.ufma.portalegressos.infrastructure.repositories.EgressoJpaRepository;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.platform.commons.logging.Logger;
@@ -30,7 +30,7 @@ public class EgressoRepositoryTest {
     @Transactional
     public void deveVerificarSalvarEgresso(){
         // CENARIO
-        EgressoEntity egresso = EgressoEntity.builder()
+        Egresso egresso = Egresso.builder()
                 .nome("Igor Vladimir Cunha de Alencar")
                 .email("igor.vladimir@discente.ufma.br")
                 .curriculo("curriculo teste curriculo teste curriculo teste curriculo teste curriculo teste")
@@ -39,7 +39,7 @@ public class EgressoRepositoryTest {
                 .Instagram("instagram_teste").build();
 
         // AÇÃO
-        EgressoEntity egressoSalvo = egressoJpaRepository.save(egresso);
+        Egresso egressoSalvo = egressoJpaRepository.save(egresso);
 
         // VERIFICAÇÃO
         assertNotNull(egressoSalvo);
@@ -54,7 +54,7 @@ public class EgressoRepositoryTest {
     @Transactional
     public void deveVerificarBuscarEgressoPorId(){
         // CENARIO
-        Integer idEgresso = egressoJpaRepository.save(EgressoEntity.builder()
+        Integer idEgresso = egressoJpaRepository.save(Egresso.builder()
                                                 .nome("Igor Vladimir Cunha de Alencar")
                                                 .email("igor.vladimir@discente.ufma.br")
                                                 .curriculo("curriculo teste curriculo teste curriculo teste curriculo teste curriculo teste")
@@ -62,48 +62,48 @@ public class EgressoRepositoryTest {
                                                 .linkedin("https://www.linkedin.com/in/igorvalencar/")
                                                 .Instagram("instagram_teste").build()).getIdEgresso();
         // AÇÃO
-        Optional<EgressoEntity> resultado = egressoJpaRepository.findById(idEgresso);
+        Optional<Egresso> resultado = egressoJpaRepository.findById(idEgresso);
 
         // VERIFICACAO
         assertTrue(resultado.isPresent());
-        EgressoEntity egressoEncontrado = resultado.get();
+        Egresso egressoEncontrado = resultado.get();
         assertEquals(idEgresso, egressoEncontrado.getIdEgresso());
         assertEquals("Igor Vladimir Cunha de Alencar", egressoEncontrado.getNome());
     }
     @Test
     public void naoDeveSalvarEgressoSemNomeOuEmail(){
         // CENARIO
-        EgressoEntity egressoEntity = EgressoEntity.builder()
+        Egresso egresso = Egresso.builder()
                 .email("igor.vladimir@discente.ufma.br")
                 .curriculo("curriculo teste curriculo teste")
                 .descricao("1223")
                 .build();
         // ACAO e VALIDACAO
-        assertThrows(ConstraintViolationException.class, () -> egressoJpaRepository.save(egressoEntity));
-        egressoEntity.setNome("Igor Vladimir");
-        egressoEntity.setEmail(null);
-        assertThrows(ConstraintViolationException.class, () -> egressoJpaRepository.save(egressoEntity));
+        assertThrows(ConstraintViolationException.class, () -> egressoJpaRepository.save(egresso));
+        egresso.setNome("Igor Vladimir");
+        egresso.setEmail(null);
+        assertThrows(ConstraintViolationException.class, () -> egressoJpaRepository.save(egresso));
     }
 
     @Test
     @Transactional
     public void deveVerificarBuscarTodosEgressos(){
         // CENARIO
-        EgressoEntity egresso1 = EgressoEntity.builder()
+        Egresso egresso1 = Egresso.builder()
                 .nome("Igor Vladimir Cunha de Alencar")
                 .email("igor.vladimir@discente.ufma.br")
                 .curriculo("curriculo teste curriculo teste curriculo teste curriculo teste curriculo teste")
                 .descricao("graduando CP")
                 .linkedin("https://www.linkedin.com/in/igorvalencar/")
                 .Instagram("instagram_teste").build();
-        EgressoEntity egresso2 = EgressoEntity.builder()
+        Egresso egresso2 = Egresso.builder()
                 .nome("Fulano da Silva")
                 .email("fulano.silva@discente.ufma.br")
                 .curriculo("curriculo de Fulano da Silva")
                 .descricao("descrição do FUlano da Silva")
                 .linkedin("https://www.linkedin.com/in/fulanoDaSilva/")
                 .Instagram("fulano_silva").build();
-        EgressoEntity egresso3 = EgressoEntity.builder()
+        Egresso egresso3 = Egresso.builder()
                 .nome("Fulano da Silva")
                 .email("fulano.silva@discente.ufma.br")
                 .curriculo("curriculo de Fulano da Silva")
@@ -115,7 +115,7 @@ public class EgressoRepositoryTest {
         egressoJpaRepository.save(egresso3);
 
         // ACAO
-        List<EgressoEntity> resultado = egressoJpaRepository.findAll();
+        List<Egresso> resultado = egressoJpaRepository.findAll();
         // VALIDACAO
         assertFalse(resultado.isEmpty());
         assertEquals(3, resultado.size());

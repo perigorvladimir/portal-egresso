@@ -1,7 +1,7 @@
 package com.ufma.portalegressos.database;
 
-import com.ufma.portalegressos.infrastructure.entities.CoordenadorEntity;
-import com.ufma.portalegressos.infrastructure.entities.CursoEntity;
+import com.ufma.portalegressos.application.domain.Coordenador;
+import com.ufma.portalegressos.application.domain.Curso;
 import com.ufma.portalegressos.infrastructure.repositories.CoordenadorJpaRepository;
 import com.ufma.portalegressos.infrastructure.repositories.CursoJpaRepository;
 import jakarta.validation.ConstraintViolationException;
@@ -22,10 +22,10 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CursoRepositoryTest {
     @Autowired
     private CursoJpaRepository cursoJpaRepository;
-    private static CoordenadorEntity coordenadorBase;
+    private static Coordenador coordenadorBase;
     @BeforeAll
     public static void setUp(@Autowired CoordenadorJpaRepository coordenadorJpaRepository) {
-        CoordenadorEntity coordenador = CoordenadorEntity.builder()
+        Coordenador coordenador = Coordenador.builder()
                 .login("login")
                 .senha("senha")
                 .tipo("coordenador")
@@ -35,13 +35,13 @@ public class CursoRepositoryTest {
     @Test
     @Transactional
     public void deveVerificarFluxoPrincipalSalvar() {
-        CursoEntity curso = CursoEntity.builder()
+        Curso curso = Curso.builder()
                 .nome("Ciência da Computação")
                 .nivel("Graduação")
                 .coordenador(coordenadorBase)
                 .build();
 
-        CursoEntity cursoSalvo = cursoJpaRepository.save(curso);
+        Curso cursoSalvo = cursoJpaRepository.save(curso);
 
         assertNotNull(cursoSalvo.getIdCurso());
         assertEquals(curso.getNome(), cursoSalvo.getNome());
@@ -52,23 +52,23 @@ public class CursoRepositoryTest {
     @Test
     @Transactional
     public void deveVerificarBuscarCursoPorId() {
-        CursoEntity curso1 = cursoJpaRepository.save(CursoEntity.builder()
+        Curso curso1 = cursoJpaRepository.save(Curso.builder()
                 .nome("Ciência da Computação")
                 .nivel("Graduação")
                 .coordenador(null)
                 .build());
-        CursoEntity curso2 = cursoJpaRepository.save(CursoEntity.builder()
+        Curso curso2 = cursoJpaRepository.save(Curso.builder()
                 .nome("Engenharia de Software")
                 .nivel("Graduação")
                 .coordenador(coordenadorBase)
                 .build());
 
-        Optional<CursoEntity> resposta1 = cursoJpaRepository.findById(curso1.getIdCurso());
-        Optional<CursoEntity> resposta2 = cursoJpaRepository.findById(curso2.getIdCurso());
+        Optional<Curso> resposta1 = cursoJpaRepository.findById(curso1.getIdCurso());
+        Optional<Curso> resposta2 = cursoJpaRepository.findById(curso2.getIdCurso());
 
         // resultado1
         assertTrue(resposta1.isPresent());
-        CursoEntity cursoEncontrado1 = resposta1.get();
+        Curso cursoEncontrado1 = resposta1.get();
         assertEquals(curso1.getIdCurso(), cursoEncontrado1.getIdCurso());
         assertEquals(curso1.getNome(), cursoEncontrado1.getNome());
         assertEquals(curso1.getNivel(), cursoEncontrado1.getNivel());
@@ -76,7 +76,7 @@ public class CursoRepositoryTest {
 
         // resultado2
         assertTrue(resposta2.isPresent());
-        CursoEntity cursoEncontrado2 = resposta2.get();
+        Curso cursoEncontrado2 = resposta2.get();
         assertEquals(curso2.getIdCurso(), cursoEncontrado2.getIdCurso());
         assertEquals(curso2.getNome(), cursoEncontrado2.getNome());
         assertEquals(curso2.getNivel(), cursoEncontrado2.getNivel());
@@ -85,7 +85,7 @@ public class CursoRepositoryTest {
 
     @Test
     public void naoDeveSalvarCursoSemNomeOuNivel() {
-        CursoEntity curso = CursoEntity.builder()
+        Curso curso = Curso.builder()
                 .nome("Ciência da Computação")
                 .coordenador(coordenadorBase)
                 .build();
@@ -98,16 +98,16 @@ public class CursoRepositoryTest {
     @Test
     @Transactional
     public void deveVerificarBuscarTodosCursos(){
-        CursoEntity curso1 = cursoJpaRepository.save(CursoEntity.builder()
+        Curso curso1 = cursoJpaRepository.save(Curso.builder()
                 .nome("curso nome 1")
                 .nivel("Graduação")
                 .coordenador(coordenadorBase)
                 .build());
-        CursoEntity curso2 = cursoJpaRepository.save(CursoEntity.builder()
+        Curso curso2 = cursoJpaRepository.save(Curso.builder()
                 .nome("curso nome 2")
                 .nivel("Graduação")
                 .build());
-        CursoEntity curso3 = cursoJpaRepository.save(CursoEntity.builder()
+        Curso curso3 = cursoJpaRepository.save(Curso.builder()
                 .nome("Design de Móveis")
                 .nivel("Técnico")
                 .coordenador(coordenadorBase)
@@ -116,7 +116,7 @@ public class CursoRepositoryTest {
         cursoJpaRepository.save(curso2);
         cursoJpaRepository.save(curso3);
 
-        List<CursoEntity> cursos = cursoJpaRepository.findAll();
+        List<Curso> cursos = cursoJpaRepository.findAll();
 
         assertFalse(cursos.isEmpty());
         assertEquals(3, cursos.size());

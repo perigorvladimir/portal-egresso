@@ -1,4 +1,4 @@
-package com.ufma.portalegressos.infrastructure.entities;
+package com.ufma.portalegressos.application.domain;
 
 
 import jakarta.persistence.*;
@@ -15,7 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 @Table(name="egresso")
-public class EgressoEntity {
+public class Egresso {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idEgresso;
@@ -29,7 +29,7 @@ public class EgressoEntity {
     private String Instagram;
     private String curriculo;
     @OneToMany(mappedBy="egresso")
-    private List<CargoEntity> cargos;
+    private List<Cargo> cargos;
     @OneToMany(mappedBy="egresso")
-    private Set<CursoEgressoEntity> cursoEgressos;
+    private Set<CursoEgresso> cursoEgressos;
 }

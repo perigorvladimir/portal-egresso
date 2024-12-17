@@ -1,9 +1,9 @@
 package com.ufma.portalegressos.infrastructure.repositories;
 
-import com.ufma.portalegressos.infrastructure.entities.DepoimentoEntity;
+import com.ufma.portalegressos.application.domain.Depoimento;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DepoimentoJpaRepository extends JpaRepository<DepoimentoEntity, Integer> {
+public interface DepoimentoJpaRepository extends JpaRepository<Depoimento, Integer> {
 }

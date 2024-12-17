@@ -1,4 +1,4 @@
-package com.ufma.portalegressos.infrastructure.entities;
+package com.ufma.portalegressos.application.domain;
 
 
 import jakarta.persistence.*;
@@ -14,7 +14,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="curso")
-public class CursoEntity {
+public class Curso {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idCurso;
@@ -23,8 +23,8 @@ public class CursoEntity {
     @NotNull
     private String nivel;
     @OneToMany(mappedBy = "curso")
-    private Set<CursoEgressoEntity> cursoEgressos;
+    private Set<CursoEgresso> cursoEgressos;
     @ManyToOne
     @JoinColumn(name="id_coordenador")
-    private CoordenadorEntity coordenador;
+    private Coordenador coordenador;
 }

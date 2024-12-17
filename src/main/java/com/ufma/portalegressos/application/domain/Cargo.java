@@ -1,4 +1,4 @@
-package com.ufma.portalegressos.infrastructure.entities;
+package com.ufma.portalegressos.application.domain;
 
 import lombok.*;
 import jakarta.persistence.*;
@@ -11,7 +11,7 @@ import jakarta.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="cargo")
-public class CargoEntity {
+public class Cargo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idCargo;
@@ -25,5 +25,5 @@ public class CargoEntity {
     @ManyToOne
     @JoinColumn(name="id_egresso", nullable=false)
     @NotNull
-    private EgressoEntity egresso;
+    private Egresso egresso;
 }

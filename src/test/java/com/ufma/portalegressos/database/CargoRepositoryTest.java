@@ -1,7 +1,7 @@
 package com.ufma.portalegressos.database;
 
-import com.ufma.portalegressos.infrastructure.entities.CargoEntity;
-import com.ufma.portalegressos.infrastructure.entities.EgressoEntity;
+import com.ufma.portalegressos.application.domain.Cargo;
+import com.ufma.portalegressos.application.domain.Egresso;
 import com.ufma.portalegressos.infrastructure.repositories.CargoJpaRepository;
 import com.ufma.portalegressos.infrastructure.repositories.EgressoJpaRepository;
 import jakarta.validation.ConstraintViolationException;
@@ -22,10 +22,10 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CargoRepositoryTest {
     @Autowired
     private CargoJpaRepository cargoJpaRepository;
-    private static EgressoEntity egressoBase;
+    private static Egresso egressoBase;
     @BeforeAll
     public static void setUp(@Autowired EgressoJpaRepository egressoJpaRepository){
-        EgressoEntity egresso = EgressoEntity.builder()
+        Egresso egresso = Egresso.builder()
                 .nome("egresso para teste")
                 .email("egressoparateste@gmail.com")
                 .descricao("descricao egresso para teste")
@@ -39,7 +39,7 @@ public class CargoRepositoryTest {
     @Test
     @Transactional
     public void deveVerificarSalvarCargo(){
-        CargoEntity cargo = CargoEntity.builder()
+        Cargo cargo = Cargo.builder()
                 .egresso(egressoBase)
                 .anoInicio(2022)
                 .anoFim(2023)
@@ -47,7 +47,7 @@ public class CargoRepositoryTest {
                 .local("local teste cargo")
                 .build();
 
-        CargoEntity cargoSalvo = cargoJpaRepository.save(cargo);
+        Cargo cargoSalvo = cargoJpaRepository.save(cargo);
 
         assertNotNull(cargoSalvo);
         assertEquals(cargo.getEgresso(), cargoSalvo.getEgresso());
@@ -59,14 +59,14 @@ public class CargoRepositoryTest {
     @Test
     @Transactional
     public void deveVerificarBuscarCargoPorIdCargo(){
-        CargoEntity cargoCriado1 = cargoJpaRepository.save(CargoEntity.builder()
+        Cargo cargoCriado1 = cargoJpaRepository.save(Cargo.builder()
                 .egresso(egressoBase)
                 .anoInicio(2022)
                 .anoFim(2023)
                 .descricao("descricao teste cargo")
                 .local("local teste cargo")
                 .build());
-        CargoEntity cargoCriado2 = cargoJpaRepository.save(CargoEntity.builder()
+        Cargo cargoCriado2 = cargoJpaRepository.save(Cargo.builder()
                 .egresso(egressoBase)
                 .anoInicio(2021)
                 .anoFim(2024)
@@ -74,59 +74,59 @@ public class CargoRepositoryTest {
                 .local("local teste cargo 2")
                 .build());
 
-        Optional<CargoEntity> resposta1 = cargoJpaRepository.findById(cargoCriado1.getIdCargo());
-        Optional<CargoEntity> resposta2 = cargoJpaRepository.findById(cargoCriado2.getIdCargo());
+        Optional<Cargo> resposta1 = cargoJpaRepository.findById(cargoCriado1.getIdCargo());
+        Optional<Cargo> resposta2 = cargoJpaRepository.findById(cargoCriado2.getIdCargo());
 
         // resultado1
         assertTrue(resposta1.isPresent());
-        CargoEntity cargoEncontrado1 = resposta1.get();
+        Cargo cargoEncontrado1 = resposta1.get();
         assertEquals(cargoCriado1.getIdCargo(), cargoEncontrado1.getIdCargo());
         assertEquals(cargoCriado1.getDescricao(), cargoEncontrado1.getDescricao());
 
         //resultado 2
         assertTrue(resposta2.isPresent());
-        CargoEntity cargoEncontrado2 = resposta2.get();
+        Cargo cargoEncontrado2 = resposta2.get();
         assertEquals(cargoCriado2.getIdCargo(), cargoEncontrado2.getIdCargo());
         assertEquals(cargoCriado2.getDescricao(), cargoEncontrado2.getDescricao());
     }
 
     @Test
     public void naoDeveSalvarCargoSemEgressoOuDescricaoOuLocalOuAnoInicio(){
-        CargoEntity cargoEntity = CargoEntity.builder()
+        Cargo cargo = Cargo.builder()
                 .local("localteste")
                 .descricao("descricao teste")
                 .anoInicio(2021)
                 .anoFim(2024)
                 .build();
-        assertThrows(ConstraintViolationException.class, () -> cargoJpaRepository.save(cargoEntity));
-        cargoEntity.setEgresso(egressoBase);
-        cargoEntity.setLocal(null);
-        assertThrows(ConstraintViolationException.class, () -> cargoJpaRepository.save(cargoEntity));
-        cargoEntity.setLocal("local teste");
-        cargoEntity.setDescricao(null);
-        assertThrows(ConstraintViolationException.class, () -> cargoJpaRepository.save(cargoEntity));
-        cargoEntity.setDescricao("descricao teste");
-        cargoEntity.setAnoInicio(null);
-        assertThrows(ConstraintViolationException.class, () -> cargoJpaRepository.save(cargoEntity));
+        assertThrows(ConstraintViolationException.class, () -> cargoJpaRepository.save(cargo));
+        cargo.setEgresso(egressoBase);
+        cargo.setLocal(null);
+        assertThrows(ConstraintViolationException.class, () -> cargoJpaRepository.save(cargo));
+        cargo.setLocal("local teste");
+        cargo.setDescricao(null);
+        assertThrows(ConstraintViolationException.class, () -> cargoJpaRepository.save(cargo));
+        cargo.setDescricao("descricao teste");
+        cargo.setAnoInicio(null);
+        assertThrows(ConstraintViolationException.class, () -> cargoJpaRepository.save(cargo));
     }
 
     @Test
     @Transactional
     public void deveVerificarBuscarTodosCargos(){
-        CargoEntity cargo1 = CargoEntity.builder()
+        Cargo cargo1 = Cargo.builder()
                 .egresso(egressoBase)
                 .descricao("descricao teste 1")
                 .local("local teste 1")
                 .anoInicio(2015)
                 .build();
-        CargoEntity cargo2 = CargoEntity.builder()
+        Cargo cargo2 = Cargo.builder()
                 .egresso(egressoBase)
                 .descricao("descricao teste 2")
                 .local("local teste 2")
                 .anoInicio(2015)
                 .anoFim(2019)
                 .build();
-        CargoEntity cargo3 = CargoEntity.builder()
+        Cargo cargo3 = Cargo.builder()
                 .egresso(egressoBase)
                 .descricao("descricao teste 3")
                 .local("local teste 3")
@@ -137,7 +137,7 @@ public class CargoRepositoryTest {
         cargoJpaRepository.save(cargo2);
         cargoJpaRepository.save(cargo3);
 
-        List<CargoEntity> resposta = cargoJpaRepository.findAll();
+        List<Cargo> resposta = cargoJpaRepository.findAll();
 
         assertFalse(resposta.isEmpty());
         assertEquals(3, resposta.size());
