@@ -26,7 +26,7 @@ public class Egresso {
     private String descricao;
     private String foto;
     private String linkedin;
-    private String Instagram;
+    private String instagram;
     private String curriculo;
     @OneToMany(mappedBy="egresso")
     private List<Cargo> cargos;

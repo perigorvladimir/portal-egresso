@@ -1,7 +1,7 @@
 package com.ufma.portalegressos.database;
 
 import com.ufma.portalegressos.application.domain.Coordenador;
-import com.ufma.portalegressos.application.repositories.CoordenadorJpaRepository;
+import com.ufma.portalegressos.application.out.CoordenadorJpaRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;

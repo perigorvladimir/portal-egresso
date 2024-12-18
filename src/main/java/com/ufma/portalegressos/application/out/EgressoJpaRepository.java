@@ -1,7 +1,6 @@
-package com.ufma.portalegressos.application.repositories;
+package com.ufma.portalegressos.application.out;
 
 import com.ufma.portalegressos.application.domain.Egresso;
-import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

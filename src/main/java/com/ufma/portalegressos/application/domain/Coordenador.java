@@ -27,17 +27,20 @@ public class Coordenador implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idCoordenador;
     @NotNull
+    @Column(nullable = false)
+    private String nome;
+    @NotNull
+    @Column(nullable=false, unique = true)
     private String login;
     @NotNull
     @Column(nullable = false)
     private String senha;
-    private String role = "ADMIN";
     @OneToMany(mappedBy = "coordenador")
     private Set<Curso> cursos;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(role));
+        return Collections.singleton(new SimpleGrantedAuthority("ROLE_ADMIN"));
     }
 
     @Override

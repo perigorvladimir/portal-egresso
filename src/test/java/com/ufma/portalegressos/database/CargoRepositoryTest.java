@@ -2,8 +2,8 @@ package com.ufma.portalegressos.database;
 
 import com.ufma.portalegressos.application.domain.Cargo;
 import com.ufma.portalegressos.application.domain.Egresso;
-import com.ufma.portalegressos.application.repositories.CargoJpaRepository;
-import com.ufma.portalegressos.application.repositories.EgressoJpaRepository;
+import com.ufma.portalegressos.application.out.CargoJpaRepository;
+import com.ufma.portalegressos.application.out.EgressoJpaRepository;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

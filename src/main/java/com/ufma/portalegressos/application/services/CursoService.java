@@ -1,22 +1,32 @@
 package com.ufma.portalegressos.application.services;
 
+import com.ufma.portalegressos.application.domain.Coordenador;
 import com.ufma.portalegressos.application.domain.Curso;
-import com.ufma.portalegressos.application.domain.CursoEgresso;
-import com.ufma.portalegressos.application.domain.Egresso;
-import com.ufma.portalegressos.application.repositories.CursoJpaRepository;
+import com.ufma.portalegressos.application.out.CoordenadorJpaRepository;
+import com.ufma.portalegressos.application.out.CursoJpaRepository;
 import com.ufma.portalegressos.application.usecases.curso.CursoUC;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 @AllArgsConstructor
 public class CursoService implements CursoUC {
     private final CursoJpaRepository cursoJpaRepository;
+    private final CoordenadorJpaRepository coordenadorJpaRepository;
     @Override
-    public Curso salvarCurso(Curso curso) {
-        return cursoJpaRepository.save(curso);
+    public Curso salvarCurso(Request request) {
+        if(request.getIdCoordenador()!=null){
+            Coordenador coordEncontrado = coordenadorJpaRepository.findById(request.getIdCoordenador()).orElseThrow(EntityNotFoundException::new);
+
+            Curso curso = Curso.builder()
+                    .coordenador(coordEncontrado)
+                    .nome(request.getNome())
+                    .nivel(request.getNivel())
+                    .build();
+            return cursoJpaRepository.save(curso);
+        }
+        return null;
     }
 
     @Override

@@ -2,11 +2,10 @@ package com.ufma.portalegressos.application.services;
 
 import com.ufma.portalegressos.application.domain.CursoEgresso;
 import com.ufma.portalegressos.application.domain.Egresso;
-import com.ufma.portalegressos.application.repositories.CursoEgressoJpaRepository;
-import com.ufma.portalegressos.application.repositories.EgressoJpaRepository;
+import com.ufma.portalegressos.application.out.CursoEgressoJpaRepository;
+import com.ufma.portalegressos.application.out.EgressoJpaRepository;
 import com.ufma.portalegressos.application.usecases.egresso.EgressoUC;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +15,17 @@ public class EgressoService implements EgressoUC {
     public final EgressoJpaRepository egressoJpaRepository;
     public final CursoEgressoJpaRepository cursoEgressoJpaRepository;
 
-    public Egresso salvarEgresso(Egresso egresso){
+    public Egresso salvarEgresso(Request request){
+        Egresso egresso = Egresso.builder()
+                .nome(request.getNome())
+                .email(request.getEmail())
+                .descricao(request.getDescricao())
+                .foto(request.getFoto())
+                .linkedin(request.getLinkedin())
+                .instagram(request.getInstagram())
+                .curriculo(request.getCurriculo())
+                .build();
+
         return egressoJpaRepository.save(egresso);
     }
 
