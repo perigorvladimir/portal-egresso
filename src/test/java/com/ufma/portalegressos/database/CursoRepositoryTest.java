@@ -2,8 +2,8 @@ package com.ufma.portalegressos.database;
 
 import com.ufma.portalegressos.application.domain.Coordenador;
 import com.ufma.portalegressos.application.domain.Curso;
-import com.ufma.portalegressos.infrastructure.repositories.CoordenadorJpaRepository;
-import com.ufma.portalegressos.infrastructure.repositories.CursoJpaRepository;
+import com.ufma.portalegressos.application.repositories.CoordenadorJpaRepository;
+import com.ufma.portalegressos.application.repositories.CursoJpaRepository;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
