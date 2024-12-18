@@ -4,8 +4,15 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
+
+import static java.util.Collections.emptyList;
 
 @Entity
 @DynamicInsert
@@ -15,7 +22,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name="coordenador")
-public class Coordenador {
+public class Coordenador implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idCoordenador;
@@ -24,8 +31,22 @@ public class Coordenador {
     @NotNull
     @Column(nullable = false)
     private String senha;
-    @Column(columnDefinition = "varchar(255) default 'egresso'", nullable = false)
-    private String tipo;
+    private String role = "ADMIN";
     @OneToMany(mappedBy = "coordenador")
     private Set<Curso> cursos;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singleton(new SimpleGrantedAuthority(role));
+    }
+
+    @Override
+    public String getPassword() {
+        return senha;
+    }
+
+    @Override
+    public String getUsername() {
+        return login;
+    }
 }

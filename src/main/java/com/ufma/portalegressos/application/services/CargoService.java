@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @AllArgsConstructor
-@Service
 public class CargoService implements CargoUC {
     private final CargoJpaRepository cargoJpaRepository;
     @Override
