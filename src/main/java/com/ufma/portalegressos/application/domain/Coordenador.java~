@@ -35,7 +35,10 @@ public class Coordenador implements UserDetails {
     @NotNull
     @Column(nullable = false)
     private String senha;
+<<<<<<< Updated upstream
+=======
     private String role = "ROLE_ADMIN";
+>>>>>>> Stashed changes
     @OneToMany(mappedBy = "coordenador")
     private Set<Curso> cursos;
 

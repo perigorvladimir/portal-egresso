@@ -16,11 +16,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private final CoordenadorJpaRepository coordenadorJpaRepository;
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        Optional<Coordenador> response = coordenadorJpaRepository.findByLogin(login);
-        if(response.isEmpty()) throw new UsernameNotFoundException(login);
-
-        Coordenador coord = response.get();
-        return new org.springframework.security.core.userdetails.User(coord.getUsername(), coord.getPassword(), coord.getAuthorities());
+        return coordenadorJpaRepository.findByLogin(login);
     }
 
 }

@@ -6,6 +6,7 @@ import com.ufma.portalegressos.application.out.CursoEgressoJpaRepository;
 import com.ufma.portalegressos.application.out.EgressoJpaRepository;
 import com.ufma.portalegressos.application.usecases.egresso.EgressoUC;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;

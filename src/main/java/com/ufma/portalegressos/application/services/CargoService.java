@@ -7,10 +7,12 @@ import com.ufma.portalegressos.application.out.EgressoJpaRepository;
 import com.ufma.portalegressos.application.usecases.cargo.CargoUC;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @AllArgsConstructor
+@Service
 public class CargoService implements CargoUC {
     private final CargoJpaRepository cargoJpaRepository;
     private final EgressoJpaRepository egressoJpaRepository;
