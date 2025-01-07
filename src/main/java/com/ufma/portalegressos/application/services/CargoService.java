@@ -18,6 +18,14 @@ public class CargoService implements CargoUC {
     private final EgressoJpaRepository egressoJpaRepository;
     @Override
     public Cargo salvar(Request request) {
+        if(request.getIdEgresso()==null){
+            throw new IllegalArgumentException("Campo Id Egresso nao pode ser nulo");
+        }
+
+        if(request.getAnoFim() < request.getAnoInicio()){
+            throw new IllegalArgumentException("O ano de fim deve ser maior que o de inicio");
+        }
+
         Egresso egressoEncontrado = egressoJpaRepository.findById(request.getIdEgresso()).orElseThrow(EntityNotFoundException::new);
 
         Cargo cargo = Cargo.builder()

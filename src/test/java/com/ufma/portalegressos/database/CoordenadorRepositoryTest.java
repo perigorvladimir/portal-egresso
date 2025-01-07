@@ -30,14 +30,15 @@ public class CoordenadorRepositoryTest {
     @Transactional
     public void deveVerificarSalvarCoordenador(){
         Coordenador coordenador = Coordenador.builder()
-                .tipo("coordenador")
+                .role("coordenador")
                 .login("login")
                 .senha("senha")
+                .nome("Geraldo")
                 .build();
         Coordenador coordenadorSalvo = coordenadorJpaRepository.save(coordenador);
 
         assertNotNull(coordenadorSalvo);
-        assertEquals(coordenador.getTipo(), coordenadorSalvo.getTipo());
+        assertEquals(coordenador.getRole(), coordenadorSalvo.getRole());
         assertEquals(coordenador.getLogin(), coordenadorSalvo.getLogin());
         assertEquals(coordenador.getCursos(), coordenadorSalvo.getCursos());
         // nao verifica login pois vai ser salvo criptografado
@@ -48,6 +49,7 @@ public class CoordenadorRepositoryTest {
         Coordenador coordenador = Coordenador.builder()
                 .login("login")
                 .senha("senha")
+                .nome("Igor")
                 .build();
 
         // Salva a entidade
@@ -58,18 +60,19 @@ public class CoordenadorRepositoryTest {
         Coordenador coordenadorAtualizado = coordenadorJpaRepository.findById(coordenadorSalvo.getIdCoordenador())
                 .orElseThrow(() -> new RuntimeException("Coordenador não encontrado"));
 
-        assertEquals("egresso", coordenadorAtualizado.getTipo());
+        assertEquals("ROLE_ADMIN", coordenadorAtualizado.getRole());
 
         coordenador = Coordenador.builder()
-                .login("login")
+                .login("login2")
                 .senha("senha")
-                .tipo(null)
+                .role(null)
+                .nome("Igor")
                 .build();
         Coordenador coordenadorSalvo2 = coordenadorJpaRepository.saveAndFlush(coordenador);
         entityManager.clear();
         Coordenador coordenadorAtualizado2 = coordenadorJpaRepository.findById(coordenadorSalvo2.getIdCoordenador())
                 .orElseThrow(() -> new RuntimeException("Coordenador não encontrado"));
-        assertEquals("egresso", coordenadorAtualizado2.getTipo());
+        assertEquals("ROLE_ADMIN", coordenadorAtualizado2.getRole());
     }
 
     @Test
@@ -78,11 +81,13 @@ public class CoordenadorRepositoryTest {
         Coordenador coordenadorCriado1 = coordenadorJpaRepository.save(Coordenador.builder()
                 .login("login 1")
                 .senha("123")
+                .nome("nome1")
                 .build());
         Coordenador coordenadorCriado2 = coordenadorJpaRepository.save(Coordenador.builder()
-                .tipo("admin")
+                .role("admin")
                 .login("login 2")
                 .senha("12345")
+                .nome("nome2")
                 .build());
         entityManager.clear();
 
@@ -93,16 +98,15 @@ public class CoordenadorRepositoryTest {
         // resultado 1
         assertTrue(resultado1.isPresent());
         Coordenador coordenadorEncontrado1 = resultado1.get();
-        System.out.println(coordenadorEncontrado1.getTipo());
         assertEquals(coordenadorCriado1.getIdCoordenador(), coordenadorEncontrado1.getIdCoordenador());
-        assertEquals("egresso", coordenadorEncontrado1.getTipo());
+        assertEquals("ROLE_ADMIN", coordenadorEncontrado1.getRole());
         assertEquals(coordenadorCriado1.getLogin(), coordenadorEncontrado1.getLogin());
 
         // resultado 2
         assertTrue(resultado2.isPresent());
         Coordenador coordenadorEncontrado2 = resultado2.get();
         assertEquals(coordenadorCriado2.getIdCoordenador(), coordenadorEncontrado2.getIdCoordenador());
-        assertEquals(coordenadorCriado2.getTipo(), coordenadorEncontrado2.getTipo());
+        assertEquals(coordenadorCriado2.getRole(), coordenadorEncontrado2.getRole());
         assertEquals(coordenadorCriado2.getLogin(), coordenadorEncontrado2.getLogin());
     }
 
@@ -110,7 +114,7 @@ public class CoordenadorRepositoryTest {
     public void naoDeveSalvarSemLoginOuSenha(){
         Coordenador coordenador = Coordenador.builder()
                 .login("loginteste")
-                .tipo(null)
+                .role(null)
                 .build();
 
         assertThrows(ConstraintViolationException.class, () -> coordenadorJpaRepository.save(coordenador));
@@ -124,17 +128,20 @@ public class CoordenadorRepositoryTest {
     public void deveVerificarBuscarTodosCoordenadores(){
         Coordenador coordenador1 = Coordenador.builder()
                 .login("login")
+                .nome("nome1")
                 .senha("123")
                 .build();
         Coordenador coordenador2 = Coordenador.builder()
                         .login("login2")
                         .senha("1234")
-                        .tipo("admin")
+                        .nome("nome2")
+                        .role("admin")
                         .build();
         Coordenador coordenador3 = Coordenador.builder()
                 .login("login3")
                 .senha("12345")
-                .tipo("super-admin")
+                .nome("nome2")
+                .role("super-admin")
                 .build();
         coordenadorJpaRepository.save(coordenador1);
         coordenadorJpaRepository.save(coordenador2);

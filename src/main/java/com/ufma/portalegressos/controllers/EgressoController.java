@@ -13,7 +13,6 @@ public class EgressoController {
     private final EgressoService egressoService;
     @GetMapping
     public String buscarTodosEgressos() {
-        var egressos =
-        return
+        return "ok";
     }
 }

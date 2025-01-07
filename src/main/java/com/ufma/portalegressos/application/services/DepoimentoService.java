@@ -7,12 +7,14 @@ import com.ufma.portalegressos.application.out.EgressoJpaRepository;
 import com.ufma.portalegressos.application.usecases.depoimento.DepoimentoUC;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
+@Service
 public class DepoimentoService implements DepoimentoUC {
     private final DepoimentoJpaRepository depoimentoJpaRepository;
     private final EgressoJpaRepository egressoJpaRepository;

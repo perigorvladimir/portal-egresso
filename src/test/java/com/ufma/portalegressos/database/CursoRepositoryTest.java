@@ -28,7 +28,7 @@ public class CursoRepositoryTest {
         Coordenador coordenador = Coordenador.builder()
                 .login("login")
                 .senha("senha")
-                .tipo("coordenador")
+                .nome("Igor")
                 .build();
         coordenadorBase = coordenadorJpaRepository.save(coordenador);
     }

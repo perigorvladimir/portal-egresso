@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
+@Service
 public class EgressoService implements EgressoUC {
     public final EgressoJpaRepository egressoJpaRepository;
     public final CursoEgressoJpaRepository cursoEgressoJpaRepository;

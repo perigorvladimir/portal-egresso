@@ -35,6 +35,7 @@ public class Coordenador implements UserDetails {
     @NotNull
     @Column(nullable = false)
     private String senha;
+    @Column(columnDefinition = "varchar(255) default 'ROLE_ADMIN'", nullable = false)
     private String role = "ROLE_ADMIN";
     @OneToMany(mappedBy = "coordenador")
     private Set<Curso> cursos;

@@ -2,6 +2,8 @@ package com.ufma.portalegressos.application.out;
 
 import com.ufma.portalegressos.application.domain.Depoimento;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -9,6 +11,7 @@ import java.util.List;
 
 @Repository
 public interface DepoimentoJpaRepository extends JpaRepository<Depoimento, Integer> {
-    List<Depoimento> findByDataYear(Integer ano);
+    @Query("SELECT d FROM Depoimento d WHERE YEAR(d.data) = :ano")
+    List<Depoimento> findByDataYear(@Param("ano") Integer ano);
     List<Depoimento> findByDataAfter(LocalDate data);
 }

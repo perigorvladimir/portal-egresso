@@ -30,7 +30,7 @@ public class CargoRepositoryTest {
                 .email("egressoparateste@gmail.com")
                 .descricao("descricao egresso para teste")
                 .curriculo("curriculo egresso para teste")
-                .Instagram("egresso_teste")
+                .instagram("egresso_teste")
                 .linkedin("https://linkedin/egressoTeste")
                 .foto("foto codificada")
                 .build();

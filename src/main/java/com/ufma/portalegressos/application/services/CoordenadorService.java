@@ -5,8 +5,10 @@ import com.ufma.portalegressos.application.out.CoordenadorJpaRepository;
 import com.ufma.portalegressos.application.out.SenhaEncoder;
 import com.ufma.portalegressos.application.usecases.coordenador.CoordenadorUC;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
+@Service
 public class CoordenadorService implements CoordenadorUC {
     private final CoordenadorJpaRepository coordenadorJpaRepository;
     @Override

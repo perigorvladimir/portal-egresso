@@ -36,7 +36,7 @@ public class EgressoRepositoryTest {
                 .curriculo("curriculo teste curriculo teste curriculo teste curriculo teste curriculo teste")
                 .descricao("graduando CP")
                 .linkedin("https://www.linkedin.com/in/igorvalencar/")
-                .Instagram("instagram_teste").build();
+                .instagram("instagram_teste").build();
 
         // AÇÃO
         Egresso egressoSalvo = egressoJpaRepository.save(egresso);
@@ -60,7 +60,7 @@ public class EgressoRepositoryTest {
                                                 .curriculo("curriculo teste curriculo teste curriculo teste curriculo teste curriculo teste")
                                                 .descricao("graduando CP")
                                                 .linkedin("https://www.linkedin.com/in/igorvalencar/")
-                                                .Instagram("instagram_teste").build()).getIdEgresso();
+                                                .instagram("instagram_teste").build()).getIdEgresso();
         // AÇÃO
         Optional<Egresso> resultado = egressoJpaRepository.findById(idEgresso);
 
@@ -95,21 +95,21 @@ public class EgressoRepositoryTest {
                 .curriculo("curriculo teste curriculo teste curriculo teste curriculo teste curriculo teste")
                 .descricao("graduando CP")
                 .linkedin("https://www.linkedin.com/in/igorvalencar/")
-                .Instagram("instagram_teste").build();
+                .instagram("instagram_teste").build();
         Egresso egresso2 = Egresso.builder()
                 .nome("Fulano da Silva")
                 .email("fulano.silva@discente.ufma.br")
                 .curriculo("curriculo de Fulano da Silva")
                 .descricao("descrição do FUlano da Silva")
                 .linkedin("https://www.linkedin.com/in/fulanoDaSilva/")
-                .Instagram("fulano_silva").build();
+                .instagram("fulano_silva").build();
         Egresso egresso3 = Egresso.builder()
                 .nome("Fulano da Silva")
                 .email("fulano.silva@discente.ufma.br")
                 .curriculo("curriculo de Fulano da Silva")
                 .descricao("descrição do FUlano da Silva")
                 .linkedin("https://www.linkedin.com/in/fulanoDaSilva/")
-                .Instagram("fulano_silva").build();
+                .instagram("fulano_silva").build();
         egressoJpaRepository.save(egresso1);
         egressoJpaRepository.save(egresso2);
         egressoJpaRepository.save(egresso3);
