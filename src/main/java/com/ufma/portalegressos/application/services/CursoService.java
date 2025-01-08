@@ -19,22 +19,25 @@ public class CursoService implements CursoUC {
     private final CoordenadorJpaRepository coordenadorJpaRepository;
     @Override
     public Curso salvarCurso(Request request) {
-        if(request.getIdCoordenador()!=null){
-            Coordenador coordEncontrado = coordenadorJpaRepository.findById(request.getIdCoordenador()).orElseThrow(EntityNotFoundException::new);
+        if(request.getIdCoordenador() == null) throw new IllegalArgumentException("Coordenador do curso precisa ser informado");
 
-            Curso curso = Curso.builder()
-                    .coordenador(coordEncontrado)
-                    .nome(request.getNome())
-                    .nivel(request.getNivel())
-                    .build();
-            return cursoJpaRepository.save(curso);
-        }
-        return null;
+        Coordenador coordEncontrado = coordenadorJpaRepository.findById(request.getIdCoordenador()).orElseThrow(EntityNotFoundException::new);
+
+        Curso curso = Curso.builder()
+                .coordenador(coordEncontrado)
+                .nome(request.getNome())
+                .nivel(request.getNivel())
+                .build();
+        return cursoJpaRepository.save(curso);
     }
 
     @Override
-    public Optional<Curso> buscarPorId(Integer id) {
-        return cursoJpaRepository.findById(id);
+    public Curso buscarPorId(Integer id) {
+        Optional<Curso> curso = cursoJpaRepository.findById(id);
+        if(curso.isEmpty()){
+            throw new EntityNotFoundException("Curso não encontrado com o id inserido");
+        }
+        return curso.get();
     }
 
     @Override

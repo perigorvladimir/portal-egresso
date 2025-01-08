@@ -5,5 +5,5 @@ import com.ufma.portalegressos.application.domain.Egresso;
 import java.util.Optional;
 
 public interface BuscarEgressoPorIdUC {
-    Optional<Egresso> buscarEgressoPorId(Integer id);
+    Egresso buscarEgressoPorId(Integer id);
 }

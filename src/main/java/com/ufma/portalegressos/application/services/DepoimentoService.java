@@ -30,8 +30,12 @@ public class DepoimentoService implements DepoimentoUC {
     }
 
     @Override
-    public Optional<Depoimento> buscarDepoimentoPorId(Integer id) {
-        return depoimentoJpaRepository.findById(id);
+    public Depoimento buscarDepoimentoPorId(Integer id) {
+        Optional<Depoimento> depoimentoOptinal = depoimentoJpaRepository.findById(id);
+        if(depoimentoOptinal.isEmpty()){
+            throw new EntityNotFoundException("Depoimento nao encontrado com o id inserido");
+        }
+        return depoimentoOptinal.get();
     }
 
     @Override

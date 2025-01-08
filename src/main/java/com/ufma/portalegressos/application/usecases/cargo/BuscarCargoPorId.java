@@ -5,5 +5,5 @@ import com.ufma.portalegressos.application.domain.Cargo;
 import java.util.Optional;
 
 public interface BuscarCargoPorId {
-    Optional<Cargo> buscarPorId(Integer id);
+    Cargo buscarPorId(Integer id);
 }

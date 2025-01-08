@@ -5,6 +5,7 @@ import com.ufma.portalegressos.application.domain.Egresso;
 import com.ufma.portalegressos.application.out.CursoEgressoJpaRepository;
 import com.ufma.portalegressos.application.out.EgressoJpaRepository;
 import com.ufma.portalegressos.application.usecases.egresso.EgressoUC;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -32,8 +33,12 @@ public class EgressoService implements EgressoUC {
     }
 
     @Override
-    public Optional<Egresso> buscarEgressoPorId(Integer id) {
-        return egressoJpaRepository.findById(id);
+    public Egresso buscarEgressoPorId(Integer id) {
+        Optional<Egresso> egressoOptional = egressoJpaRepository.findById(id);
+        if(egressoOptional.isEmpty()){
+            throw new EntityNotFoundException("Egresso nao encontrado com o id inserido");
+        }
+        return egressoOptional.get();
     }
 
     @Override

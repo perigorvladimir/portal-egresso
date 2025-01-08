@@ -4,6 +4,7 @@ import com.ufma.portalegressos.application.domain.Coordenador;
 import com.ufma.portalegressos.application.out.CoordenadorJpaRepository;
 import com.ufma.portalegressos.application.out.SenhaEncoder;
 import com.ufma.portalegressos.application.usecases.coordenador.CoordenadorUC;
+import jakarta.validation.ConstraintViolationException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

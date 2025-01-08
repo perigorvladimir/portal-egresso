@@ -39,8 +39,12 @@ public class CargoService implements CargoUC {
     }
 
     @Override
-    public Optional<Cargo> buscarPorId(Integer id) {
-        return cargoJpaRepository.findById(id);
+    public Cargo buscarPorId(Integer id) {
+        Optional<Cargo> cargo = cargoJpaRepository.findById(id);
+        if(cargo.isEmpty()){
+            throw new EntityNotFoundException("Cargo não encontrado com o id inserido");
+        }
+        return cargo.get();
     }
 
     @Override
