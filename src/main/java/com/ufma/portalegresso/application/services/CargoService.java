@@ -9,6 +9,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -50,5 +51,10 @@ public class CargoService implements CargoUC {
     @Override
     public void deletar(Integer id) {
         cargoJpaRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Cargo> buscarTodosCargos() {
+        return cargoJpaRepository.findAll();
     }
 }

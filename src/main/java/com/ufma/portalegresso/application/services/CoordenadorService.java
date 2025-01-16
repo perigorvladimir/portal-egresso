@@ -7,6 +7,8 @@ import com.ufma.portalegresso.application.usecases.coordenador.CoordenadorUC;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @AllArgsConstructor
 @Service
 public class CoordenadorService implements CoordenadorUC {
@@ -22,5 +24,10 @@ public class CoordenadorService implements CoordenadorUC {
         Coordenador coord = Coordenador.builder().nome(request.getNome()).login(request.getLogin()).senha(senhaCriptografada).build();
 
         return coordenadorJpaRepository.save(coord);
+    }
+
+    @Override
+    public List<Coordenador> buscarTodosCoordenadores() {
+        return coordenadorJpaRepository.findAll();
     }
 }
