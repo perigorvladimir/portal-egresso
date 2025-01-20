@@ -6,18 +6,17 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-public interface SalvarCargoUC {
-    Cargo salvar(Request request);
+public interface UpdateCargoUC {
+    Cargo updateCargo(Integer id, Request request);
 
     @Getter
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
     class Request{
-        private String descricao;
-        private String local;
-        private Integer anoInicio;
-        private Integer anoFim;
-        private Integer idEgresso;
+        String descricao;
+        String local;
+        Integer anoInicio;
+        Integer anoFim;
     }
 }

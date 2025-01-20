@@ -1,4 +1,4 @@
 package com.ufma.portalegresso.application.usecases.depoimento;
 
-public interface DepoimentoUC extends SalvarDepoimentoUC, BuscarDepoimentoPorIdUC, DeletarDepoimentoUC, BuscarDepoimentosPorAnoUC, BuscarDepoimentosRecentesUC{
+public interface DepoimentoUC extends SalvarDepoimentoUC, BuscarDepoimentoPorIdUC, DeletarDepoimentoUC, BuscarDepoimentosPorAnoUC, BuscarDepoimentosRecentesUC, UpdateDepoimentoUC, BuscarDepoimentoPorEgressoUC{
 }

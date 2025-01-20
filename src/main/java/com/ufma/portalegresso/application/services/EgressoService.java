@@ -5,6 +5,8 @@ import com.ufma.portalegresso.application.domain.Egresso;
 import com.ufma.portalegresso.application.out.CursoEgressoJpaRepository;
 import com.ufma.portalegresso.application.out.EgressoJpaRepository;
 import com.ufma.portalegresso.application.usecases.egresso.EgressoUC;
+import com.ufma.portalegresso.application.usecases.egresso.SalvarEgressoUC;
+import com.ufma.portalegresso.application.usecases.egresso.UpdateEgressoUC;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +20,7 @@ public class EgressoService implements EgressoUC {
     public final EgressoJpaRepository egressoJpaRepository;
     public final CursoEgressoJpaRepository cursoEgressoJpaRepository;
 
-    public Egresso salvarEgresso(Request request){
+    public Egresso salvarEgresso(SalvarEgressoUC.Request request){
         Egresso egresso = Egresso.builder()
                 .nome(request.getNome())
                 .email(request.getEmail())
@@ -56,5 +58,18 @@ public class EgressoService implements EgressoUC {
         List<CursoEgresso> cursoEgresso = cursoEgressoJpaRepository.findCursoEgressoByCurso_IdCurso(cursoId);
 
         return cursoEgresso.stream().map(CursoEgresso::getEgresso).toList();
+    }
+
+    @Override
+    public Egresso updateEgresso(Integer id, UpdateEgressoUC.Request request) {
+        Egresso egresso = buscarEgressoPorId(id);
+        egresso.setNome(request.getNome());
+        egresso.setEmail(request.getEmail());
+        egresso.setDescricao(request.getDescricao());
+        egresso.setFoto(request.getFoto());
+        egresso.setLinkedin(request.getLinkedin());
+        egresso.setInstagram(request.getInstagram());
+        egresso.setCurriculo(request.getCurriculo());
+        return egressoJpaRepository.save(egresso);
     }
 }

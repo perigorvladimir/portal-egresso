@@ -2,6 +2,7 @@ package com.ufma.portalegresso.application.database;
 
 import com.ufma.portalegresso.application.domain.Coordenador;
 import com.ufma.portalegresso.application.out.CoordenadorJpaRepository;
+import com.ufma.portalegresso.infra.SenhaEncoderFake;
 import jakarta.persistence.EntityManager;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,12 +21,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@Profile("test")
+@ActiveProfiles("test")
 public class CoordenadorRepositoryTest {
     @Autowired
     private EntityManager entityManager;
     @Autowired
     private CoordenadorJpaRepository coordenadorJpaRepository;
+    @Autowired
+    private SenhaEncoderFake senhaEncoderfake;
 
     @Test
     @Transactional

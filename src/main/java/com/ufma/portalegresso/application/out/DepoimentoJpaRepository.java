@@ -14,4 +14,5 @@ public interface DepoimentoJpaRepository extends JpaRepository<Depoimento, Integ
     @Query("SELECT d FROM Depoimento d WHERE YEAR(d.data) = :ano")
     List<Depoimento> findByDataYear(@Param("ano") Integer ano);
     List<Depoimento> findByDataAfter(LocalDate data);
+    List<Depoimento> findByEgresso_IdEgresso(Integer idEgresso);
 }

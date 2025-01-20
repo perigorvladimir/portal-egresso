@@ -1,6 +1,5 @@
 package com.ufma.portalegresso.application.services;
 
-import com.ufma.portalegresso.application.domain.Cargo;
 import com.ufma.portalegresso.application.domain.Coordenador;
 import com.ufma.portalegresso.application.domain.Curso;
 import com.ufma.portalegresso.application.out.CoordenadorJpaRepository;
@@ -110,7 +109,7 @@ public class CursoServiceTest {
                 .idCoordenador(coordenadorBase.getIdCoordenador())
                 .build());
 
-        service.deletarCurso(cursoCriado.getIdCurso());
+        service.deletarCursoPorId(cursoCriado.getIdCurso());
 
         Optional<Curso> cursoEncontrado = cursoJpaRepository.findById(cursoCriado.getIdCurso());
         assertTrue(cursoEncontrado.isEmpty());

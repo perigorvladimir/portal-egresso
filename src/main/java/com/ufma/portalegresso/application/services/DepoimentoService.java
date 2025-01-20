@@ -5,6 +5,8 @@ import com.ufma.portalegresso.application.domain.Egresso;
 import com.ufma.portalegresso.application.out.DepoimentoJpaRepository;
 import com.ufma.portalegresso.application.out.EgressoJpaRepository;
 import com.ufma.portalegresso.application.usecases.depoimento.DepoimentoUC;
+import com.ufma.portalegresso.application.usecases.depoimento.SalvarDepoimentoUC;
+import com.ufma.portalegresso.application.usecases.depoimento.UpdateDepoimentoUC;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +21,7 @@ public class DepoimentoService implements DepoimentoUC {
     private final DepoimentoJpaRepository depoimentoJpaRepository;
     private final EgressoJpaRepository egressoJpaRepository;
     @Override
-    public Depoimento salvarDepoimento(Request request) {
+    public Depoimento salvarDepoimento(SalvarDepoimentoUC.Request request) {
         if(request.getIdEgresso() == null) {
             throw new IllegalArgumentException("Campo Id Egresso nao pode ser nulo");
         }
@@ -42,7 +44,7 @@ public class DepoimentoService implements DepoimentoUC {
     }
 
     @Override
-    public void deletar(Integer id) {
+    public void deletarPorId(Integer id) {
         depoimentoJpaRepository.deleteById(id);
     }
 
@@ -55,5 +57,18 @@ public class DepoimentoService implements DepoimentoUC {
     public List<Depoimento> buscarDepoimentosRecentes() {
         LocalDate dataBuscar = LocalDate.now().minusDays(30);
         return depoimentoJpaRepository.findByDataAfter(dataBuscar);
+    }
+
+    @Override
+    public Depoimento updateDepoimento(Integer id, UpdateDepoimentoUC.Request request) {
+        Depoimento depoimento = buscarDepoimentoPorId(id);
+        depoimento.setTexto(request.getTexto());
+        return depoimentoJpaRepository.save(depoimento);
+    }
+
+
+    @Override
+    public List<Depoimento> buscarDepoimentoPorEgresso(Integer idEgresso) {
+        return depoimentoJpaRepository.findByEgresso_IdEgresso(idEgresso);
     }
 }

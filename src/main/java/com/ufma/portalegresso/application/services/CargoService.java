@@ -5,6 +5,8 @@ import com.ufma.portalegresso.application.domain.Egresso;
 import com.ufma.portalegresso.application.out.CargoJpaRepository;
 import com.ufma.portalegresso.application.out.EgressoJpaRepository;
 import com.ufma.portalegresso.application.usecases.cargo.CargoUC;
+import com.ufma.portalegresso.application.usecases.cargo.SalvarCargoUC;
+import com.ufma.portalegresso.application.usecases.cargo.UpdateCargoUC;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +20,7 @@ public class CargoService implements CargoUC {
     private final CargoJpaRepository cargoJpaRepository;
     private final EgressoJpaRepository egressoJpaRepository;
     @Override
-    public Cargo salvar(Request request) {
+    public Cargo salvar(SalvarCargoUC.Request request) {
         if(request.getIdEgresso()==null){
             throw new IllegalArgumentException("Campo Id Egresso nao pode ser nulo");
         }
@@ -47,14 +49,23 @@ public class CargoService implements CargoUC {
         }
         return cargo.get();
     }
+    @Override
+    public List<Cargo> buscarTodosCargos() {
+        return cargoJpaRepository.findAll();
+    }
 
     @Override
-    public void deletar(Integer id) {
+    public void deletarPorId(Integer id) {
         cargoJpaRepository.deleteById(id);
     }
 
     @Override
-    public List<Cargo> buscarTodosCargos() {
-        return cargoJpaRepository.findAll();
+    public Cargo updateCargo(Integer id, UpdateCargoUC.Request request) {
+        Cargo cargo = buscarPorId(id);
+        cargo.setLocal(request.getLocal());
+        cargo.setDescricao(request.getDescricao());
+        cargo.setAnoInicio(request.getAnoInicio());
+        cargo.setAnoFim(request.getAnoFim());
+        return cargoJpaRepository.save(cargo);
     }
 }

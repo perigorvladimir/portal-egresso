@@ -1,4 +1,4 @@
 package com.ufma.portalegresso.application.usecases.cargo;
 
-public interface CargoUC extends SalvarCargoUC, DeletarCargoUC, BuscarCargoPorIdUC, BuscarTodosCargosUC {
+public interface CargoUC extends SalvarCargoUC, DeletarCargoUC, BuscarCargoPorIdUC, BuscarTodosCargosUC, UpdateCargoUC {
 }

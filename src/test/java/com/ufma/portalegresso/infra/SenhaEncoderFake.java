@@ -1,10 +1,11 @@
 package com.ufma.portalegresso.infra;
 
 import com.ufma.portalegresso.application.out.SenhaEncoder;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
+import org.springframework.test.context.ActiveProfiles;
 
-@Profile("test")
+@ActiveProfiles("test")
 public class SenhaEncoderFake implements SenhaEncoder {
 
     @Override

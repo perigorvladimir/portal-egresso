@@ -99,7 +99,7 @@ public class DepoimentoServiceTest {
                 .texto("depoimento padrao")
                 .build());
 
-        service.deletar(depoimentoCriado.getIdDepoimento());
+        service.deletarPorId(depoimentoCriado.getIdDepoimento());
 
         Optional<Depoimento> depoimentoEncontrado = depoimentoJpaRepository.findById(depoimentoCriado.getIdDepoimento());
         assertTrue(depoimentoEncontrado.isEmpty());

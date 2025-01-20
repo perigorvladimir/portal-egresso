@@ -122,13 +122,13 @@ public class CargoServiceTest {
                 .idEgresso(egressoBase.getIdEgresso())
                 .build());
 
-        service.deletar(cargoCriado.getIdCargo());
+        service.deletarPorId(cargoCriado.getIdCargo());
 
         assertThrows(EntityNotFoundException.class, () -> service.buscarPorId(cargoCriado.getIdCargo()));
     }
 
     @Test
     public void naoDeveGerarErroAoDeletarCargoInexistente(){
-        assertDoesNotThrow(() -> service.deletar(1));
+        assertDoesNotThrow(() -> service.deletarPorId(1));
     }
 }

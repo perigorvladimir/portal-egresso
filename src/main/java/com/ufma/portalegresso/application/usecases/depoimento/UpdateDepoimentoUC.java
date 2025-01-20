@@ -6,15 +6,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-public interface SalvarDepoimentoUC {
-    Depoimento salvarDepoimento(Request request);
+public interface UpdateDepoimentoUC {
+    Depoimento updateDepoimento(Integer id, Request depoimento);
 
-    @Builder
     @Getter
+    @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    class Request {
-        private String texto;
-        private Integer idEgresso;
+    class Request{
+        String texto;
     }
 }

@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class ResponseApi<T> {
     private T dado;
     private String mensagem;
+    private String detalhes;
     private Integer status;
     @Builder.Default
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
