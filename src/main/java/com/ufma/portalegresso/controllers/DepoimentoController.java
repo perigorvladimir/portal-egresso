@@ -7,6 +7,7 @@ import com.ufma.portalegresso.shared.ResponseApi;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -58,6 +59,7 @@ public class DepoimentoController {
     }
 
     @PostMapping
+    @Transactional
     public ResponseEntity<?> salvarDepoimento(@RequestBody SalvarDepoimentoUC.Request request) {
         var depoimentoSalvo = depoimentoUC.salvarDepoimento(request);
         URI location = URI.create("/depoimento/" + depoimentoSalvo.getIdDepoimento());
@@ -69,6 +71,7 @@ public class DepoimentoController {
     }
 
     @PutMapping("/{idDepoimento}")
+    @Transactional
     public ResponseEntity<?> atualizarDepoimento(@PathVariable Integer idDepoimento, @RequestBody UpdateDepoimentoUC.Request request) {
         var depoimentoSalvo = depoimentoUC.updateDepoimento(idDepoimento, request);
         return ResponseEntity.ok(ResponseApi.builder()
@@ -80,6 +83,7 @@ public class DepoimentoController {
     }
 
     @DeleteMapping("/{idDepoimento}")
+    @Transactional
     public ResponseEntity<?> deletarDepoimento(@PathVariable Integer idDepoimento) {
         depoimentoUC.deletarPorId(idDepoimento);
         return ResponseEntity.ok().body(

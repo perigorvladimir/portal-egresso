@@ -6,6 +6,7 @@ import com.ufma.portalegresso.shared.ResponseApi;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -29,6 +30,7 @@ public class CursoController {
     }
 
     @PostMapping
+    @Transactional
     public ResponseEntity<?> salvarCurso(@RequestBody SalvarCursoUC.Request request) {
         var cursoSalvo = cursoUC.salvarCurso(request);
         URI location = URI.create("/curso/" + cursoSalvo.getIdCurso());
@@ -36,12 +38,14 @@ public class CursoController {
     }
 
     @PutMapping("/{idCurso}/coordenador/{idCoordenador}")
+    @Transactional
     public ResponseEntity<?> designarCoordenador(@PathVariable Integer idCurso, @PathVariable Integer idCoordenador) {
         var designacao = cursoUC.designarCoordenador(idCurso, idCoordenador);
         return ResponseEntity.ok(ResponseApi.builder().dado(designacao).status(200).build());
     }
 
     @DeleteMapping("/{idCurso}")
+    @Transactional
     public ResponseEntity<?> deletarCurso(@PathVariable Integer idCurso) {
         cursoUC.deletarCursoPorId(idCurso);
 

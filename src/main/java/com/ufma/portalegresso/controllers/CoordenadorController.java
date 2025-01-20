@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -19,6 +20,7 @@ import java.net.URI;
 public class CoordenadorController {
     private final CoordenadorUC coordenadorUC;
     private final SenhaEncoder senhaEncoder;
+
     @GetMapping
     public ResponseEntity<?> buscarTodosCoordenadores() {
         var coordenadores = coordenadorUC.buscarTodosCoordenadores();
@@ -30,6 +32,7 @@ public class CoordenadorController {
         return ResponseEntity.ok(ResponseApi.builder().dado(coordenador).status(200).build());
     }
     @PostMapping
+    @Transactional
     public ResponseEntity<?> salvarCoordenador(@RequestBody SalvarCoordenadorUC.Request request) {
         var coordenadorSalvo = coordenadorUC.salvarCoordenador(request, senhaEncoder);
         URI location = URI.create("/coordenador/" + coordenadorSalvo.getIdCoordenador());
@@ -37,12 +40,14 @@ public class CoordenadorController {
     }
 
     @PutMapping("/{idCoordenador}")
+    @Transactional
     public ResponseEntity<?> atualizarCoordenador(@PathVariable Integer idCoordenador, @RequestBody UpdateCoordenadorUC.Request request) {
         var coordenadorSalvo = coordenadorUC.updateCoordenador(idCoordenador, request);
         return ResponseEntity.ok(ResponseApi.builder().dado(coordenadorSalvo).status(200).build());
     }
 
     @DeleteMapping("/{idCoordenador}")
+    @Transactional
     public ResponseEntity<?> deletarCoordenador(@PathVariable Integer idCoordenador) {
         coordenadorUC.deletarCoordenadorPorId(idCoordenador);
 
