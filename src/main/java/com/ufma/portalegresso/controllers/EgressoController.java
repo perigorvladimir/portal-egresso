@@ -7,6 +7,7 @@ import com.ufma.portalegresso.application.usecases.egresso.UpdateEgressoUC;
 import com.ufma.portalegresso.shared.ResponseApi;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -44,6 +45,7 @@ public class EgressoController {
                 .build());
     }
     @PostMapping
+    @Transactional
     public ResponseEntity<?> salvarEgresso(SalvarEgressoUC.Request request) {
         var egresso = egressoUC.salvarEgresso(request);
         return ResponseEntity.ok(ResponseApi.builder()
@@ -53,6 +55,7 @@ public class EgressoController {
                 .build());
     }
     @DeleteMapping("/{id}")
+    @Transactional
     public ResponseEntity<?> deletarEgresso(@PathVariable Integer id) {
         egressoUC.deletarEgressoPorId(id);
         return ResponseEntity.ok(ResponseApi.builder()
@@ -61,6 +64,7 @@ public class EgressoController {
                 .build());
     }
     @PutMapping("/{id}")
+    @Transactional
     public ResponseEntity<?> atualizarEgresso(@PathVariable Integer id, @RequestBody UpdateEgressoUC.Request request) {
         var egresso = egressoUC.updateEgresso(id, request);
         return ResponseEntity.ok(ResponseApi.builder()
