@@ -36,4 +36,15 @@ public class CustomizedGlobalExceptionHandler {
                 .build();
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public final ResponseEntity<ResponseApi<Object>> handleIllegalArgumentException(IllegalArgumentException ex, WebRequest request){
+        logger.error("Bad request: {}", ex.getMessage(), ex);
+        ResponseApi<Object> exceptionResponse = ResponseApi.builder()
+                .mensagem(ex.getMessage())
+                .detalhes(request.getDescription(true))
+                .status(HttpStatus.BAD_REQUEST.value())
+                .build();
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
 }
