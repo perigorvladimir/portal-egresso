@@ -3,6 +3,7 @@ package com.ufma.portalegresso.controllers;
 import com.ufma.portalegresso.application.usecases.curso.CursoUC;
 import com.ufma.portalegresso.application.usecases.curso.SalvarCursoUC;
 import com.ufma.portalegresso.shared.ResponseApi;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,7 @@ public class CursoController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<?> salvarCurso(@RequestBody SalvarCursoUC.Request request) {
+    public ResponseEntity<?> salvarCurso(@RequestBody @Valid SalvarCursoUC.Request request) {
         var cursoSalvo = cursoUC.salvarCurso(request);
         URI location = URI.create("/curso/" + cursoSalvo.getIdCurso());
         return ResponseEntity.created(location).body(ResponseApi.builder().dado(cursoSalvo).status(201).build());

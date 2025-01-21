@@ -21,7 +21,9 @@ public class Curso {
     @NotNull
     private String nome;
     @NotNull
-    private String nivel;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TipoNivel tipoNivel;
     @OneToMany(mappedBy = "curso")
     private Set<CursoEgresso> cursoEgressos;
     @ManyToOne
