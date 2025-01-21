@@ -2,6 +2,7 @@ package com.ufma.portalegresso.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ufma.portalegresso.application.domain.Curso;
+import com.ufma.portalegresso.application.domain.TipoNivel;
 import com.ufma.portalegresso.application.usecases.curso.CursoUC;
 import com.ufma.portalegresso.application.usecases.curso.DesignarCoordenadorUC;
 import com.ufma.portalegresso.application.usecases.curso.SalvarCursoUC;
@@ -14,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.DeferredImportSelector;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
@@ -30,6 +30,7 @@ import java.util.List;
 @WebMvcTest(controllers = CursoController.class)
 @AutoConfigureMockMvc
 @Import(TestSecurityConfig.class)
+//TODO VERIFICAR SE PRECISA DE TESTE ADICIONAL PARA O ENUM TIPO NIVEL
 public class CursoControllerTest {
     static final String api = "/curso";
     @Autowired
@@ -39,8 +40,8 @@ public class CursoControllerTest {
 
     @Test
     public void deveBuscarTodosCursos() throws Exception {
-        Curso curso1 = Curso.builder().nome("Curso 1").nivel("Graduação").build();
-        Curso curso2 = Curso.builder().nome("Curso 2").nivel("Graduação").build();
+        Curso curso1 = Curso.builder().nome("Curso 1").tipoNivel(TipoNivel.GRADUACAO).build();
+        Curso curso2 = Curso.builder().nome("Curso 2").tipoNivel(TipoNivel.GRADUACAO).build();
 
         Mockito.when(cursoUC.buscarTodosCursos()).thenReturn(List.of(curso1, curso2));
 
@@ -52,7 +53,7 @@ public class CursoControllerTest {
     public void deveBuscarCursoPorId() throws Exception {
         // cenario
         Integer dto = 1;
-        Curso curso = Curso.builder().nome("Curso 1").nivel("Graduação").build();
+        Curso curso = Curso.builder().nome("Curso 1").tipoNivel(TipoNivel.GRADUACAO).build();
 
         Mockito.when(cursoUC.buscarPorId(Mockito.any(Integer.class))).thenReturn(curso);
 
@@ -90,8 +91,8 @@ public class CursoControllerTest {
     @Test
     public void deveSalvarCurso() throws Exception {
         // cenario
-        SalvarCursoUC.Request curso = SalvarCursoUC.Request.builder().nome("Curso 1").nivel("Graduação").idCoordenador(1).build();
-        Curso cursoSalvo = Curso.builder().nome("Curso 1").nivel("Graduação").build();
+        SalvarCursoUC.Request curso = SalvarCursoUC.Request.builder().nome("Curso 1").tipoNivel("TECNOLOGO").idCoordenador(1).build();
+        Curso cursoSalvo = Curso.builder().nome("Curso 1").tipoNivel(TipoNivel.GRADUACAO).build();
 
         Mockito.when(cursoUC.salvarCurso(Mockito.any(SalvarCursoUC.Request.class))).thenReturn(cursoSalvo);
 

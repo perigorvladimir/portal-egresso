@@ -52,6 +52,7 @@ public class CargoServiceTest {
                 .anoInicio(2021)
                 .anoFim(2022)
                 .descricao("Cargo")
+                .tipoAreaTrabalho("FINANCEIRO")
                 .idEgresso(egressoBase.getIdEgresso())
                 .build();
 
@@ -98,6 +99,7 @@ public class CargoServiceTest {
                 .anoInicio(2021)
                 .anoFim(2022)
                 .descricao("Cargo")
+                .tipoAreaTrabalho("RH")
                 .idEgresso(egressoBase.getIdEgresso())
                 .build());
 
@@ -119,6 +121,7 @@ public class CargoServiceTest {
                 .anoInicio(2021)
                 .anoFim(2022)
                 .descricao("Cargo")
+                .tipoAreaTrabalho("FINANCEIRO")
                 .idEgresso(egressoBase.getIdEgresso())
                 .build());
 

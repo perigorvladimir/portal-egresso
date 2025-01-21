@@ -2,6 +2,7 @@ package com.ufma.portalegresso.application.database;
 
 import com.ufma.portalegresso.application.domain.Coordenador;
 import com.ufma.portalegresso.application.domain.Curso;
+import com.ufma.portalegresso.application.domain.TipoNivel;
 import com.ufma.portalegresso.application.out.CoordenadorJpaRepository;
 import com.ufma.portalegresso.application.out.CursoJpaRepository;
 import jakarta.validation.ConstraintViolationException;
@@ -42,7 +43,7 @@ public class CursoRepositoryTest {
     public void deveVerificarFluxoPrincipalSalvar() {
         Curso curso = Curso.builder()
                 .nome("Ciência da Computação")
-                .nivel("Graduação")
+                .tipoNivel(TipoNivel.GRADUACAO)
                 .coordenador(coordenadorBase)
                 .build();
 
@@ -50,7 +51,7 @@ public class CursoRepositoryTest {
 
         assertNotNull(cursoSalvo.getIdCurso());
         assertEquals(curso.getNome(), cursoSalvo.getNome());
-        assertEquals(curso.getNivel(), cursoSalvo.getNivel());
+        assertEquals(curso.getTipoNivel(), cursoSalvo.getTipoNivel());
         assertEquals(curso.getCoordenador(), cursoSalvo.getCoordenador());
     }
 
@@ -59,12 +60,12 @@ public class CursoRepositoryTest {
     public void deveVerificarBuscarCursoPorId() {
         Curso curso1 = cursoJpaRepository.save(Curso.builder()
                 .nome("Ciência da Computação")
-                .nivel("Graduação")
+                .tipoNivel(TipoNivel.GRADUACAO)
                 .coordenador(null)
                 .build());
         Curso curso2 = cursoJpaRepository.save(Curso.builder()
                 .nome("Engenharia de Software")
-                .nivel("Graduação")
+                .tipoNivel(TipoNivel.GRADUACAO)
                 .coordenador(coordenadorBase)
                 .build());
 
@@ -76,7 +77,7 @@ public class CursoRepositoryTest {
         Curso cursoEncontrado1 = resposta1.get();
         assertEquals(curso1.getIdCurso(), cursoEncontrado1.getIdCurso());
         assertEquals(curso1.getNome(), cursoEncontrado1.getNome());
-        assertEquals(curso1.getNivel(), cursoEncontrado1.getNivel());
+        assertEquals(curso1.getTipoNivel(), cursoEncontrado1.getTipoNivel());
         assertEquals(curso1.getCoordenador(), cursoEncontrado1.getCoordenador());
 
         // resultado2
@@ -84,7 +85,7 @@ public class CursoRepositoryTest {
         Curso cursoEncontrado2 = resposta2.get();
         assertEquals(curso2.getIdCurso(), cursoEncontrado2.getIdCurso());
         assertEquals(curso2.getNome(), cursoEncontrado2.getNome());
-        assertEquals(curso2.getNivel(), cursoEncontrado2.getNivel());
+        assertEquals(curso2.getTipoNivel(), cursoEncontrado2.getTipoNivel());
         assertEquals(curso2.getCoordenador(), cursoEncontrado2.getCoordenador());
     }
 
@@ -96,7 +97,7 @@ public class CursoRepositoryTest {
                 .build();
         assertThrows(ConstraintViolationException.class, () -> cursoJpaRepository.save(curso));
         curso.setNome(null);
-        curso.setNivel("Graduação");
+        curso.setTipoNivel(TipoNivel.GRADUACAO);
         assertThrows(ConstraintViolationException.class, () -> cursoJpaRepository.save(curso));
     }
 
@@ -105,16 +106,16 @@ public class CursoRepositoryTest {
     public void deveVerificarBuscarTodosCursos(){
         Curso curso1 = cursoJpaRepository.save(Curso.builder()
                 .nome("curso nome 1")
-                .nivel("Graduação")
+                .tipoNivel(TipoNivel.GRADUACAO)
                 .coordenador(coordenadorBase)
                 .build());
         Curso curso2 = cursoJpaRepository.save(Curso.builder()
                 .nome("curso nome 2")
-                .nivel("Graduação")
+                .tipoNivel(TipoNivel.GRADUACAO)
                 .build());
         Curso curso3 = cursoJpaRepository.save(Curso.builder()
                 .nome("Design de Móveis")
-                .nivel("Técnico")
+                .tipoNivel(TipoNivel.TECNOLOGO)
                 .coordenador(coordenadorBase)
                 .build());
         cursoJpaRepository.save(curso1);

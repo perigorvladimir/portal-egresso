@@ -51,7 +51,7 @@ public class CursoServiceTest {
     public void deveSalvarCursoPadrao(){
         SalvarCursoUC.Request curso = SalvarCursoUC.Request.builder()
                 .nome("Ciência da Computação")
-                .nivel("Graduação")
+                .tipoNivel("GRADUACAO")
                 .idCoordenador(coordenadorBase.getIdCoordenador())
                 .build();
 
@@ -65,7 +65,7 @@ public class CursoServiceTest {
     public void deveBuscarCursoPorIdPadrao(){
         Curso cursoCriado = service.salvarCurso(SalvarCursoUC.Request.builder()
                 .nome("Ciência da Computação")
-                .nivel("Graduação")
+                .tipoNivel("GRADUACAO")
                 .idCoordenador(coordenadorBase.getIdCoordenador())
                 .build());
 
@@ -79,17 +79,17 @@ public class CursoServiceTest {
     public void deveBuscarTodosCursosPadrao(){
         Curso cursoCriado1 = service.salvarCurso(SalvarCursoUC.Request.builder()
                 .nome("Ciência da Computação")
-                .nivel("Graduação")
+                .tipoNivel("TECNOLOGO")
                 .idCoordenador(coordenadorBase.getIdCoordenador())
                 .build());
         Curso cursoCriado2 = service.salvarCurso(SalvarCursoUC.Request.builder()
                 .nome("Economia")
-                .nivel("Graduação")
+                .tipoNivel("DOUTORADO")
                 .idCoordenador(coordenadorBase.getIdCoordenador())
                 .build());
         Curso cursoCriado3 = service.salvarCurso(SalvarCursoUC.Request.builder()
                 .nome("Filosofia")
-                .nivel("Graduação")
+                .tipoNivel("MESTRADO")
                 .idCoordenador(coordenadorBase.getIdCoordenador())
                 .build());
         List<Curso> cursos = service.buscarTodosCursos();
@@ -105,7 +105,7 @@ public class CursoServiceTest {
         Curso cursoCriado = service.salvarCurso(SalvarCursoUC.Request
                 .builder()
                 .nome("Curso deletar padrao")
-                .nivel("Graduação")
+                .tipoNivel("GRADUACAO")
                 .idCoordenador(coordenadorBase.getIdCoordenador())
                 .build());
 

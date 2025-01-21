@@ -2,14 +2,13 @@ package com.ufma.portalegresso.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ufma.portalegresso.application.domain.Cargo;
-import com.ufma.portalegresso.application.out.SenhaEncoder;
+import com.ufma.portalegresso.application.domain.TipoAreaTrabalho;
 import com.ufma.portalegresso.application.usecases.cargo.CargoUC;
 import com.ufma.portalegresso.application.usecases.cargo.SalvarCargoUC;
 import com.ufma.portalegresso.application.usecases.cargo.UpdateCargoUC;
 import com.ufma.portalegresso.infra.TestSecurityConfig;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +30,8 @@ import java.util.List;
 @WebMvcTest(controllers = CargoController.class)
 @AutoConfigureMockMvc
 @Import(TestSecurityConfig.class)
+
+//TODO FAZER TESTES COM RELACAO AO ENUM NOVO, TIPOAREA
 public class CargoControllerTest {
     static final String api = "/cargo";
     @Autowired
@@ -63,7 +64,7 @@ public class CargoControllerTest {
     @Test
     public void deveSalvarCargo() throws Exception {
         // cenario
-        SalvarCargoUC.Request  cargo = SalvarCargoUC.Request.builder().anoInicio(2020).descricao("descricao").anoFim(2021).local("UFMA").build();
+        SalvarCargoUC.Request  cargo = SalvarCargoUC.Request.builder().tipoAreaTrabalho("RH").anoInicio(2020).descricao("descricao").anoFim(2021).local("UFMA").build();
         Cargo cargoSalvo = Cargo.builder().anoInicio(2020).descricao("descricao").anoFim(2021).local("UFMA").build();
 
         Mockito.when(cargoUC.salvar(Mockito.any(SalvarCargoUC.Request.class))).thenReturn(cargoSalvo);
@@ -84,7 +85,7 @@ public class CargoControllerTest {
     public void deveDeletarCargo() throws Exception {
         // cenario
         Integer dto = 1;
-        Cargo cargo = Cargo.builder().anoInicio(2020).descricao("descricao").anoFim(2021).local("UFMA").build();
+        Cargo cargo = Cargo.builder().anoInicio(2020).descricao("descricao").tipoAreaTrabalho(TipoAreaTrabalho.RH).anoFim(2021).local("UFMA").build();
 
         Mockito.doNothing().when(cargoUC).deletarPorId(Mockito.any(Integer.class));
 

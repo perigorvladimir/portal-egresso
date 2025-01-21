@@ -2,6 +2,7 @@ package com.ufma.portalegresso.application.database;
 
 import com.ufma.portalegresso.application.domain.Cargo;
 import com.ufma.portalegresso.application.domain.Egresso;
+import com.ufma.portalegresso.application.domain.TipoAreaTrabalho;
 import com.ufma.portalegresso.application.out.CargoJpaRepository;
 import com.ufma.portalegresso.application.out.EgressoJpaRepository;
 import jakarta.validation.ConstraintViolationException;
@@ -50,6 +51,7 @@ public class CargoRepositoryTest {
                 .anoFim(2023)
                 .descricao("descricao teste cargo")
                 .local("local teste cargo")
+                .tipoAreaTrabalho(TipoAreaTrabalho.FINANCEIRO)
                 .build();
 
         Cargo cargoSalvo = cargoJpaRepository.save(cargo);
@@ -70,6 +72,7 @@ public class CargoRepositoryTest {
                 .anoFim(2023)
                 .descricao("descricao teste cargo")
                 .local("local teste cargo")
+                .tipoAreaTrabalho(TipoAreaTrabalho.TECNOLOGIA)
                 .build());
         Cargo cargoCriado2 = cargoJpaRepository.save(Cargo.builder()
                 .egresso(egressoBase)
@@ -77,6 +80,7 @@ public class CargoRepositoryTest {
                 .anoFim(2024)
                 .descricao("descricao teste cargo 2")
                 .local("local teste cargo 2")
+                .tipoAreaTrabalho(TipoAreaTrabalho.FINANCEIRO)
                 .build());
 
         Optional<Cargo> resposta1 = cargoJpaRepository.findById(cargoCriado1.getIdCargo());
@@ -123,6 +127,7 @@ public class CargoRepositoryTest {
                 .descricao("descricao teste 1")
                 .local("local teste 1")
                 .anoInicio(2015)
+                .tipoAreaTrabalho(TipoAreaTrabalho.FINANCEIRO)
                 .build();
         Cargo cargo2 = Cargo.builder()
                 .egresso(egressoBase)
@@ -130,6 +135,7 @@ public class CargoRepositoryTest {
                 .local("local teste 2")
                 .anoInicio(2015)
                 .anoFim(2019)
+                .tipoAreaTrabalho(TipoAreaTrabalho.RH)
                 .build();
         Cargo cargo3 = Cargo.builder()
                 .egresso(egressoBase)
@@ -137,6 +143,7 @@ public class CargoRepositoryTest {
                 .local("local teste 3")
                 .anoInicio(2020)
                 .anoFim(2030)
+                .tipoAreaTrabalho(TipoAreaTrabalho.TECNOLOGIA)
                 .build();
         cargoJpaRepository.save(cargo1);
         cargoJpaRepository.save(cargo2);
