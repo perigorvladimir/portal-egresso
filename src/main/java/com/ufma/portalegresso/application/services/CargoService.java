@@ -2,8 +2,8 @@ package com.ufma.portalegresso.application.services;
 
 import com.ufma.portalegresso.application.domain.Cargo;
 import com.ufma.portalegresso.application.domain.Egresso;
+import com.ufma.portalegresso.application.domain.TipoAreaTrabalho;
 import com.ufma.portalegresso.application.out.CargoJpaRepository;
-import com.ufma.portalegresso.application.out.EgressoJpaRepository;
 import com.ufma.portalegresso.application.usecases.cargo.CargoUC;
 import com.ufma.portalegresso.application.usecases.cargo.SalvarCargoUC;
 import com.ufma.portalegresso.application.usecases.cargo.UpdateCargoUC;
@@ -18,7 +18,7 @@ import java.util.Optional;
 @Service
 public class CargoService implements CargoUC {
     private final CargoJpaRepository cargoJpaRepository;
-    private final EgressoJpaRepository egressoJpaRepository;
+    private final EgressoService egressoService;
     @Override
     public Cargo salvar(SalvarCargoUC.Request request) {
         if(request.getIdEgresso()==null){
@@ -29,7 +29,7 @@ public class CargoService implements CargoUC {
             throw new IllegalArgumentException("O ano de fim deve ser maior que o de inicio");
         }
 
-        Egresso egressoEncontrado = egressoJpaRepository.findById(request.getIdEgresso()).orElseThrow(EntityNotFoundException::new);
+        Egresso egressoEncontrado = egressoService.buscarEgressoPorId(request.getIdEgresso());
 
         Cargo cargo = Cargo.builder()
                 .egresso(egressoEncontrado)
@@ -37,6 +37,7 @@ public class CargoService implements CargoUC {
                 .descricao(request.getDescricao())
                 .anoInicio(request.getAnoInicio())
                 .anoFim(request.getAnoFim())
+                .tipoAreaTrabalho(TipoAreaTrabalho.valueOf(request.getTipoAreaTrabalho()))
                 .build();
         return cargoJpaRepository.save(cargo);
     }

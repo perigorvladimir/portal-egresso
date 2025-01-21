@@ -18,6 +18,10 @@ public class Cargo {
     @NotNull
     private String descricao;
     @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TipoAreaTrabalho tipoAreaTrabalho;
+    @NotNull
     private String local;
     @NotNull
     private Integer anoInicio;

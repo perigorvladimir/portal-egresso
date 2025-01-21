@@ -4,6 +4,7 @@ import com.ufma.portalegresso.application.usecases.cargo.CargoUC;
 import com.ufma.portalegresso.application.usecases.cargo.SalvarCargoUC;
 import com.ufma.portalegresso.application.usecases.cargo.UpdateCargoUC;
 import com.ufma.portalegresso.shared.ResponseApi;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +40,7 @@ public class CargoController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<?> salvarCargo(@RequestBody SalvarCargoUC.Request request) {
+    public ResponseEntity<?> salvarCargo(@Valid @RequestBody SalvarCargoUC.Request request) {
         var cargoSalvo = cargoUC.salvar(request);
         URI location = URI.create("/cargo/" + cargoSalvo.getIdCargo());
         return ResponseEntity.created(location).body(ResponseApi.builder()
