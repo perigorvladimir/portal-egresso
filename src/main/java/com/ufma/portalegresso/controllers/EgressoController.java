@@ -1,16 +1,14 @@
 package com.ufma.portalegresso.controllers;
 
-import com.ufma.portalegresso.application.services.EgressoService;
 import com.ufma.portalegresso.application.usecases.egresso.EgressoUC;
 import com.ufma.portalegresso.application.usecases.egresso.SalvarEgressoUC;
 import com.ufma.portalegresso.application.usecases.egresso.UpdateEgressoUC;
 import com.ufma.portalegresso.shared.ResponseApi;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/egresso")
@@ -46,7 +44,7 @@ public class EgressoController {
     }
     @PostMapping
     @Transactional
-    public ResponseEntity<?> salvarEgresso(SalvarEgressoUC.Request request) {
+    public ResponseEntity<?> salvarEgresso(@Valid @RequestBody SalvarEgressoUC.Request request) {
         var egresso = egressoUC.salvarEgresso(request);
         return ResponseEntity.ok(ResponseApi.builder()
                 .dado(egresso)

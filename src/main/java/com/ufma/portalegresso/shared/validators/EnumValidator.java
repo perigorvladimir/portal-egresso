@@ -11,23 +11,32 @@ public class EnumValidator implements ConstraintValidator<ValidEnum, String> {
 
     @Override
     public void initialize(ValidEnum constraintAnnotation) {
-        System.out.println("initialize foi chamado");
         this.enumClass = constraintAnnotation.enumClass();
     }
+
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
+        // Permitir nulos caso a anotação não especifique "não pode ser nulo"
         if (value == null) {
-            throw new IllegalArgumentException(String.format("O valor de '%s' não pode ser nulo", enumClass.getSimpleName()));
+            context.disableDefaultConstraintViolation();
+            context.buildConstraintViolationWithTemplate(
+                    String.format("O valor de '%s' não pode ser nulo", enumClass.getSimpleName())).addConstraintViolation();
+            return false;
         }
 
-        boolean isValid =Stream.of(enumClass.getEnumConstants())
+        // Verifica se o valor está entre os valores válidos do Enum
+        boolean isValid = Stream.of(enumClass.getEnumConstants())
                 .anyMatch(e -> e.name().equals(value));
 
         if (!isValid) {
-            throw new IllegalArgumentException(
-                    String.format("'%s' não é um valor válido para %s. Valores válidos: %s", value, enumClass.getSimpleName(), Arrays.toString(enumClass.getEnumConstants())));
+            // Adiciona uma mensagem customizada de erro ao contexto
+            context.disableDefaultConstraintViolation();
+            context.buildConstraintViolationWithTemplate(
+                    String.format("'%s' não é um valor válido para %s. Valores válidos: %s",
+                            value, enumClass.getSimpleName(), Arrays.toString(enumClass.getEnumConstants()))
+            ).addConstraintViolation();
         }
 
-        return true;
+        return isValid;
     }
 }
