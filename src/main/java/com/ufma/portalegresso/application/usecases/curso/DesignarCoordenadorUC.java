@@ -10,7 +10,6 @@ public interface DesignarCoordenadorUC {
     Response designarCoordenador(Integer idCurso, Integer idCoordenador);
 
     @Builder
-    @Getter
     @AllArgsConstructor
     @NoArgsConstructor
     class Response{

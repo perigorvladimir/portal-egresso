@@ -30,6 +30,16 @@ public class Egresso {
     private String curriculo;
     @OneToMany(mappedBy="egresso")
     private List<Cargo> cargos;
-    @OneToMany(mappedBy="egresso")
+    @OneToMany(mappedBy="egresso", cascade = CascadeType.ALL)
     private Set<CursoEgresso> cursoEgressos;
+
+    public void addCurso(Curso curso, Integer anoInicio, Integer anoFim) {
+        CursoEgresso cursoEgresso = CursoEgresso.builder()
+                .curso(curso)
+                .egresso(this)
+                .anoInicio(anoInicio)
+                .anoFim(anoFim)
+                .build();
+        cursoEgressos.add(cursoEgresso);
+    }
 }
