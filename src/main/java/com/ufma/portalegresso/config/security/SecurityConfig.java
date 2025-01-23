@@ -34,6 +34,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/**").permitAll() // Permite acesso ao console do H2
+
+                        .anyRequest().authenticated()
+                )
+                .headers(headers -> headers.frameOptions().disable())
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();

@@ -1,5 +1,7 @@
 package com.ufma.portalegresso.application.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -29,5 +31,6 @@ public class Cargo {
     @ManyToOne
     @JoinColumn(name="id_egresso", nullable=false)
     @NotNull
+    @JsonIgnoreProperties({"cargos"})
     private Egresso egresso;
 }

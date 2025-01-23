@@ -5,8 +5,8 @@ import com.ufma.portalegresso.application.usecases.coordenador.CoordenadorUC;
 import com.ufma.portalegresso.application.usecases.coordenador.SalvarCoordenadorUC;
 import com.ufma.portalegresso.application.usecases.coordenador.UpdateCoordenadorUC;
 import com.ufma.portalegresso.shared.ResponseApi;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +33,7 @@ public class CoordenadorController {
     }
     @PostMapping
     @Transactional
-    public ResponseEntity<?> salvarCoordenador(@RequestBody SalvarCoordenadorUC.Request request) {
+    public ResponseEntity<?> salvarCoordenador(@Valid @RequestBody SalvarCoordenadorUC.Request request) {
         var coordenadorSalvo = coordenadorUC.salvarCoordenador(request, senhaEncoder);
         URI location = URI.create("/coordenador/" + coordenadorSalvo.getIdCoordenador());
         return ResponseEntity.created(location).body(ResponseApi.builder().dado(coordenadorSalvo).status(201).build());

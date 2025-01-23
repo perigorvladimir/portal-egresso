@@ -1,32 +1,52 @@
 package com.ufma.portalegresso.application.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ufma.portalegresso.application.domain.relacionamentos.CursoEgressoId;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@Builder
 @Table(name="curso_egresso")
 public class CursoEgresso {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idCursoEgresso;
+    @EmbeddedId
+    private CursoEgressoId id = new CursoEgressoId();
+    @ManyToOne
+    @JoinColumn(name="id_egresso", nullable=false)
+    @NotNull
+    @MapsId("idEgresso")
+    @JsonIgnore
+    private Egresso egresso;
+    @ManyToOne
+    @JoinColumn(name="id_curso", nullable=false)
+    @NotNull
+    @MapsId("idCurso")
+    @JsonIgnore
+    private Curso curso;
     @NotNull
     @Column(nullable = false)
     private Integer anoInicio;
     private Integer anoFim;
-    @ManyToOne
-    @JoinColumn(name="id_egresso", nullable=false)
-    @NotNull
-    private Egresso egresso;
-    @ManyToOne
-    @JoinColumn(name="id_Curso", nullable=false)
-    @NotNull
-    private Curso curso;
+
+    //pro set funcionar direito
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CursoEgresso that = (CursoEgresso) o;
+        return Objects.equals(curso, that.curso) &&
+                Objects.equals(egresso, that.egresso);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(curso, egresso);
+    }
 }

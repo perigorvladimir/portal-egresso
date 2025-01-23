@@ -54,6 +54,9 @@ public class CursoService implements CursoUC {
     @Override
     public Response designarCoordenador(Integer idCurso, Integer idCoordenador) {
         Curso curso = buscarPorId(idCurso);
-        return Response.builder().nomeNovoCoord(curso.getCoordenador().getNome()).nomeCurso(curso.getNome()).build();
+        Coordenador coordenador = coordenadorService.buscarCoordenadorPorId(idCoordenador);
+        curso.setCoordenador(coordenador);
+        Curso cursoSalvo = cursoJpaRepository.save(curso);
+        return Response.builder().idNovoCoord(cursoSalvo.getCoordenador().getIdCoordenador()).nomeNovoCoord(cursoSalvo.getCoordenador().getNome()).idCurso(cursoSalvo.getIdCurso()).nomeCurso(cursoSalvo.getNome()).build();
     }
 }

@@ -1,10 +1,11 @@
 package com.ufma.portalegresso.application.usecases.egresso;
 
+import com.ufma.portalegresso.application.domain.CursoEgresso;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-public interface LinkarCursoUC {
-    Response linkarCurso(Integer egressoId, Request request);
+public interface VincularCursoUC {
+    Response vincularCurso(Integer egressoId, Request request);
 
     @AllArgsConstructor
     @NoArgsConstructor
@@ -18,16 +19,14 @@ public interface LinkarCursoUC {
         Integer anoFim;
     }
 
+    @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    @Builder
     @Getter
     class Response{
-        Integer idEgresso;
-        String nomeEgresso;
-        Integer idCursoLinkado;
-        String nomeCursoLinkado;
-        Integer anoInicioCursoLinkado;
-        Integer anoFimCursoLinkado;
+        Integer idCurso;
+        String nomeCurso;
+        Integer idEgressoVinculado;
+        String nomeEgressoVinculado;
     }
 }

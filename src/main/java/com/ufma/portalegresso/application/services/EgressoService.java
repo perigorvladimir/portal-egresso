@@ -3,10 +3,11 @@ package com.ufma.portalegresso.application.services;
 import com.ufma.portalegresso.application.domain.Curso;
 import com.ufma.portalegresso.application.domain.CursoEgresso;
 import com.ufma.portalegresso.application.domain.Egresso;
+import com.ufma.portalegresso.application.domain.relacionamentos.CursoEgressoId;
 import com.ufma.portalegresso.application.out.CursoEgressoJpaRepository;
 import com.ufma.portalegresso.application.out.EgressoJpaRepository;
 import com.ufma.portalegresso.application.usecases.egresso.EgressoUC;
-import com.ufma.portalegresso.application.usecases.egresso.LinkarCursoUC;
+import com.ufma.portalegresso.application.usecases.egresso.VincularCursoUC;
 import com.ufma.portalegresso.application.usecases.egresso.SalvarEgressoUC;
 import com.ufma.portalegresso.application.usecases.egresso.UpdateEgressoUC;
 import jakarta.persistence.EntityNotFoundException;
@@ -77,18 +78,28 @@ public class EgressoService implements EgressoUC {
     }
 
     @Override
-    public LinkarCursoUC.Response linkarCurso(Integer egressoId, LinkarCursoUC.Request request) {
+    public VincularCursoUC.Response vincularCurso(Integer egressoId, VincularCursoUC.Request request) {
         Egresso egresso = buscarEgressoPorId(egressoId);
         Curso curso = cursoService.buscarPorId(request.getIdCurso());
-        egresso.addCurso(curso, request.getAnoInicio(), request.getAnoFim());
-        egressoJpaRepository.save(egresso);
-        return LinkarCursoUC.Response.builder()
-                .idEgresso(egresso.getIdEgresso())
-                .nomeEgresso(egresso.getNome())
-                .idCursoLinkado(curso.getIdCurso())
-                .nomeCursoLinkado(curso.getNome())
-                .anoInicioCursoLinkado(request.getAnoInicio())
-                .anoFimCursoLinkado(request.getAnoFim())
+
+        CursoEgressoId id = new CursoEgressoId(egressoId, request.getIdCurso());
+        cursoEgressoJpaRepository.findById(id).ifPresent(cursoEgresso -> {
+            throw new IllegalArgumentException("O egresso já está linkado com o curso especificado.");
+        });
+
+        CursoEgresso cursoEgresso = new CursoEgresso();
+        cursoEgresso.setId(id);
+        cursoEgresso.setAnoInicio(request.getAnoInicio());
+        cursoEgresso.setAnoFim(request.getAnoFim());
+        cursoEgresso.setEgresso(egresso);
+        cursoEgresso.setCurso(curso);
+        CursoEgresso cursoEgressoSalvo = cursoEgressoJpaRepository.save(cursoEgresso);
+
+        return VincularCursoUC.Response.builder()
+                .idEgressoVinculado(cursoEgressoSalvo.getEgresso().getIdEgresso())
+                .nomeEgressoVinculado(cursoEgressoSalvo.getEgresso().getNome())
+                .idCurso(cursoEgressoSalvo.getCurso().getIdCurso())
+                .nomeCurso(cursoEgressoSalvo.getCurso().getNome())
                 .build();
     }
 }

@@ -1,5 +1,8 @@
 package com.ufma.portalegresso.application.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -8,9 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @DynamicInsert
@@ -36,6 +37,7 @@ public class Coordenador implements UserDetails {
     @Column(columnDefinition = "varchar(255) default 'ROLE_ADMIN'", nullable = false)
     private String role = "ROLE_ADMIN";
     @OneToMany(mappedBy = "coordenador")
+    @JsonIgnoreProperties({"coordenador"})
     private Set<Curso> cursos;
 
     @Override

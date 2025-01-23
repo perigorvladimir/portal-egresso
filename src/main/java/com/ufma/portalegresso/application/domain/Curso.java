@@ -1,6 +1,9 @@
 package com.ufma.portalegresso.application.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -24,9 +27,10 @@ public class Curso {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TipoNivel tipoNivel;
-    @OneToMany(mappedBy = "curso")
+    @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private Set<CursoEgresso> cursoEgressos;
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name="id_coordenador")
     private Coordenador coordenador;
 }

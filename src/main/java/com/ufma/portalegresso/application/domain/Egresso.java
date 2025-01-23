@@ -1,10 +1,12 @@
 package com.ufma.portalegresso.application.domain;
 
 
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -28,18 +30,24 @@ public class Egresso {
     private String linkedin;
     private String instagram;
     private String curriculo;
-    @OneToMany(mappedBy="egresso")
+    @OneToMany(mappedBy="egresso", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties({"egresso"})
     private List<Cargo> cargos;
-    @OneToMany(mappedBy="egresso", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="egresso", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private Set<CursoEgresso> cursoEgressos;
+    @OneToMany(mappedBy="egresso", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties({"egresso"})
+    private Set<Depoimento> depoimentos;
 
-    public void addCurso(Curso curso, Integer anoInicio, Integer anoFim) {
-        CursoEgresso cursoEgresso = CursoEgresso.builder()
-                .curso(curso)
-                .egresso(this)
-                .anoInicio(anoInicio)
-                .anoFim(anoFim)
-                .build();
-        cursoEgressos.add(cursoEgresso);
+    public Set<String> getCursos() {
+        if(cursoEgressos==null){
+            return null;
+        }
+        Set<String> set = new HashSet<>();
+        for(CursoEgresso cursoMatriculado: this.cursoEgressos){
+            set.add(cursoMatriculado.getCurso().getNome());
+        }
+        return set;
     }
 }

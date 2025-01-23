@@ -1,7 +1,7 @@
 package com.ufma.portalegresso.controllers;
 
 import com.ufma.portalegresso.application.usecases.egresso.EgressoUC;
-import com.ufma.portalegresso.application.usecases.egresso.LinkarCursoUC;
+import com.ufma.portalegresso.application.usecases.egresso.VincularCursoUC;
 import com.ufma.portalegresso.application.usecases.egresso.SalvarEgressoUC;
 import com.ufma.portalegresso.application.usecases.egresso.UpdateEgressoUC;
 import com.ufma.portalegresso.shared.ResponseApi;
@@ -72,13 +72,13 @@ public class EgressoController {
                 .status(200)
                 .build());
     }
-    @PostMapping("/{id}/cursos")
+    @PostMapping("/{id}/curso")
     @Transactional
-    public ResponseEntity<?> linkarEgressoComCurso(@PathVariable Integer id, @Valid @RequestBody LinkarCursoUC.Request request) {
-        var egresso = egressoUC.linkarCurso(id, request);
+    public ResponseEntity<?> vincularEgressoACurso(@PathVariable Integer id, @Valid @RequestBody VincularCursoUC.Request request) {
+        var response = egressoUC.vincularCurso(id, request);
         return ResponseEntity.ok(ResponseApi.builder()
-                .dado(egresso)
-                .mensagem("Curso adicionado com sucesso.")
+                .dado(response)
+                .mensagem(String.format("Egresso %s vinculado ao curso %s com sucesso.", response.getNomeEgressoVinculado(), response.getNomeCurso())) // TODO: melhorar mensagemCurso adicionado com sucesso.")
                 .status(200)
                 .build());
     }

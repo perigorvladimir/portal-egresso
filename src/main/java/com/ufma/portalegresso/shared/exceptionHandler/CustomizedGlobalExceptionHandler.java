@@ -36,7 +36,6 @@ public class CustomizedGlobalExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public final ResponseEntity<ResponseApi<Object>> handleEntityNotFoundException(EntityNotFoundException ex, WebRequest request){
-        logger.error("Not found: {}", ex.getMessage(), ex);
         ResponseApi<Object> exceptionResponse = ResponseApi.builder()
                 .mensagem(ex.getMessage())
                 .detalhes(request.getDescription(false))
@@ -46,7 +45,6 @@ public class CustomizedGlobalExceptionHandler {
     }
     @ExceptionHandler(IllegalArgumentException.class)
     public final ResponseEntity<ResponseApi<Object>> handleIllegalArgumentException(IllegalArgumentException ex, WebRequest request){
-        logger.error("Bad request: {}", ex.getMessage(), ex);
         ResponseApi<Object> exceptionResponse = ResponseApi.builder()
                 .mensagem(ex.getMessage())
                 .detalhes(request.getDescription(false))
@@ -56,7 +54,6 @@ public class CustomizedGlobalExceptionHandler {
     }
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public final ResponseEntity<ResponseApi<Object>> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, WebRequest request) {
-        logger.error("Mensagem HTTP inválida: {}", ex.getMessage(), ex);
         String mensagemErro;
         if (ex.getCause() instanceof com.fasterxml.jackson.databind.exc.MismatchedInputException) {
             mensagemErro = "Algum tipo de dado enviado na requisição não é compatível com o esperado.";
@@ -74,8 +71,6 @@ public class CustomizedGlobalExceptionHandler {
     }
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
-        logger.error("Erro de validação de request: {}", ex.getMessage(), ex);
-
         // Capturar erros de validação
         Object errorMessages = getErrors(ex);
 

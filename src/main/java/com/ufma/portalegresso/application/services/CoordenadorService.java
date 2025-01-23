@@ -7,6 +7,7 @@ import com.ufma.portalegresso.application.usecases.coordenador.CoordenadorUC;
 import com.ufma.portalegresso.application.usecases.coordenador.SalvarCoordenadorUC;
 import com.ufma.portalegresso.application.usecases.coordenador.UpdateCoordenadorUC;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,7 @@ public class CoordenadorService implements CoordenadorUC {
     public Coordenador salvarCoordenador(SalvarCoordenadorUC.Request request, SenhaEncoder senhaEncoder) {
         //verificar login
         if(coordenadorJpaRepository.existsByLogin(request.getLogin())){
-            throw new RuntimeException("Já existe um usuário cadastrado com esse login");
+            throw new IllegalArgumentException("Já existe um usuário cadastrado com esse login");
         }
         String senhaCriptografada = senhaEncoder.encode(request.getSenha());
 
