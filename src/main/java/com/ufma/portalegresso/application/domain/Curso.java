@@ -2,6 +2,7 @@ package com.ufma.portalegresso.application.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
@@ -32,5 +33,6 @@ public class Curso {
     private Set<CursoEgresso> cursoEgressos;
     @ManyToOne()
     @JoinColumn(name="id_coordenador")
+    @JsonIgnoreProperties({"cursos"})
     private Coordenador coordenador;
 }
