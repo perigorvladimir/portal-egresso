@@ -52,7 +52,7 @@ public class CargoController {
 
     @PutMapping("/{idCargo}")
     @Transactional
-    public ResponseEntity<?> atualizarCargo(@PathVariable Integer idCargo, @RequestBody UpdateCargoUC.Request request) {
+    public ResponseEntity<?> atualizarCargo(@PathVariable Integer idCargo, @Valid @RequestBody UpdateCargoUC.Request request) {
         var cargoSalvo = cargoUC.updateCargo(idCargo, request);
         return ResponseEntity.ok(ResponseApi.builder()
                 .dado(cargoSalvo)

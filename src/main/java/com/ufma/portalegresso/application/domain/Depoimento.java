@@ -19,11 +19,12 @@ public class Depoimento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idDepoimento;
+    @Column(nullable = false)
     private String texto;
+    @Column(nullable = false)
     private LocalDate data;
     @ManyToOne
     @JoinColumn(name="id_egresso", nullable=false)
-    @NotNull
     @JsonIgnoreProperties({"depoimentos"})
     private Egresso egresso;
 }

@@ -19,13 +19,10 @@ import java.util.Optional;
 @Service
 public class DepoimentoService implements DepoimentoUC {
     private final DepoimentoJpaRepository depoimentoJpaRepository;
-    private final EgressoJpaRepository egressoJpaRepository;
+    private final EgressoService egressoService;
     @Override
     public Depoimento salvarDepoimento(SalvarDepoimentoUC.Request request) {
-        if(request.getIdEgresso() == null) {
-            throw new IllegalArgumentException("Campo Id Egresso nao pode ser nulo");
-        }
-        Egresso egressoEncontrado = egressoJpaRepository.findById(request.getIdEgresso()).orElseThrow(EntityNotFoundException::new);
+        Egresso egressoEncontrado = egressoService.buscarEgressoPorId(request.getIdEgresso());
         Depoimento depoimento = Depoimento.builder()
                 .data(LocalDate.now())
                 .texto(request.getTexto())

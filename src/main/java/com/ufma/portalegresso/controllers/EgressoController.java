@@ -64,7 +64,7 @@ public class EgressoController {
     }
     @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity<?> atualizarEgresso(@PathVariable Integer id, @RequestBody UpdateEgressoUC.Request request) {
+    public ResponseEntity<?> atualizarEgresso(@PathVariable Integer id, @Valid @RequestBody UpdateEgressoUC.Request request) {
         var egresso = egressoUC.updateEgresso(id, request);
         return ResponseEntity.ok(ResponseApi.builder()
                 .dado(egresso)

@@ -21,9 +21,9 @@ public class Egresso {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idEgresso;
-    @NotNull
+    @Column(nullable = false)
     private String nome;
-    @NotNull
+    @Column(nullable = false)
     private String email;
     private String descricao;
     private String foto;

@@ -9,7 +9,6 @@ import org.junit.platform.commons.logging.Logger;
 import org.junit.platform.commons.logging.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
@@ -79,10 +78,10 @@ public class EgressoRepositoryTest {
                 .descricao("1223")
                 .build();
         // ACAO e VALIDACAO
-        assertThrows(DataIntegrityViolationException.class, () -> egressoJpaRepository.save(egresso));
+        assertThrows(ConstraintViolationException.class, () -> egressoJpaRepository.save(egresso));
         egresso.setNome("Igor Vladimir");
         egresso.setEmail(null);
-        assertThrows(DataIntegrityViolationException.class, () -> egressoJpaRepository.save(egresso));
+        assertThrows(ConstraintViolationException.class, () -> egressoJpaRepository.save(egresso));
     }
 
     @Test

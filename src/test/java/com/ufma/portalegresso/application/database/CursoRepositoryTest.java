@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -95,10 +96,10 @@ public class CursoRepositoryTest {
                 .nome("Ciência da Computação")
                 .coordenador(coordenadorBase)
                 .build();
-        assertThrows(ConstraintViolationException.class, () -> cursoJpaRepository.save(curso));
+        assertThrows(DataIntegrityViolationException.class, () -> cursoJpaRepository.save(curso));
         curso.setNome(null);
         curso.setTipoNivel(TipoNivel.GRADUACAO);
-        assertThrows(ConstraintViolationException.class, () -> cursoJpaRepository.save(curso));
+        assertThrows(DataIntegrityViolationException.class, () -> cursoJpaRepository.save(curso));
     }
 
     @Test

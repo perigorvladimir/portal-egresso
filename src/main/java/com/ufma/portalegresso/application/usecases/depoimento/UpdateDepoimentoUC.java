@@ -1,6 +1,7 @@
 package com.ufma.portalegresso.application.usecases.depoimento;
 
 import com.ufma.portalegresso.application.domain.Depoimento;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,6 +15,7 @@ public interface UpdateDepoimentoUC {
     @AllArgsConstructor
     @NoArgsConstructor
     class Request{
+        @NotBlank
         String texto;
     }
 }

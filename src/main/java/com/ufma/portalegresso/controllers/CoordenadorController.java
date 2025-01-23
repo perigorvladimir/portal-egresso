@@ -41,7 +41,7 @@ public class CoordenadorController {
 
     @PutMapping("/{idCoordenador}")
     @Transactional
-    public ResponseEntity<?> atualizarCoordenador(@PathVariable Integer idCoordenador, @RequestBody UpdateCoordenadorUC.Request request) {
+    public ResponseEntity<?> atualizarCoordenador(@PathVariable Integer idCoordenador, @Valid @RequestBody UpdateCoordenadorUC.Request request) {
         var coordenadorSalvo = coordenadorUC.updateCoordenador(idCoordenador, request);
         return ResponseEntity.ok(ResponseApi.builder().dado(coordenadorSalvo).status(200).build());
     }

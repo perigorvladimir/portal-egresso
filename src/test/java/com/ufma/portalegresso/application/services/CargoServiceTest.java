@@ -6,11 +6,13 @@ import com.ufma.portalegresso.application.out.CargoJpaRepository;
 import com.ufma.portalegresso.application.out.EgressoJpaRepository;
 import com.ufma.portalegresso.application.usecases.cargo.SalvarCargoUC;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -86,7 +88,7 @@ public class CargoServiceTest {
                 .descricao("Cargo")
                 .build();
 
-        assertThrows(IllegalArgumentException.class, () -> service.salvar(cargo));
+        assertThrows(InvalidDataAccessApiUsageException.class, () -> service.salvar(cargo));
     }
 
     @Test

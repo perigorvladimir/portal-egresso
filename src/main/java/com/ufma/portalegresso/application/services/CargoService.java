@@ -21,10 +21,6 @@ public class CargoService implements CargoUC {
     private final EgressoService egressoService;
     @Override
     public Cargo salvar(SalvarCargoUC.Request request) {
-        if(request.getIdEgresso()==null){
-            throw new IllegalArgumentException("Campo Id Egresso nao pode ser nulo");
-        }
-
         if(request.getAnoFim() < request.getAnoInicio()){
             throw new IllegalArgumentException("O ano de fim deve ser maior que o de inicio");
         }

@@ -49,7 +49,7 @@ public class CoordenadorService implements CoordenadorUC {
 
     @Override
     public Coordenador updateCoordenador(Integer id, UpdateCoordenadorUC.Request request) {
-        Coordenador coord = coordenadorJpaRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        Coordenador coord = buscarCoordenadorPorId(id);
         coord.setNome(request.getNome());
         return coordenadorJpaRepository.save(coord);
     }

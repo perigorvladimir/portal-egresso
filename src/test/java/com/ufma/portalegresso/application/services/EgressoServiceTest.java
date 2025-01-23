@@ -7,6 +7,7 @@ import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,7 +56,7 @@ public class EgressoServiceTest {
                 .instagram("Instagram")
                 .curriculo("Curriculo")
                 .build();
-        assertThrows(ConstraintViolationException.class, () -> service.salvarEgresso(egresso));
+        assertThrows(DataIntegrityViolationException.class, () -> service.salvarEgresso(egresso));
 
         SalvarEgressoUC.Request egresso2 = SalvarEgressoUC.Request.builder()
                 .nome("Geraldo")
@@ -64,7 +65,7 @@ public class EgressoServiceTest {
                 .instagram("Instagram")
                 .curriculo("Curriculo")
                 .build();
-        assertThrows(ConstraintViolationException.class, () -> service.salvarEgresso(egresso2));
+        assertThrows(DataIntegrityViolationException.class, () -> service.salvarEgresso(egresso2));
     }
 
     @Test

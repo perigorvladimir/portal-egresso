@@ -22,9 +22,8 @@ public class Curso {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idCurso;
-    @NotNull
+    @Column(nullable = false)
     private String nome;
-    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TipoNivel tipoNivel;

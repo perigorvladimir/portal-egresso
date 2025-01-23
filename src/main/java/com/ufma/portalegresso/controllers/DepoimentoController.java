@@ -4,6 +4,7 @@ import com.ufma.portalegresso.application.usecases.depoimento.DepoimentoUC;
 import com.ufma.portalegresso.application.usecases.depoimento.SalvarDepoimentoUC;
 import com.ufma.portalegresso.application.usecases.depoimento.UpdateDepoimentoUC;
 import com.ufma.portalegresso.shared.ResponseApi;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,7 +61,7 @@ public class DepoimentoController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<?> salvarDepoimento(@RequestBody SalvarDepoimentoUC.Request request) {
+    public ResponseEntity<?> salvarDepoimento(@RequestBody @Valid SalvarDepoimentoUC.Request request) {
         var depoimentoSalvo = depoimentoUC.salvarDepoimento(request);
         URI location = URI.create("/depoimento/" + depoimentoSalvo.getIdDepoimento());
         return ResponseEntity.created(location).body(ResponseApi.builder()
@@ -72,7 +73,7 @@ public class DepoimentoController {
 
     @PutMapping("/{idDepoimento}")
     @Transactional
-    public ResponseEntity<?> atualizarDepoimento(@PathVariable Integer idDepoimento, @RequestBody UpdateDepoimentoUC.Request request) {
+    public ResponseEntity<?> atualizarDepoimento(@PathVariable Integer idDepoimento, @RequestBody @Valid UpdateDepoimentoUC.Request request) {
         var depoimentoSalvo = depoimentoUC.updateDepoimento(idDepoimento, request);
         return ResponseEntity.ok(ResponseApi.builder()
                 .dado(depoimentoSalvo)

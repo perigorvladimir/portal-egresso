@@ -64,7 +64,7 @@ public class CargoControllerTest {
     @Test
     public void deveSalvarCargo() throws Exception {
         // cenario
-        SalvarCargoUC.Request  cargo = SalvarCargoUC.Request.builder().tipoAreaTrabalho("RH").anoInicio(2020).descricao("descricao").anoFim(2021).local("UFMA").build();
+        SalvarCargoUC.Request  cargo = SalvarCargoUC.Request.builder().idEgresso(1).tipoAreaTrabalho("TECNOLOGIA").anoInicio(2020).descricao("descricao").anoFim(2021).local("UFMA").build();
         Cargo cargoSalvo = Cargo.builder().anoInicio(2020).descricao("descricao").anoFim(2021).local("UFMA").build();
 
         Mockito.when(cargoUC.salvar(Mockito.any(SalvarCargoUC.Request.class))).thenReturn(cargoSalvo);

@@ -1,6 +1,7 @@
 package com.ufma.portalegresso.application.usecases.egresso;
 
 import com.ufma.portalegresso.application.domain.Egresso;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,6 +19,7 @@ public interface SalvarEgressoUC {
         @NotBlank
         String nome;
         @NotBlank
+        @Email
         String email;
         String descricao;
         String foto;

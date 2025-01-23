@@ -7,7 +7,7 @@ import jakarta.validation.Payload;
 import java.lang.annotation.*;
 
 @Documented
-@Constraint(validatedBy = EnumValidator.class) // classe que valida
+@Constraint(validatedBy = ValidEnumValidator.class) // classe que valida
 @Target({ElementType.FIELD, ElementType.PARAMETER}) // onde pode ser usado
 @Retention(RetentionPolicy.RUNTIME) // pode ser acessada por reflexao
 public @interface ValidEnum {

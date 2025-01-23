@@ -4,6 +4,7 @@ import com.ufma.portalegresso.application.domain.Curso;
 import com.ufma.portalegresso.application.domain.TipoNivel;
 import com.ufma.portalegresso.shared.validators.ValidEnum;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

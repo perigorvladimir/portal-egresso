@@ -11,6 +11,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,7 +71,7 @@ public class DepoimentoServiceTest {
         SalvarDepoimentoUC.Request depoimento = SalvarDepoimentoUC.Request.builder()
                 .texto("depoimento padrao")
                 .build();
-        assertThrows(IllegalArgumentException.class, () -> service.salvarDepoimento(depoimento));
+        assertThrows(InvalidDataAccessApiUsageException.class, () -> service.salvarDepoimento(depoimento));
     }
 
     @Test
