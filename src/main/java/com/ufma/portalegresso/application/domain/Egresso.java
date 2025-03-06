@@ -40,13 +40,13 @@ public class Egresso {
     @JsonIgnoreProperties({"egresso"})
     private Set<Depoimento> depoimentos;
 
-    public Set<String> getCursos() {
+    public Set<Curso> getCursos() {
         if(cursoEgressos==null){
             return null;
         }
-        Set<String> set = new HashSet<>();
+        Set<Curso> set = new HashSet<>();
         for(CursoEgresso cursoMatriculado: this.cursoEgressos){
-            set.add(cursoMatriculado.getCurso().getNome());
+            set.add(cursoMatriculado.getCurso());
         }
         return set;
     }
