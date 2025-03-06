@@ -9,7 +9,7 @@ import org.springframework.test.context.ActiveProfiles;
 public class SenhaEncoderFake implements SenhaEncoder {
 
     @Override
-    public String encode(String senha) {
+    public String encode(String senha, String algoritmoCriptografia) {
         return senha;
     }
 

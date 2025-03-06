@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 public interface SalvarCoordenadorUC {
-    Coordenador salvarCoordenador(Request request, SenhaEncoder senhaEncoder);
+    Coordenador salvarCoordenador(Request request, String algortimoCriptografia);
 
     @Getter
     @Builder

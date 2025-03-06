@@ -37,10 +37,14 @@ public class Coordenador implements UserDetails {
     @OneToMany(mappedBy = "coordenador")
     @JsonIgnoreProperties({"coordenador"})
     private Set<Curso> cursos;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singleton(new SimpleGrantedAuthority("ROLE_ADMIN"));
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        return List.of();
     }
 
     @Override

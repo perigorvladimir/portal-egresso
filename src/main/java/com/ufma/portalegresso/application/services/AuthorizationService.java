@@ -1,4 +1,4 @@
-package com.ufma.portalegresso.infra.security;
+package com.ufma.portalegresso.application.services;
 
 import com.ufma.portalegresso.application.out.CoordenadorJpaRepository;
 import lombok.AllArgsConstructor;
@@ -9,11 +9,10 @@ import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class AuthorizationService implements UserDetailsService {
     private final CoordenadorJpaRepository coordenadorJpaRepository;
     @Override
-    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        return coordenadorJpaRepository.findByLogin(login);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return coordenadorJpaRepository.findByLogin(username);
     }
-
 }

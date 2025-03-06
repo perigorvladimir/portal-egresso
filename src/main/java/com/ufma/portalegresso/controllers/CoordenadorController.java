@@ -19,7 +19,6 @@ import java.net.URI;
 @AllArgsConstructor
 public class CoordenadorController {
     private final CoordenadorUC coordenadorUC;
-    private final SenhaEncoder senhaEncoder;
 
     @GetMapping
     public ResponseEntity<?> buscarTodosCoordenadores() {
@@ -34,7 +33,7 @@ public class CoordenadorController {
     @PostMapping
     @Transactional
     public ResponseEntity<?> salvarCoordenador(@Valid @RequestBody SalvarCoordenadorUC.Request request) {
-        var coordenadorSalvo = coordenadorUC.salvarCoordenador(request, senhaEncoder);
+        var coordenadorSalvo = coordenadorUC.salvarCoordenador(request, "bcrypt");
         URI location = URI.create("/coordenador/" + coordenadorSalvo.getIdCoordenador());
         return ResponseEntity.created(location).body(ResponseApi.builder().dado(coordenadorSalvo).status(201).build());
     }

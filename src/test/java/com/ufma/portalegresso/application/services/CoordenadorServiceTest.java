@@ -20,8 +20,6 @@ public class CoordenadorServiceTest {
     private EntityManager entityManager;
     @Autowired
     private CoordenadorService service;
-    @Autowired
-    private SenhaEncoderFake senhaEncoderfake;
 
     @Test
     @Transactional
@@ -31,7 +29,7 @@ public class CoordenadorServiceTest {
                 .login("login")
                 .senha("senha")
                 .build();
-        Coordenador coordenadorSalvo = service.salvarCoordenador(request, senhaEncoderfake);
+        Coordenador coordenadorSalvo = service.salvarCoordenador(request, "noop");
 
         entityManager.clear();
         Coordenador coordenador = entityManager.find(Coordenador.class, coordenadorSalvo.getIdCoordenador());
@@ -49,18 +47,18 @@ public class CoordenadorServiceTest {
                 .login("login")
                 .senha("senha")
                 .build();
-        assertThrows(ConstraintViolationException.class, () -> service.salvarCoordenador(request, senhaEncoderfake));
+        assertThrows(ConstraintViolationException.class, () -> service.salvarCoordenador(request, "noop"));
 
         SalvarCoordenadorUC.Request request2 = SalvarCoordenadorUC.Request.builder()
                 .nome("nome coordenador")
                 .senha("senha")
                 .build();
-        assertThrows(ConstraintViolationException.class, () -> service.salvarCoordenador(request2, senhaEncoderfake));
+        assertThrows(ConstraintViolationException.class, () -> service.salvarCoordenador(request2, "noop"));
 
         SalvarCoordenadorUC.Request request3 = SalvarCoordenadorUC.Request.builder()
                 .login("login")
                 .nome("nome coordenador")
                 .build();
-        assertThrows(ConstraintViolationException.class, () -> service.salvarCoordenador(request3, senhaEncoderfake));
+        assertThrows(ConstraintViolationException.class, () -> service.salvarCoordenador(request3, "noop"));
     }
 }
