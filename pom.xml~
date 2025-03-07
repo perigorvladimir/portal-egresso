@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.ufma</groupId>
-    <artifactId>portal-egressos</artifactId>
+    <artifactId>portal-egresso</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>portal-egresso</name>
     <description>portal-egresso</description>

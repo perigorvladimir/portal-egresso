@@ -88,9 +88,9 @@ public class CustomizedGlobalExceptionHandler {
         ResponseApi<Object> exceptionResponse = ResponseApi.builder()
                 .mensagem(ex.getMessage())
                 .detalhes(request.getDescription(false))
-                .status(HttpStatus.UNAUTHORIZED.value())
+                .status(HttpStatus.OK.value())
                 .build();
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT);
     }
 
     private Object getErrors(MethodArgumentNotValidException ex) {

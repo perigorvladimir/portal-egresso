@@ -13,6 +13,6 @@ public class AuthorizationService implements UserDetailsService {
     private final CoordenadorJpaRepository coordenadorJpaRepository;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return coordenadorJpaRepository.findByLogin(username);
+        return coordenadorJpaRepository.findByLogin(username).orElseThrow(() -> new UsernameNotFoundException("Coordenador nao encontrado"));
     }
 }

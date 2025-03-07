@@ -16,6 +16,7 @@ public class EncoderDinamico implements SenhaEncoder {
     private final Map<String, PasswordEncoder> encoders = new HashMap<>();
 
     public EncoderDinamico() {
+        // Adiciona apenas Bcrypt e Noop como algoritmos disponíveis
         encoders.put("bcrypt", new BCryptPasswordEncoder());
         encoders.put("noop", NoOpPasswordEncoder.getInstance());
 
