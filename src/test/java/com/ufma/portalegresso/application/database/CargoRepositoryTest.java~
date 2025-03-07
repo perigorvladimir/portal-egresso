@@ -110,7 +110,7 @@ public class CargoRepositoryTest {
                 .anoFim(2024)
                 .tipoAreaTrabalho(TipoAreaTrabalho.FINANCEIRO)
                 .build();
-        //TODO AJEITAR AQUI PARA VER O CAMPO QUE DEU ERRO, pegar a plavra que tem dentro das aspas
+        //TODO AJEITAR AQUI PARA VER O CAMPO QUE DEU ERRO
         try {
             cargoJpaRepository.save(cargo);
         } catch (DataIntegrityViolationException e) {

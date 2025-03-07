@@ -2,7 +2,6 @@ package com.ufma.portalegresso.application.services;
 
 import com.ufma.portalegresso.application.domain.Coordenador;
 import com.ufma.portalegresso.application.usecases.coordenador.SalvarCoordenadorUC;
-import com.ufma.portalegresso.infra.SenhaEncoderFake;
 import jakarta.persistence.EntityManager;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
@@ -38,7 +37,7 @@ public class CoordenadorServiceTest {
         assertEquals("ROLE_ADMIN", coordenador.getRole());
         assertEquals(request.getNome(), coordenadorSalvo.getNome());
         assertEquals(request.getLogin(), coordenadorSalvo.getLogin());
-        assertEquals(request.getSenha(), coordenadorSalvo.getSenha());
+        assertEquals(request.getSenha(), coordenadorSalvo.getSenha().split("}")[1]);
     }
 
     @Test

@@ -2,12 +2,10 @@ package com.ufma.portalegresso.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ufma.portalegresso.application.domain.Egresso;
-import com.ufma.portalegresso.application.services.AuthorizationService;
 import com.ufma.portalegresso.application.usecases.egresso.EgressoUC;
 import com.ufma.portalegresso.application.usecases.egresso.SalvarEgressoUC;
 import com.ufma.portalegresso.application.usecases.egresso.UpdateEgressoUC;
 import com.ufma.portalegresso.infra.TestSecurityConfig;
-import com.ufma.portalegresso.infra.security.TokenService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -37,10 +35,6 @@ public class EgressoControllerTest {
     private MockMvc mvc;
     @MockBean
     private EgressoUC egressoUC;
-    @MockBean
-    private TokenService tokenService;
-    @MockBean
-    private AuthorizationService authorizationService;
 
     @Test
     public void deveBuscarTodosEgressos() throws Exception {

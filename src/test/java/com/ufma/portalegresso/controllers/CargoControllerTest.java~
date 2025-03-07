@@ -47,6 +47,7 @@ public class CargoControllerTest {
     private AuthorizationService authorizationService;
 
     @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
     public void deveBuscarCargoPorId() throws Exception {
         // cenario
         Integer dto = 1;

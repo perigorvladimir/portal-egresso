@@ -3,10 +3,12 @@ package com.ufma.portalegresso.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ufma.portalegresso.application.domain.Curso;
 import com.ufma.portalegresso.application.domain.TipoNivel;
+import com.ufma.portalegresso.application.services.AuthorizationService;
 import com.ufma.portalegresso.application.usecases.curso.CursoUC;
 import com.ufma.portalegresso.application.usecases.curso.DesignarCoordenadorUC;
 import com.ufma.portalegresso.application.usecases.curso.SalvarCursoUC;
 import com.ufma.portalegresso.infra.TestSecurityConfig;
+import com.ufma.portalegresso.infra.security.TokenService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -37,6 +39,10 @@ public class CursoControllerTest {
     private MockMvc mvc;
     @MockBean
     private CursoUC cursoUC;
+    @MockBean
+    private TokenService tokenService;
+    @MockBean
+    private AuthorizationService authorizationService;
 
     @Test
     public void deveBuscarTodosCursos() throws Exception {

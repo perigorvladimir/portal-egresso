@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +26,9 @@ public class EncoderDinamico implements SenhaEncoder {
 
     @Override
     public String encode(String senha, String algoritmo) {
+        if(senha==null){
+            return null;
+        }
         PasswordEncoder encoder = encoders.getOrDefault(algoritmo, encoders.get("bcrypt"));
         return "{" + algoritmo + "}" + encoder.encode(senha); // Prefixa com o algoritmo usado
     }

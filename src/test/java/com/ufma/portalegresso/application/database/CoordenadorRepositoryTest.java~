@@ -2,6 +2,7 @@ package com.ufma.portalegresso.application.database;
 
 import com.ufma.portalegresso.application.domain.Coordenador;
 import com.ufma.portalegresso.application.out.CoordenadorJpaRepository;
+import com.ufma.portalegresso.infra.security.EncoderDinamico;
 import jakarta.persistence.EntityManager;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,8 @@ public class CoordenadorRepositoryTest {
     private EntityManager entityManager;
     @Autowired
     private CoordenadorJpaRepository coordenadorJpaRepository;
+    @Autowired
+    private EncoderDinamico encoderDinamico;
 
     @Test
     @Transactional

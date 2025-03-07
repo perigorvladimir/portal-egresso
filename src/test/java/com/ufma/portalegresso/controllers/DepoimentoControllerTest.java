@@ -2,10 +2,12 @@ package com.ufma.portalegresso.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ufma.portalegresso.application.domain.Depoimento;
+import com.ufma.portalegresso.application.services.AuthorizationService;
 import com.ufma.portalegresso.application.usecases.depoimento.DepoimentoUC;
 import com.ufma.portalegresso.application.usecases.depoimento.SalvarDepoimentoUC;
 import com.ufma.portalegresso.application.usecases.depoimento.UpdateDepoimentoUC;
 import com.ufma.portalegresso.infra.TestSecurityConfig;
+import com.ufma.portalegresso.infra.security.TokenService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -35,6 +37,10 @@ public class DepoimentoControllerTest {
     private MockMvc mvc;
     @MockBean
     private DepoimentoUC depoimentoUC;
+    @MockBean
+    private TokenService tokenService;
+    @MockBean
+    private AuthorizationService authorizationService;
 
     @Test
     public void deveBuscarDepoimentoPorId() throws Exception {

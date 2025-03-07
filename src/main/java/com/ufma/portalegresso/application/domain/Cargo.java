@@ -19,7 +19,6 @@ public class Cargo {
     private Integer idCargo;
     @Column(nullable = false)
     private String descricao;
-    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TipoAreaTrabalho tipoAreaTrabalho;
