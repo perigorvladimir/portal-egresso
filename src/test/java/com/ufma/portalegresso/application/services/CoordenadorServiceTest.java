@@ -7,6 +7,7 @@ import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,18 +47,18 @@ public class CoordenadorServiceTest {
                 .login("login")
                 .senha("senha")
                 .build();
-        assertThrows(ConstraintViolationException.class, () -> service.salvarCoordenador(request, "noop"));
+        assertThrows(DataIntegrityViolationException.class, () -> service.salvarCoordenador(request, "noop"));
 
         SalvarCoordenadorUC.Request request2 = SalvarCoordenadorUC.Request.builder()
                 .nome("nome coordenador")
                 .senha("senha")
                 .build();
-        assertThrows(ConstraintViolationException.class, () -> service.salvarCoordenador(request2, "noop"));
+        assertThrows(DataIntegrityViolationException.class, () -> service.salvarCoordenador(request2, "noop"));
 
         SalvarCoordenadorUC.Request request3 = SalvarCoordenadorUC.Request.builder()
                 .login("login")
                 .nome("nome coordenador")
                 .build();
-        assertThrows(ConstraintViolationException.class, () -> service.salvarCoordenador(request3, "noop"));
+        assertThrows(DataIntegrityViolationException.class, () -> service.salvarCoordenador(request3, "noop"));
     }
 }

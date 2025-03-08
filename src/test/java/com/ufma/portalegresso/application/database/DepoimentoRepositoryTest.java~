@@ -195,7 +195,7 @@ public class DepoimentoRepositoryTest {
     @Test
     @Transactional
     public void deveTestarEgressoPoderTerMaisDeUmDepoimento(){
-        Depoimento depoimentoSalvo1 = depoimentoJpaRepository.save(Depoimento.builder().texto("texto depoimento 1").egresso(egressoBase).data(LocalDate.now()).build());
+        Depoimento depoimentoSalvo1 = depoimentoJpaRepository.save(Depoimento.builder().texto("texto depoimento 1").egresso(egressoBase).data(LocalDate.now()).build()();
         Depoimento depoimentoSalvo2 = depoimentoJpaRepository.save(Depoimento.builder().texto("texto depoimento 2").egresso(egressoBase).data(LocalDate.now()).build());
 
         Set<Depoimento> depoimentos = egressoJpaRepository.findById(egressoBase.getIdEgresso()).get().getDepoimentos();

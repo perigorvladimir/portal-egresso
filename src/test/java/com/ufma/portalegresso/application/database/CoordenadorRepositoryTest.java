@@ -8,11 +8,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,9 +30,8 @@ public class CoordenadorRepositoryTest {
 
     @Test
     @Transactional
-    public void deveVerificarSalvarCoordenador(){
+    public void deveSalvarCoordenadorFluxoPadrao(){
         Coordenador coordenador = Coordenador.builder()
-                .role("coordenador")
                 .login("login")
                 .senha("senha")
                 .nome("Geraldo")
@@ -41,11 +42,11 @@ public class CoordenadorRepositoryTest {
         assertEquals(coordenador.getRole(), coordenadorSalvo.getRole());
         assertEquals(coordenador.getLogin(), coordenadorSalvo.getLogin());
         assertEquals(coordenador.getCursos(), coordenadorSalvo.getCursos());
-        // nao verifica login pois vai ser salvo criptografado
+        assertEquals(coordenador.getSenha(), coordenadorSalvo.getSenha());
     }
     @Test
     @Transactional
-    public void deveVerificarValorDefaultDoTipo() {
+    public void deveVerificarValorDefaultDaRole() {
         Coordenador coordenador = Coordenador.builder()
                 .login("login")
                 .senha("senha")
@@ -65,7 +66,6 @@ public class CoordenadorRepositoryTest {
         coordenador = Coordenador.builder()
                 .login("login2")
                 .senha("senha")
-                .role(null)
                 .nome("Igor")
                 .build();
         Coordenador coordenadorSalvo2 = coordenadorJpaRepository.saveAndFlush(coordenador);
@@ -77,14 +77,13 @@ public class CoordenadorRepositoryTest {
 
     @Test
     @Transactional
-    public void deveVerificarBuscarCoordenadorPorId(){
+    public void deveBuscarCoordenadorPorId(){
         Coordenador coordenadorCriado1 = coordenadorJpaRepository.save(Coordenador.builder()
                 .login("login 1")
                 .senha("123")
                 .nome("nome1")
                 .build());
         Coordenador coordenadorCriado2 = coordenadorJpaRepository.save(Coordenador.builder()
-                .role("admin")
                 .login("login 2")
                 .senha("12345")
                 .nome("nome2")
@@ -106,7 +105,7 @@ public class CoordenadorRepositoryTest {
         assertTrue(resultado2.isPresent());
         Coordenador coordenadorEncontrado2 = resultado2.get();
         assertEquals(coordenadorCriado2.getIdCoordenador(), coordenadorEncontrado2.getIdCoordenador());
-        assertEquals(coordenadorCriado2.getRole(), coordenadorEncontrado2.getRole());
+        assertEquals("ROLE_ADMIN", coordenadorEncontrado2.getRole());
         assertEquals(coordenadorCriado2.getLogin(), coordenadorEncontrado2.getLogin());
     }
 
@@ -114,13 +113,25 @@ public class CoordenadorRepositoryTest {
     public void naoDeveSalvarSemLoginOuSenha(){
         Coordenador coordenador = Coordenador.builder()
                 .login("loginteste")
-                .role(null)
+                .nome("Geraldo Braz")
                 .build();
 
-        assertThrows(ConstraintViolationException.class, () -> coordenadorJpaRepository.save(coordenador));
+        DataIntegrityViolationException exceptionSemSenha = assertThrows(DataIntegrityViolationException.class, () -> coordenadorJpaRepository.save(coordenador));
+        assertEquals("senha", exceptionSemSenha.getCause().getCause().getLocalizedMessage().split("\"")[1].toLowerCase());
+
         coordenador.setSenha("senhaTeste");
         coordenador.setLogin(null);
-        assertThrows(ConstraintViolationException.class, () -> coordenadorJpaRepository.save(coordenador));
+        DataIntegrityViolationException exceptionSemLogin = assertThrows(DataIntegrityViolationException.class, () -> coordenadorJpaRepository.save(coordenador));
+        assertEquals("login", exceptionSemLogin.getCause().getCause().getLocalizedMessage().split("\"")[1].toLowerCase());
+
+        coordenador.setLogin("loginteste");
+        coordenador.setNome(null);
+        DataIntegrityViolationException exceptionSemNome = assertThrows(DataIntegrityViolationException.class, () -> coordenadorJpaRepository.save(coordenador));
+        assertEquals("nome", exceptionSemNome.getCause().getCause().getLocalizedMessage().split("\"")[1].toLowerCase());
+
+        coordenador.setNome("Geraldo Braz");
+        Coordenador coordSalvo = assertDoesNotThrow(() -> coordenadorJpaRepository.save(coordenador));
+        coordenadorJpaRepository.deleteById(coordSalvo.getIdCoordenador());
     }
 
     @Test
@@ -135,13 +146,11 @@ public class CoordenadorRepositoryTest {
                         .login("login2")
                         .senha("1234")
                         .nome("nome2")
-                        .role("admin")
                         .build();
         Coordenador coordenador3 = Coordenador.builder()
                 .login("login3")
                 .senha("12345")
                 .nome("nome2")
-                .role("super-admin")
                 .build();
         coordenadorJpaRepository.save(coordenador1);
         coordenadorJpaRepository.save(coordenador2);
@@ -154,4 +163,61 @@ public class CoordenadorRepositoryTest {
         assertTrue(resposta.contains(coordenador1));
     }
 
+    @Test
+    @Transactional
+    public void deveAtualizarCoordenadorFluxoPadrao(){
+        Coordenador coordenadorSalvo = coordenadorJpaRepository.save(Coordenador.builder()
+                .nome("Igor")
+                .login("login")
+                .senha("senha")
+                .build());
+        Coordenador coordenadorAtualizado = Coordenador.builder()
+                .idCoordenador(coordenadorSalvo.getIdCoordenador())
+                .nome("nomeAtualizado")
+                .login("loginAtualizado")
+                .senha("senhaAtualizado")
+                .build();
+
+        coordenadorJpaRepository.save(coordenadorAtualizado);
+
+        Optional<Coordenador> resultado = coordenadorJpaRepository.findById(coordenadorAtualizado.getIdCoordenador());
+
+        assertTrue(resultado.isPresent());
+        Coordenador coordenadorEncontrado = resultado.get();
+        assertEquals(coordenadorAtualizado.getIdCoordenador(), coordenadorEncontrado.getIdCoordenador());
+        assertEquals(coordenadorAtualizado.getRole(), coordenadorEncontrado.getRole());
+        assertEquals(coordenadorAtualizado.getLogin(), coordenadorEncontrado.getLogin());
+        assertEquals(coordenadorAtualizado.getCursos(), coordenadorEncontrado.getCursos());
+        assertEquals(coordenadorAtualizado.getSenha(), coordenadorEncontrado.getSenha());
+    }
+
+    @Test
+    @Transactional
+    public void deveDeletarCoordenadorPorId(){
+        Coordenador coordenadorSalvo = coordenadorJpaRepository.save(Coordenador.builder()
+                .login("login")
+                .senha("senha")
+                .nome("Igor")
+                .build());
+        coordenadorJpaRepository.deleteById(coordenadorSalvo.getIdCoordenador());
+
+        assertThrows(NoSuchElementException.class, () -> coordenadorJpaRepository.findById(coordenadorSalvo.getIdCoordenador()).get());
+    }
+
+    @Test
+    @Transactional
+    public void naoDeveSalvarCoordenadorComLoginDuplicado(){
+        Coordenador coordenadorSalvo = coordenadorJpaRepository.save(Coordenador.builder()
+                .login("login")
+                .senha("senha")
+                .nome("Igor")
+                .build());
+        Coordenador coord = Coordenador.builder()
+                .login("login")
+                .senha("123")
+                .nome("Geraldo")
+                .build();
+
+        assertThrows(DataIntegrityViolationException.class, () -> coordenadorJpaRepository.save(coord));
+    }
 }

@@ -23,13 +23,10 @@ public class Coordenador implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idCoordenador;
-    @NotNull
     @Column(nullable = false)
     private String nome;
-    @NotNull
     @Column(nullable=false, unique = true)
     private String login;
-    @NotNull
     @Column(nullable = false)
     private String senha;
     @Column(columnDefinition = "varchar(255) default 'ROLE_ADMIN'", nullable = false)

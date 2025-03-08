@@ -15,6 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,7 +29,7 @@ public class EgressoRepositoryTest {
     private EgressoJpaRepository egressoJpaRepository;
     @Test
     @Transactional
-    public void deveVerificarSalvarEgresso(){
+    public void deveSalvarEgressoFluxoPadrao(){
         // CENARIO
         Egresso egresso = Egresso.builder()
                 .nome("Igor Vladimir Cunha de Alencar")
@@ -52,7 +53,7 @@ public class EgressoRepositoryTest {
     }
     @Test
     @Transactional
-    public void deveVerificarBuscarEgressoPorId(){
+    public void deveBuscarEgressoPorId(){
         // CENARIO
         Integer idEgresso = egressoJpaRepository.save(Egresso.builder()
                                                 .nome("Igor Vladimir Cunha de Alencar")
@@ -79,10 +80,16 @@ public class EgressoRepositoryTest {
                 .descricao("1223")
                 .build();
         // ACAO e VALIDACAO
-        assertThrows(DataIntegrityViolationException.class, () -> egressoJpaRepository.save(egresso));
+        DataIntegrityViolationException exceptionSemNome = assertThrows(DataIntegrityViolationException.class, () -> egressoJpaRepository.save(egresso));
+        assertEquals("nome", exceptionSemNome.getCause().getCause().getLocalizedMessage().split("\"")[1].toLowerCase());
+
         egresso.setNome("Igor Vladimir");
         egresso.setEmail(null);
-        assertThrows(DataIntegrityViolationException.class, () -> egressoJpaRepository.save(egresso));
+        DataIntegrityViolationException exceptionSemEmail = assertThrows(DataIntegrityViolationException.class, () -> egressoJpaRepository.save(egresso));
+
+        egresso.setEmail("igor.vladimir@discente.ufma.br");
+        Egresso egressoSalvo = assertDoesNotThrow(() -> egressoJpaRepository.save(egresso));
+        egressoJpaRepository.deleteById(egressoSalvo.getIdEgresso());
     }
 
     @Test
@@ -119,7 +126,63 @@ public class EgressoRepositoryTest {
         // VALIDACAO
         assertFalse(resultado.isEmpty());
         assertEquals(3, resultado.size());
+    }
 
+    @Test
+    @Transactional
+    public void deveAtualizarEgressoFluxoPadrao(){
+        // CENARIO
+        Egresso egressoSalvo = egressoJpaRepository.save(Egresso.builder()
+                .nome("Igor Vladimir Cunha de Alencar")
+                .email("igor.vladimir@discente.ufma.br")
+                .curriculo("curriculo teste curriculo teste curriculo teste curriculo teste curriculo teste")
+                .descricao("graduando CP")
+                .linkedin("https://www.linkedin.com/in/igorvalencar/")
+                .instagram("instagram_teste")
+                .build());
+        Egresso egressoAtualizado = Egresso.builder()
+                .nome("Geraldo Braz Junior")
+                .email("geraldo.braz@discente.ufma.br")
+                .curriculo("curriculo atualizado")
+                .descricao("graduando CP atualizado")
+                .linkedin("https://www.linkedin.com/in/igorvalencar/atualizado")
+                .instagram("instagram_teste atualizado")
+                .build();
+
+        egressoJpaRepository.save(egressoAtualizado);
+
+        // AÇÃO
+        Optional<Egresso> resultado = egressoJpaRepository.findById(egressoAtualizado.getIdEgresso());
+
+        // VERIFICAÇÃO
+        assertTrue(resultado.isPresent());
+        Egresso egressoEncontrado = resultado.get();
+        assertEquals(egressoAtualizado.getIdEgresso(), egressoEncontrado.getIdEgresso());
+        assertEquals(egressoAtualizado.getNome(), egressoEncontrado.getNome());
+        assertEquals(egressoAtualizado.getEmail(), egressoEncontrado.getEmail());
+        assertEquals(egressoAtualizado.getCurriculo(), egressoEncontrado.getCurriculo());
+        assertEquals(egressoAtualizado.getDescricao(), egressoEncontrado.getDescricao());
+        assertEquals(egressoAtualizado.getLinkedin(), egressoEncontrado.getLinkedin());
+        assertEquals(egressoAtualizado.getInstagram(), egressoEncontrado.getInstagram());
+    }
+
+    @Test
+    @Transactional
+    public void deveDeletarEgressoPorId(){
+        Egresso egressoSalvo = egressoJpaRepository.save(Egresso.builder()
+                .nome("Igor Vladimir Cunha de Alencar")
+                .email("igor.vladimir@discente.ufma.br")
+                .curriculo("curriculo teste curriculo teste curriculo teste curriculo teste curriculo teste")
+                .descricao("graduando CP")
+                .linkedin("https://www.linkedin.com/in/igorvalencar/")
+                .instagram("instagram_teste")
+                .build());
+
+        // AÇÃO
+        egressoJpaRepository.deleteById(egressoSalvo.getIdEgresso());
+
+        // VERIFICAÇÃO
+        assertThrows(NoSuchElementException.class, () -> egressoJpaRepository.findById(egressoSalvo.getIdEgresso()).get());
     }
 
 }

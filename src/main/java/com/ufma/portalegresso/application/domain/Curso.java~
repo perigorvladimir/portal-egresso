@@ -30,7 +30,7 @@ public class Curso {
     @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private Set<CursoEgresso> cursoEgressos;
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name="id_coordenador")
     @JsonIgnoreProperties({"cursos"})
     private Coordenador coordenador;

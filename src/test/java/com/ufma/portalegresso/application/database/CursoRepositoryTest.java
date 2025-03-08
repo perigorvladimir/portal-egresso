@@ -16,6 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,7 +42,7 @@ public class CursoRepositoryTest {
     }
     @Test
     @Transactional
-    public void deveVerificarFluxoPrincipalSalvar() {
+    public void deveSalvarCoordenadorFluxoPadrao() {
         Curso curso = Curso.builder()
                 .nome("Ciência da Computação")
                 .tipoNivel(TipoNivel.GRADUACAO)
@@ -96,10 +97,17 @@ public class CursoRepositoryTest {
                 .nome("Ciência da Computação")
                 .coordenador(coordenadorBase)
                 .build();
-        assertThrows(DataIntegrityViolationException.class, () -> cursoJpaRepository.save(curso));
+        DataIntegrityViolationException exceptionSemNivel = assertThrows(DataIntegrityViolationException.class, () -> cursoJpaRepository.save(curso));
+        assertEquals("nivel", exceptionSemNivel.getCause().getCause().getLocalizedMessage().split("\"")[1].toLowerCase());
+
         curso.setNome(null);
         curso.setTipoNivel(TipoNivel.GRADUACAO);
-        assertThrows(DataIntegrityViolationException.class, () -> cursoJpaRepository.save(curso));
+        DataIntegrityViolationException exceptionSemNome = assertThrows(DataIntegrityViolationException.class, () -> cursoJpaRepository.save(curso));
+        assertEquals("nome", exceptionSemNome.getCause().getCause().getLocalizedMessage().split("\"")[1].toLowerCase());
+
+        curso.setNome("Ciência da Computação");
+        Curso cursoSalvo = assertDoesNotThrow(() -> cursoJpaRepository.save(curso));
+        cursoJpaRepository.deleteById(cursoSalvo.getIdCurso());
     }
 
     @Test
@@ -130,5 +138,20 @@ public class CursoRepositoryTest {
         assertTrue(cursos.contains(curso1));
         assertTrue(cursos.contains(curso2));
         assertTrue(cursos.contains(curso3));
+    }
+
+    //sem atualizar pois nao faz sentido para o sistema
+
+    @Test
+    @Transactional
+    public void deveDeletarCursoPorId(){
+        Curso cursoSalvo = cursoJpaRepository.save(Curso.builder()
+                .nome("Design de Móveis")
+                .tipoNivel(TipoNivel.TECNOLOGO)
+                .coordenador(coordenadorBase)
+                .build());
+        cursoJpaRepository.deleteById(cursoSalvo.getIdCurso());
+
+        assertThrows(NoSuchElementException.class, () -> cursoJpaRepository.findById(cursoSalvo.getIdCurso()).get());
     }
 }
