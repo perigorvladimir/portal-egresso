@@ -8,6 +8,7 @@ import com.ufma.portalegresso.application.usecases.cargo.CargoUC;
 import com.ufma.portalegresso.application.usecases.cargo.SalvarCargoUC;
 import com.ufma.portalegresso.application.usecases.cargo.UpdateCargoUC;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,7 @@ public class CargoService implements CargoUC {
     private final CargoJpaRepository cargoJpaRepository;
     private final EgressoService egressoService;
     @Override
-    public Cargo salvar(SalvarCargoUC.Request request) {
+    public Cargo salvar(@Valid SalvarCargoUC.Request request) {
         if(request.getAnoFim() < request.getAnoInicio()){
             throw new IllegalArgumentException("O ano de fim deve ser maior que o de inicio");
         }

@@ -10,11 +10,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDate;
-
+@Validated
 public interface SalvarCargoUC {
-    Cargo salvar(Request request);
+    Cargo salvar(@Valid Request request);
 
     @Getter
     @Builder

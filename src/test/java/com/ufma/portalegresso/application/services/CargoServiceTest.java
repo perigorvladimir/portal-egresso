@@ -46,7 +46,7 @@ public class CargoServiceTest {
     }
     @Test
     @Transactional
-    public void deveSalvarCargo(){
+    public void deveSalvarCargoFluxoPadrao(){
         SalvarCargoUC.Request cargo = SalvarCargoUC.Request.builder()
                 .local("UFMA")
                 .anoInicio(2021)
@@ -72,6 +72,18 @@ public class CargoServiceTest {
                 .local("UFMA")
                 .anoInicio(2021)
                 .anoFim(2020)
+                .descricao("Cargo")
+                .idEgresso(egressoBase.getIdEgresso())
+                .build();
+
+        assertThrows(IllegalArgumentException.class, () -> service.salvar(cargo));
+    }
+
+    @Test
+    public void deveGerarErroAoTentarSalvarSemAnoInicio(){
+        SalvarCargoUC.Request cargo = SalvarCargoUC.Request.builder()
+                .local("UFMA")
+                .anoFim(2022)
                 .descricao("Cargo")
                 .idEgresso(egressoBase.getIdEgresso())
                 .build();
