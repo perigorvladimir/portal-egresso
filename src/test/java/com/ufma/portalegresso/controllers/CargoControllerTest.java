@@ -111,8 +111,8 @@ public class CargoControllerTest {
     public void deveAtualizarCargo() throws Exception {
         // cenario
         Integer idCargo = 1;
-        UpdateCargoUC.Request cargo = UpdateCargoUC.Request.builder().anoInicio(2020).descricao("descricao").anoFim(2021).local("UFMA").build();
-        Cargo cargoSalvo = Cargo.builder().anoInicio(2020).descricao("descricao").anoFim(2021).local("UFMA").build();
+        UpdateCargoUC.Request cargo = UpdateCargoUC.Request.builder().anoInicio(2020).tipoAreaTrabalho("RH").descricao("descricao").anoFim(2021).local("UFMA").build();
+        Cargo cargoSalvo = Cargo.builder().anoInicio(2020).tipoAreaTrabalho(TipoAreaTrabalho.RH).descricao("descricao").anoFim(2021).local("UFMA").build();
 
         Mockito.when(cargoUC.updateCargo(Mockito.any(Integer.class), Mockito.any(UpdateCargoUC.Request.class))).thenReturn(cargoSalvo);
 

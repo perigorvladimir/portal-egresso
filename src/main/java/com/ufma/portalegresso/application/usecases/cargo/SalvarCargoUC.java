@@ -4,18 +4,14 @@ import com.ufma.portalegresso.application.domain.Cargo;
 import com.ufma.portalegresso.application.domain.TipoAreaTrabalho;
 import com.ufma.portalegresso.shared.validators.MaxAnoAtual;
 import com.ufma.portalegresso.shared.validators.ValidEnum;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 
-import java.time.LocalDate;
-@Validated
 public interface SalvarCargoUC {
-    Cargo salvar(@Valid Request request);
+    Cargo salvar(Request request);
 
     @Getter
     @Builder

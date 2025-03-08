@@ -7,5 +7,10 @@ public enum TipoAreaTrabalho {
     SAUDE,
     RH,
     VENDAS,
-    MARKETING
+    MARKETING;
+
+    public static TipoAreaTrabalho buscarPorNome(String valor) {
+        if(valor == null) return null;
+        return valueOf(valor);
+    }
 }
