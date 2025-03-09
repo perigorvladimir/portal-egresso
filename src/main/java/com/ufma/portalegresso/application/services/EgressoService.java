@@ -40,11 +40,11 @@ public class EgressoService implements EgressoUC {
 
     @Override
     public Egresso buscarEgressoPorId(Integer id) {
-        Optional<Egresso> egressoOptional = egressoJpaRepository.findById(id);
-        if(egressoOptional.isEmpty()){
-            throw new EntityNotFoundException("Egresso nao encontrado com o id inserido");
+        if(id == null){
+            throw new IllegalArgumentException("O id do egresso nao pode ser nulo");
         }
-        return egressoOptional.get();
+        Egresso egresso = egressoJpaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Egresso nao encontrado com o id inserido"));
+        return egresso;
     }
 
     @Override

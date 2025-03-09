@@ -39,11 +39,11 @@ public class CargoService implements CargoUC {
 
     @Override
     public Cargo buscarPorId(Integer id) {
-        Optional<Cargo> cargo = cargoJpaRepository.findById(id);
-        if(cargo.isEmpty()){
-            throw new EntityNotFoundException("Cargo não encontrado com o id inserido");
+        if(id == null){
+            throw new IllegalArgumentException("O id do cargo nao pode ser nulo");
         }
-        return cargo.get();
+        Cargo cargo = cargoJpaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cargo não encontrado com o id inserido"));
+        return cargo;
     }
     @Override
     public List<Cargo> buscarTodosCargos() {
@@ -64,7 +64,7 @@ public class CargoService implements CargoUC {
         cargo.setAnoInicio(request.getAnoInicio());
         cargo.setAnoFim(request.getAnoFim());
         cargo.setTipoAreaTrabalho(TipoAreaTrabalho.buscarPorNome(request.getTipoAreaTrabalho()));
-        return cargoJpaRepository.save(cargo);
+        return cargoJpaRepository.saveAndFlush(cargo);
     }
 
     private void validarAnoInicioEAnoFim(Integer anoInicio, Integer anoFim){

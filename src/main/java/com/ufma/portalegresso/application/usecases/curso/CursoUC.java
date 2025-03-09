@@ -1,4 +1,5 @@
 package com.ufma.portalegresso.application.usecases.curso;
 
-public interface CursoUC extends SalvarCursoUC, DeletarCursoUC, BuscarCursoPorIdUC, BuscarTodosCursosUC, DesignarCoordenadorUC {
+
+public interface CursoUC extends SalvarCursoUC, DeletarCursoUC, BuscarCursoPorIdUC, BuscarTodosCursosUC, DesignarCoordenadorUC, UpdateCursoUc {
 }

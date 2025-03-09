@@ -71,7 +71,7 @@ public class DepoimentoServiceTest {
         SalvarDepoimentoUC.Request depoimento = SalvarDepoimentoUC.Request.builder()
                 .texto("depoimento padrao")
                 .build();
-        assertThrows(InvalidDataAccessApiUsageException.class, () -> service.salvarDepoimento(depoimento));
+        assertThrows(IllegalArgumentException.class, () -> service.salvarDepoimento(depoimento));
     }
 
     @Test

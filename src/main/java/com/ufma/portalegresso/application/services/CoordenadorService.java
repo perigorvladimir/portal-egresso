@@ -25,6 +25,9 @@ public class CoordenadorService implements CoordenadorUC {
         if(coordenadorJpaRepository.existsByLogin(request.getLogin())){
             throw new IllegalArgumentException("Já existe um usuário cadastrado com esse login");
         }
+        if(request.getSenha().length() < 8){
+            throw new IllegalArgumentException("A senha deve ter pelo menos 8 caracteres");
+        }
         String senhaCriptografada = senhaEncoder.encode(request.getSenha(), algoritmoCriptografia);
 
         Coordenador coord = Coordenador.builder().nome(request.getNome()).login(request.getLogin()).senha(senhaCriptografada).build();
@@ -39,6 +42,9 @@ public class CoordenadorService implements CoordenadorUC {
 
     @Override
     public Coordenador buscarCoordenadorPorId(Integer idCoordenador) {
+        if(idCoordenador == null){
+            throw new IllegalArgumentException("O id do coordenador nao pode ser nulo");
+        }
         Coordenador coordenador = coordenadorJpaRepository.findById(idCoordenador).orElseThrow(() -> new EntityNotFoundException("Coordenador não encontrado com o id inserido"));
         return coordenador;
     }

@@ -6,6 +6,8 @@ import com.ufma.portalegresso.application.domain.TipoNivel;
 import com.ufma.portalegresso.application.out.CoordenadorJpaRepository;
 import com.ufma.portalegresso.application.out.CursoJpaRepository;
 import com.ufma.portalegresso.application.usecases.curso.CursoUC;
+import com.ufma.portalegresso.application.usecases.curso.SalvarCursoUC;
+import com.ufma.portalegresso.application.usecases.curso.UpdateCursoUc;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +21,7 @@ public class CursoService implements CursoUC {
     private final CursoJpaRepository cursoJpaRepository;
     private final CoordenadorService coordenadorService;
     @Override
-    public Curso salvarCurso(Request request) {
+    public Curso salvarCurso(SalvarCursoUC.Request request) {
         Coordenador coordenador = request.getIdCoordenador() != null ?
                 coordenadorService.buscarCoordenadorPorId(request.getIdCoordenador())
                 : null;
@@ -27,23 +29,29 @@ public class CursoService implements CursoUC {
         Curso curso = Curso.builder()
                 .coordenador(coordenador)
                 .nome(request.getNome())
-                .tipoNivel(TipoNivel.valueOf(request.getTipoNivel()))
+                .tipoNivel(TipoNivel.buscarPorNome(request.getTipoNivel()))
                 .build();
         return cursoJpaRepository.save(curso);
     }
 
     @Override
     public Curso buscarPorId(Integer id) {
-        Optional<Curso> curso = cursoJpaRepository.findById(id);
-        if(curso.isEmpty()){
-            throw new EntityNotFoundException("Curso não encontrado com o id inserido");
+        if(id == null){
+            throw new IllegalArgumentException("O id do curso nao pode ser nulo");
         }
-        return curso.get();
+        Curso curso = cursoJpaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Curso nao encontrado com o id inserido"));
+        return curso;
     }
 
     @Override
     public List<Curso> buscarTodosCursos() {
         return cursoJpaRepository.findAll();
+    }
+    @Override
+    public Curso update(Integer id, UpdateCursoUc.Request request) {
+        Curso curso = buscarPorId(id);
+        curso.setNome(request.getNome());
+        return cursoJpaRepository.saveAndFlush(curso);
     }
 
     @Override
@@ -56,7 +64,7 @@ public class CursoService implements CursoUC {
         Curso curso = buscarPorId(idCurso);
         Coordenador coordenador = coordenadorService.buscarCoordenadorPorId(idCoordenador);
         curso.setCoordenador(coordenador);
-        Curso cursoSalvo = cursoJpaRepository.save(curso);
+        Curso cursoSalvo = cursoJpaRepository.saveAndFlush(curso);
         return Response.builder().idNovoCoord(cursoSalvo.getCoordenador().getIdCoordenador()).nomeNovoCoord(cursoSalvo.getCoordenador().getNome()).idCurso(cursoSalvo.getIdCurso()).nomeCurso(cursoSalvo.getNome()).build();
     }
 }

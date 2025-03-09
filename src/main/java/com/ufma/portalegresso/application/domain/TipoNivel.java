@@ -5,5 +5,10 @@ public enum TipoNivel {
     GRADUACAO,
     POS_GRADUACAO,
     MESTRADO,
-    DOUTORADO
+    DOUTORADO;
+
+    public static TipoNivel buscarPorNome(String valor) {
+        if(valor == null) return null;
+        return valueOf(valor);
+    }
 }

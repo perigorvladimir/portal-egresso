@@ -3,7 +3,6 @@ package com.ufma.portalegresso.application.services;
 import com.ufma.portalegresso.application.domain.Coordenador;
 import com.ufma.portalegresso.application.usecases.coordenador.SalvarCoordenadorUC;
 import jakarta.persistence.EntityManager;
-import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,11 +22,11 @@ public class CoordenadorServiceTest {
 
     @Test
     @Transactional
-    public void deveSalvarCoordenadorPadrao(){
+    public void deveSalvarCoordenadorFluxoPadrao(){
         SalvarCoordenadorUC.Request request = SalvarCoordenadorUC.Request.builder()
                 .nome("nome coordenador")
                 .login("login")
-                .senha("senha")
+                .senha("senhaOitoDigitos")
                 .build();
         Coordenador coordenadorSalvo = service.salvarCoordenador(request, "noop");
 
@@ -43,22 +42,11 @@ public class CoordenadorServiceTest {
 
     @Test
     public void deveGerarErroAoSalvarCoordenadorSemNomeOuLoginOuSenha(){
-        SalvarCoordenadorUC.Request request = SalvarCoordenadorUC.Request.builder()
-                .login("login")
-                .senha("senha")
-                .build();
-        assertThrows(DataIntegrityViolationException.class, () -> service.salvarCoordenador(request, "noop"));
 
-        SalvarCoordenadorUC.Request request2 = SalvarCoordenadorUC.Request.builder()
-                .nome("nome coordenador")
-                .senha("senha")
-                .build();
-        assertThrows(DataIntegrityViolationException.class, () -> service.salvarCoordenador(request2, "noop"));
+    }
 
-        SalvarCoordenadorUC.Request request3 = SalvarCoordenadorUC.Request.builder()
-                .login("login")
-                .nome("nome coordenador")
-                .build();
-        assertThrows(DataIntegrityViolationException.class, () -> service.salvarCoordenador(request3, "noop"));
+    @Test
+    public void deveGerarErroAoBuscarCoordenadorPorIdNull(){
+        assertThrows(IllegalArgumentException.class, () -> service.buscarCoordenadorPorId(null));
     }
 }

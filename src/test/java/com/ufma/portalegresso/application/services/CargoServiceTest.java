@@ -2,7 +2,6 @@ package com.ufma.portalegresso.application.services;
 
 import com.ufma.portalegresso.application.domain.Cargo;
 import com.ufma.portalegresso.application.domain.Egresso;
-import com.ufma.portalegresso.application.out.CargoJpaRepository;
 import com.ufma.portalegresso.application.out.EgressoJpaRepository;
 import com.ufma.portalegresso.application.usecases.cargo.*;
 import jakarta.persistence.EntityNotFoundException;
@@ -12,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,8 +24,6 @@ public class CargoServiceTest {
     @Autowired
     private CargoService service;
     private static Egresso egressoBase;
-    @Autowired
-    private CargoJpaRepository cargoJpaRepository;
 
     @BeforeAll
     public static void setUp(@Autowired EgressoJpaRepository egressoJpaRepository){
@@ -69,7 +65,7 @@ public class CargoServiceTest {
     }
 
     @Test
-    public void deveGerarErroAoTentarSalvarCargoComAnoFimMenorQueAnoInicio(){
+    public void deveGerarErroAoSalvarCargoComAnoFimMenorQueAnoInicio(){
         SalvarCargoUC.Request cargo = SalvarCargoUC.Request.builder()
                 .local("UFMA")
                 .anoInicio(2021)
@@ -112,7 +108,7 @@ public class CargoServiceTest {
 
     @Test
     @Transactional
-    public void deveGerarErroAoMandarTipoAreaTrabalhoInexistenteOuNulo(){
+    public void deveGerarErroAoSalvarCargoMandandoTipoAreaTrabalhoInexistenteOuNulo(){
         SalvarCargoUC.Request cargoTipoAreaNull = SalvarCargoUC.Request.builder().tipoAreaTrabalho(null).local("UFMA").anoInicio(2021).anoFim(2022).descricao("Cargo").idEgresso(egressoBase.getIdEgresso()).build();
 
         SalvarCargoUC.Request cargoTipoAreaInexistente = SalvarCargoUC.Request.builder().tipoAreaTrabalho("rh").local("UFMA").anoInicio(2021).anoFim(2022).descricao("Cargo").idEgresso(egressoBase.getIdEgresso()).build();
@@ -130,20 +126,27 @@ public class CargoServiceTest {
                 .descricao("Cargo")
                 .build();
 
-        assertThrows(InvalidDataAccessApiUsageException.class, () -> service.salvar(cargo));
+        assertThrows(IllegalArgumentException.class, () -> service.salvar(cargo));
+    }
+
+    @Test
+    @Transactional
+    public void deveGerarErroAoTentarSalvarCargoComEgressoInexistente(){
+        SalvarCargoUC.Request cargo = SalvarCargoUC.Request.builder()
+                .local("UFMA")
+                .anoInicio(2021)
+                .anoFim(2022)
+                .descricao("Cargo")
+                .idEgresso(100)
+                .build();
+
+        assertThrows(EntityNotFoundException.class, () -> service.salvar(cargo));
     }
 
     @Test
     @Transactional
     public void deveBuscarCargoPorIdPadrao(){
-        Cargo cargoCriado = service.salvar(SalvarCargoUC.Request.builder()
-                .local("UFMA")
-                .anoInicio(2021)
-                .anoFim(2022)
-                .descricao("Cargo")
-                .tipoAreaTrabalho("RH")
-                .idEgresso(egressoBase.getIdEgresso())
-                .build());
+        Cargo cargoCriado = criarCargoTestes();
 
         Cargo cargoEncontrado = service.buscarPorId(cargoCriado.getIdCargo());
 
@@ -154,6 +157,10 @@ public class CargoServiceTest {
     @Test
     public void deveGerarErroAoBuscarCargoPorIdInexistente(){
         assertThrows(EntityNotFoundException.class, () -> service.buscarPorId(100));
+    }
+    @Test
+    public void deveGerarErroAoBuscarCargoPorIdNull(){
+        assertThrows(IllegalArgumentException.class, () -> service.buscarPorId(null));
     }
 
     @Test
@@ -172,15 +179,8 @@ public class CargoServiceTest {
     }
 
     @Test
-    public void deveDeletarCargoPadrao(){
-        Cargo cargoCriado = service.salvar(SalvarCargoUC.Request.builder()
-                .local("UFMA")
-                .anoInicio(2021)
-                .anoFim(2022)
-                .descricao("Cargo")
-                .tipoAreaTrabalho("FINANCEIRO")
-                .idEgresso(egressoBase.getIdEgresso())
-                .build());
+    public void deveDeletarCargoPorId(){
+        Cargo cargoCriado = criarCargoTestes();
 
         service.deletarPorId(cargoCriado.getIdCargo());
 
@@ -194,20 +194,13 @@ public class CargoServiceTest {
 
     @Test
     @Transactional
-    public void deveAtualizarCargo(){
-        Cargo cargoCriado = service.salvar(SalvarCargoUC.Request.builder()
-                .local("UFMA")
-                .anoInicio(2021)
-                .anoFim(2022)
-                .descricao("Cargo")
-                .tipoAreaTrabalho("RH")
-                .idEgresso(egressoBase.getIdEgresso())
-                .build());
+    public void deveAtualizarCargoFluxoPadrao(){
+        Cargo cargoCriado = criarCargoTestes();
 
         UpdateCargoUC.Request cargoAtualizado = UpdateCargoUC.Request.builder()
                 .local("slz")
-                .anoInicio(2015)
-                .anoFim(2019)
+                .anoInicio(2023)
+                .anoFim(null)
                 .descricao("Cargo 2")
                 .tipoAreaTrabalho("FINANCEIRO")
                 .build();
@@ -221,5 +214,85 @@ public class CargoServiceTest {
         assertEquals(cargoAtualizado.getAnoFim(), cargoEncontrado.getAnoFim());
         assertEquals(cargoAtualizado.getLocal(), cargoEncontrado.getLocal());
         assertEquals(cargoAtualizado.getTipoAreaTrabalho(), cargoEncontrado.getTipoAreaTrabalho().toString());
+    }
+
+    @Test
+    @Transactional
+    public void deveGerarErroAoAtualizarCargoInexistente(){
+
+        UpdateCargoUC.Request cargoAtualizado = UpdateCargoUC.Request.builder()
+                .local("slz")
+                .anoInicio(2022)
+                .anoFim(2023)
+                .descricao("Cargo 2")
+                .tipoAreaTrabalho("FINANCEIRO")
+                .build();
+
+        assertThrows(EntityNotFoundException.class, () -> service.updateCargo(100, cargoAtualizado));
+    }
+
+    @Test
+    @Transactional
+    public void deveGerarErroAoAtualizarCargoMandandoIdNull(){
+        UpdateCargoUC.Request cargoAtualizado = UpdateCargoUC.Request.builder()
+                .local("slz")
+                .anoInicio(2022)
+                .anoFim(2023)
+                .descricao("Cargo 2")
+                .tipoAreaTrabalho("FINANCEIRO")
+                .build();
+
+        assertThrows(IllegalArgumentException.class, () -> service.updateCargo(null, cargoAtualizado));
+    }
+
+    @Test
+    @Transactional
+    public void deveGerarErroAoAtualizarCargoComAnoFimMenorQueAnoInicio(){
+        Cargo cargoCriado = criarCargoTestes();
+
+        UpdateCargoUC.Request cargoAtualizado = UpdateCargoUC.Request.builder()
+                .local("slz")
+                .anoInicio(2022)
+                .anoFim(2019)
+                .descricao("Cargo 2")
+                .tipoAreaTrabalho("FINANCEIRO")
+                .build();
+
+        assertThrows(IllegalArgumentException.class, () -> service.updateCargo(cargoCriado.getIdCargo(), cargoAtualizado));
+    }
+
+    @Test
+    @Transactional
+    public void deveGerarErroAoAtualizarCargoMandandoTipoAreaTrabalhoInexistenteOuNulo(){
+        Cargo cargoCriado = criarCargoTestes();
+
+        UpdateCargoUC.Request cargoAtualizadoAreaNull = UpdateCargoUC.Request.builder()
+                .local("slz")
+                .anoInicio(2011)
+                .anoFim(null)
+                .descricao("Cargo 2")
+                .tipoAreaTrabalho(null)
+                .build();
+        UpdateCargoUC.Request cargoAtualizadoAreaInexistente = UpdateCargoUC.Request.builder()
+                .local("slz")
+                .anoInicio(2015)
+                .anoFim(2019)
+                .descricao("Cargo 2")
+                .tipoAreaTrabalho("rh")
+                .build();
+        DataIntegrityViolationException exceptionAreaNull = assertThrows(DataIntegrityViolationException.class, () -> service.updateCargo(cargoCriado.getIdCargo(), cargoAtualizadoAreaNull));
+        assertEquals("tipo_area_trabalho", exceptionAreaNull.getCause().getCause().getLocalizedMessage().split("\"")[1].toLowerCase());
+        assertThrows(IllegalArgumentException.class, () -> service.updateCargo(cargoCriado.getIdCargo(), cargoAtualizadoAreaInexistente));
+    }
+
+    private Cargo criarCargoTestes(){
+        return service.salvar(SalvarCargoUC.Request.builder()
+                .local("UFMA")
+                .anoInicio(2021)
+                .anoFim(2022)
+                .descricao("Cargo")
+                .tipoAreaTrabalho("RH")
+                .idEgresso(egressoBase.getIdEgresso())
+                .build());
     }
 }

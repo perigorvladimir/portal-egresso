@@ -3,19 +3,18 @@ package com.ufma.portalegresso.application.services;
 import com.ufma.portalegresso.application.domain.Coordenador;
 import com.ufma.portalegresso.application.domain.Curso;
 import com.ufma.portalegresso.application.out.CoordenadorJpaRepository;
-import com.ufma.portalegresso.application.out.CursoJpaRepository;
-import com.ufma.portalegresso.application.usecases.curso.CursoUC;
-import com.ufma.portalegresso.application.usecases.curso.SalvarCursoUC;
+import com.ufma.portalegresso.application.usecases.curso.*;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,10 +25,6 @@ public class CursoServiceTest {
     private CursoService service;
 
     private static Coordenador coordenadorBase;
-    @Autowired
-    private CursoJpaRepository cursoJpaRepository;
-    @Autowired
-    private CursoUC cursoUC;
 
     @BeforeAll
     public static void setUp(@Autowired CoordenadorJpaRepository coordenadorJpaRepository){
@@ -61,18 +56,30 @@ public class CursoServiceTest {
         assertNotNull(cursoSalvo.getIdCurso());
     }
     @Test
-    @Transactional
-    public void deveBuscarCursoPorIdPadrao(){
-        Curso cursoCriado = service.salvarCurso(SalvarCursoUC.Request.builder()
+    public void deveGerarErroAoSalvarCursoComCoordenadorInexistente(){
+        SalvarCursoUC.Request curso = SalvarCursoUC.Request.builder()
                 .nome("Ciência da Computação")
                 .tipoNivel("GRADUACAO")
+                .idCoordenador(100)
+                .build();
+
+        assertThrows(EntityNotFoundException.class, () -> service.salvarCurso(curso));
+    }
+    @Test
+    public void deveGerarErroAoSalvarCursoComTipoNivelInexistenteOuNull(){
+        SalvarCursoUC.Request cursoTipoNivelNull = SalvarCursoUC.Request.builder()
+                .nome("Ciência da Computação")
                 .idCoordenador(coordenadorBase.getIdCoordenador())
-                .build());
+                .build();
 
-        Curso cursoEncontrado = service.buscarPorId(cursoCriado.getIdCurso());
+        SalvarCursoUC.Request cursoTipoNivelInexistente = SalvarCursoUC.Request.builder()
+                .nome("Ciência da Computação")
+                .tipoNivel("inexistente")
+                .idCoordenador(coordenadorBase.getIdCoordenador())
+                .build();
 
-        assertEquals(cursoCriado.getIdCurso(), cursoEncontrado.getIdCurso());
-        assertEquals(cursoCriado.getCoordenador().getIdCoordenador(), cursoEncontrado.getCoordenador().getIdCoordenador());
+        assertThrows(DataIntegrityViolationException.class, () -> service.salvarCurso(cursoTipoNivelNull));
+        assertThrows(IllegalArgumentException.class, () -> service.salvarCurso(cursoTipoNivelInexistente));
     }
     @Test
     @Transactional
@@ -101,6 +108,60 @@ public class CursoServiceTest {
     }
     @Test
     @Transactional
+    public void deveBuscarCursoPorIdPadrao(){
+        Curso cursoCriado = criarCursoTestes();
+
+        Curso cursoEncontrado = service.buscarPorId(cursoCriado.getIdCurso());
+
+        assertEquals(cursoCriado.getIdCurso(), cursoEncontrado.getIdCurso());
+        assertEquals(cursoCriado.getNome(), cursoEncontrado.getNome());
+        assertEquals(cursoCriado.getTipoNivel(), cursoEncontrado.getTipoNivel());
+        assertEquals(cursoCriado.getCoordenador().getIdCoordenador(), cursoEncontrado.getCoordenador().getIdCoordenador());
+    }
+    @Test
+    @Transactional
+    public void deveGerarErroAoBuscarCursoPorIdInexistente(){
+        Curso cursoCriado = criarCursoTestes();
+
+        assertThrows(EntityNotFoundException.class, () -> service.buscarPorId(100));
+    }
+    @Test
+    @Transactional
+    public void deveGerarErroAoBuscarCursoPorIdNull(){
+        Curso cursoCriado = criarCursoTestes();
+
+        assertThrows(IllegalArgumentException.class, () -> service.buscarPorId(null));
+    }
+    @Test
+    @Transactional
+    public void deveAtualizarCursoFluxoPadrao(){
+        Curso cursoCriado = criarCursoTestes();
+
+        UpdateCursoUc.Request cursoAtualizado = UpdateCursoUc.Request.builder()
+                .nome("Ciência da Computação")
+                .build();
+
+        service.update(cursoCriado.getIdCurso(), cursoAtualizado);
+
+        Curso cursoEncontrado = service.buscarPorId(cursoCriado.getIdCurso());
+
+        assertEquals(cursoCriado.getIdCurso(), cursoEncontrado.getIdCurso());
+        assertEquals(cursoCriado.getNome(), cursoEncontrado.getNome());
+        assertEquals(cursoCriado.getTipoNivel(), cursoEncontrado.getTipoNivel());
+        assertEquals(cursoCriado.getCoordenador().getIdCoordenador(), cursoEncontrado.getCoordenador().getIdCoordenador());
+    }
+    @Test
+    @Transactional
+    public void deveGerarErroAoAtualizarCursoComIdInexistente(){
+        assertThrows(EntityNotFoundException.class, () -> service.update(100, UpdateCursoUc.Request.builder().build()));
+    }
+    @Test
+    @Transactional
+    public void deveGerarErroAoAtualizarCursoComIdNull(){
+        assertThrows(IllegalArgumentException.class, () -> service.update(null, UpdateCursoUc.Request.builder().build()));
+    }
+    @Test
+    @Transactional
     public void deveDeletarCursoPadrao(){
         Curso cursoCriado = service.salvarCurso(SalvarCursoUC.Request
                 .builder()
@@ -111,7 +172,47 @@ public class CursoServiceTest {
 
         service.deletarCursoPorId(cursoCriado.getIdCurso());
 
-        Optional<Curso> cursoEncontrado = cursoJpaRepository.findById(cursoCriado.getIdCurso());
-        assertTrue(cursoEncontrado.isEmpty());
+        assertThrows(EntityNotFoundException.class, () -> service.buscarPorId(cursoCriado.getIdCurso()));
+    }
+    @Test
+    @Transactional
+    public void deveDesignarCoordenadorFluxoPadrao(){
+        Curso cursoCriado = criarCursoTestes();
+
+        DesignarCoordenadorUC.Response response = service.designarCoordenador(cursoCriado.getIdCurso(), coordenadorBase.getIdCoordenador());
+
+        assertEquals(response.getIdNovoCoord(), coordenadorBase.getIdCoordenador());
+        assertEquals(response.getNomeNovoCoord(), coordenadorBase.getNome());
+        assertEquals(response.getIdCurso(), cursoCriado.getIdCurso());
+        assertEquals(response.getNomeCurso(), cursoCriado.getNome());
+    }
+    @Test
+    public void deveGerarErroAoDesignarCoordenadorComIdCursoNull(){
+        assertThrows(IllegalArgumentException.class, () -> service.designarCoordenador(null, coordenadorBase.getIdCoordenador()));
+    }
+    @Test
+    public void deveGerarErroAoDesignarCoordenadorComIdCursoInexistente(){
+        assertThrows(EntityNotFoundException.class, () -> service.designarCoordenador(100, coordenadorBase.getIdCoordenador()));
+    }
+    @Test
+    @Transactional
+    public void deveGerarErroAoDesignarCoordenadorComIdCoordenadorNull(){
+        Curso cursoCriado = criarCursoTestes();
+        assertThrows(IllegalArgumentException.class, () -> service.designarCoordenador(cursoCriado.getIdCurso(), null));
+    }
+    @Test
+    @Transactional
+    public void deveGerarErroAoDesignarCoordenadorComIdCoordenadorInexistente(){
+        Curso cursoCriado = criarCursoTestes();
+        assertThrows(EntityNotFoundException.class, () -> service.designarCoordenador(cursoCriado.getIdCurso(), 100));
+    }
+
+    private Curso criarCursoTestes(){
+        Curso cursoCriado = service.salvarCurso(SalvarCursoUC.Request.builder()
+                .nome("Ciência da Computação")
+                .tipoNivel("GRADUACAO")
+                .idCoordenador(coordenadorBase.getIdCoordenador())
+                .build());
+        return cursoCriado;
     }
 }

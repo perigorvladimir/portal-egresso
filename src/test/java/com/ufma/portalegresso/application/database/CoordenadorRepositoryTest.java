@@ -110,7 +110,7 @@ public class CoordenadorRepositoryTest {
     }
 
     @Test
-    public void naoDeveSalvarSemLoginOuSenha(){
+    public void deveGerarErroSalvarSemLoginOuSenhaOuNome(){
         Coordenador coordenador = Coordenador.builder()
                 .login("loginteste")
                 .nome("Geraldo Braz")
