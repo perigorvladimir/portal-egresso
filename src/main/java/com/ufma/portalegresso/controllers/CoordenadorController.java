@@ -30,13 +30,6 @@ public class CoordenadorController {
         var coordenador = coordenadorUC.buscarCoordenadorPorId(idCoordenador);
         return ResponseEntity.ok(ResponseApi.builder().dado(coordenador).status(200).build());
     }
-    @PostMapping
-    @Transactional
-    public ResponseEntity<?> salvarCoordenador(@Valid @RequestBody SalvarCoordenadorUC.Request request) {
-        var coordenadorSalvo = coordenadorUC.salvarCoordenador(request, "bcrypt");
-        URI location = URI.create("/coordenador/" + coordenadorSalvo.getIdCoordenador());
-        return ResponseEntity.created(location).body(ResponseApi.builder().dado(coordenadorSalvo).status(201).build());
-    }
 
     @PutMapping("/{idCoordenador}")
     @Transactional

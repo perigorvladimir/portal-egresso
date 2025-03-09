@@ -3,7 +3,6 @@ package com.ufma.portalegresso.application.database;
 import com.ufma.portalegresso.application.domain.Coordenador;
 import com.ufma.portalegresso.application.out.CoordenadorJpaRepository;
 import jakarta.persistence.EntityManager;
-import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -207,7 +206,7 @@ public class CoordenadorRepositoryTest {
     @Test
     @Transactional
     public void naoDeveSalvarCoordenadorComLoginDuplicado(){
-        Coordenador coordenadorSalvo = coordenadorJpaRepository.save(Coordenador.builder()
+        coordenadorJpaRepository.save(Coordenador.builder()
                 .login("login")
                 .senha("senha")
                 .nome("Igor")

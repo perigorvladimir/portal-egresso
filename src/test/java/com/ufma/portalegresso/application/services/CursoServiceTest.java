@@ -45,8 +45,9 @@ public class CursoServiceTest {
         coordenadorBase2 = coordenadorService.salvarCoordenador(coordenador2, null);
     }
     @AfterAll
-    public static void cleanUp(@Autowired CoordenadorJpaRepository coordenadorJpaRepository){
-        coordenadorJpaRepository.deleteById(coordenadorBase.getIdCoordenador());
+    public static void cleanUp(@Autowired CoordenadorService coordenadorService){
+        coordenadorService.deletarCoordenadorPorId(coordenadorBase.getIdCoordenador());
+        coordenadorService.deletarCoordenadorPorId(coordenadorBase2.getIdCoordenador());
     }
 
     @Test
@@ -129,14 +130,14 @@ public class CursoServiceTest {
     @Test
     @Transactional
     public void deveGerarErroAoBuscarCursoPorIdInexistente(){
-        Curso cursoCriado = criarCursoTestes();
+        criarCursoTestes();
 
         assertThrows(EntityNotFoundException.class, () -> service.buscarPorId(100));
     }
     @Test
     @Transactional
     public void deveGerarErroAoBuscarCursoPorIdNull(){
-        Curso cursoCriado = criarCursoTestes();
+        criarCursoTestes();
 
         assertThrows(IllegalArgumentException.class, () -> service.buscarPorId(null));
     }

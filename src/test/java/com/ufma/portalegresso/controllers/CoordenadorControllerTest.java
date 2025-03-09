@@ -2,8 +2,7 @@ package com.ufma.portalegresso.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ufma.portalegresso.application.domain.Coordenador;
-import com.ufma.portalegresso.application.out.SenhaEncoder;
-import com.ufma.portalegresso.application.services.AuthorizationService;
+import com.ufma.portalegresso.application.services.CoordenadorService;
 import com.ufma.portalegresso.application.usecases.coordenador.CoordenadorUC;
 import com.ufma.portalegresso.application.usecases.coordenador.SalvarCoordenadorUC;
 import com.ufma.portalegresso.application.usecases.coordenador.UpdateCoordenadorUC;
@@ -11,7 +10,6 @@ import com.ufma.portalegresso.infra.TestSecurityConfig;
 import com.ufma.portalegresso.infra.security.TokenService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +40,7 @@ public class CoordenadorControllerTest {
     @MockBean
     private TokenService tokenService;
     @MockBean
-    private AuthorizationService authorizationService;
+    private CoordenadorService authorizationService;
 
     @Test
     public void deveBuscarTodosCoordenadores() throws Exception {

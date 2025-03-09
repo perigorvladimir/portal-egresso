@@ -1,7 +1,7 @@
 package com.ufma.portalegresso.config.security;
 
-import com.ufma.portalegresso.application.out.CoordenadorJpaRepository;
-import com.ufma.portalegresso.application.services.AuthorizationService;
+import com.ufma.portalegresso.application.services.CoordenadorService;
+import com.ufma.portalegresso.application.usecases.coordenador.CoordenadorUC;
 import com.ufma.portalegresso.infra.security.TokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -20,7 +20,7 @@ import java.io.IOException;
 @AllArgsConstructor
 public class SecurityFilter extends OncePerRequestFilter {
     private final TokenService tokenService;
-    private final AuthorizationService authorizationService;
+    private final CoordenadorService authorizationService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

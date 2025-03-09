@@ -9,6 +9,9 @@ import com.ufma.portalegresso.application.usecases.coordenador.UpdateCoordenador
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,17 +19,17 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @Service
-public class CoordenadorService implements CoordenadorUC {
+public class CoordenadorService implements CoordenadorUC, UserDetailsService {
     private final CoordenadorJpaRepository coordenadorJpaRepository;
     private final SenhaEncoder senhaEncoder;
     @Override
     public Coordenador salvarCoordenador(SalvarCoordenadorUC.Request request, String algoritmoCriptografia) {
         //verificar login
-        if(coordenadorJpaRepository.existsByLogin(request.getLogin())){
-            throw new IllegalArgumentException("Já existe um usuário cadastrado com esse login");
-        }
         if(request.getSenha().length() < 8){
             throw new IllegalArgumentException("A senha deve ter pelo menos 8 caracteres");
+        }
+        if(coordenadorJpaRepository.existsByLogin(request.getLogin())){
+            throw new IllegalArgumentException("Já existe um usuário cadastrado com esse login");
         }
         String senhaCriptografada = senhaEncoder.encode(request.getSenha(), algoritmoCriptografia);
 
@@ -59,5 +62,14 @@ public class CoordenadorService implements CoordenadorUC {
         Coordenador coord = buscarCoordenadorPorId(id);
         coord.setNome(request.getNome());
         return coordenadorJpaRepository.save(coord);
+    }
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return coordenadorJpaRepository.findByLogin(username).orElseThrow(() -> new UsernameNotFoundException("Coordenador nao encontrado"));
+    }
+
+    @Override
+    public boolean existePorLogin(String login) {
+        return coordenadorJpaRepository.existsByLogin(login);
     }
 }
