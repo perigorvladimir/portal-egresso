@@ -30,7 +30,6 @@ public class CursoEgresso {
     @MapsId("idCurso")
     @JsonIgnore
     private Curso curso;
-    @NotNull
     @Column(nullable = false)
     private Integer anoInicio;
     private Integer anoFim;

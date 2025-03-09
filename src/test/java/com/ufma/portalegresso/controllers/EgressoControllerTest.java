@@ -2,6 +2,7 @@ package com.ufma.portalegresso.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ufma.portalegresso.application.domain.Egresso;
+import com.ufma.portalegresso.application.services.AuthorizationService;
 import com.ufma.portalegresso.application.services.CoordenadorService;
 import com.ufma.portalegresso.application.usecases.egresso.EgressoUC;
 import com.ufma.portalegresso.application.usecases.egresso.SalvarEgressoUC;
@@ -40,7 +41,7 @@ public class EgressoControllerTest {
     @MockBean
     private TokenService tokenService;
     @MockBean
-    private CoordenadorService authorizationService;
+    private AuthorizationService authorizationService;
 
     @Test
     public void deveBuscarTodosEgressos() throws Exception {
@@ -126,6 +127,9 @@ public class EgressoControllerTest {
                 .email("egresso1@ufma")
                 .curriculo("Curriculo")
                 .descricao("Descricao")
+                .idCurso(1)
+                .anoInicioCurso(2019)
+                .anoFimCurso(2023)
                 .build();
         Egresso egresso = Egresso.builder()
                 .nome("Egresso 1")

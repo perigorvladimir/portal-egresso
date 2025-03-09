@@ -3,6 +3,7 @@ package com.ufma.portalegresso.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ufma.portalegresso.application.domain.Cargo;
 import com.ufma.portalegresso.application.domain.TipoAreaTrabalho;
+import com.ufma.portalegresso.application.services.AuthorizationService;
 import com.ufma.portalegresso.application.services.CoordenadorService;
 import com.ufma.portalegresso.application.usecases.cargo.CargoUC;
 import com.ufma.portalegresso.application.usecases.cargo.SalvarCargoUC;
@@ -42,7 +43,7 @@ public class CargoControllerTest {
     @MockBean
     private TokenService tokenService;
     @MockBean
-    private CoordenadorService authorizationService;
+    private AuthorizationService authorizationService;
 
     @Test
     public void deveBuscarCargoPorId() throws Exception {

@@ -13,9 +13,9 @@ import com.ufma.portalegresso.application.usecases.egresso.UpdateEgressoUC;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -24,6 +24,7 @@ public class EgressoService implements EgressoUC {
     public final CursoEgressoJpaRepository cursoEgressoJpaRepository;
     public final CursoService cursoService;
 
+    @Transactional
     public Egresso salvarEgresso(SalvarEgressoUC.Request request){
         Egresso egresso = Egresso.builder()
                 .nome(request.getNome())
@@ -35,7 +36,12 @@ public class EgressoService implements EgressoUC {
                 .curriculo(request.getCurriculo())
                 .build();
 
-        return egressoJpaRepository.save(egresso);
+        Egresso egressoSalvo = egressoJpaRepository.saveAndFlush(egresso);
+        if(request.getAnoFimCurso() == null){
+            throw new IllegalArgumentException("O ano de fim do curso nao pode ser nulo");
+        }
+        vincularCurso(egresso.getIdEgresso(), VincularCursoUC.Request.builder().idCurso(request.getIdCurso()).anoInicio(request.getAnoInicioCurso()).anoFim(request.getAnoFimCurso()).build());
+        return egressoSalvo;
     }
 
     @Override
@@ -53,18 +59,25 @@ public class EgressoService implements EgressoUC {
     }
 
     @Override
+    @Transactional
     public void deletarEgressoPorId(Integer id) {
         egressoJpaRepository.deleteById(id);
     }
 
     @Override
     public List<Egresso> buscarEgressosPorCursoId(Integer cursoId) {
+        try{
+            cursoService.buscarPorId(cursoId);
+        } catch(EntityNotFoundException e) {
+            throw new EntityNotFoundException("Curso nao encontrado com o id inserido ao tentar buscar egressos do curso");
+        }
         List<CursoEgresso> cursoEgresso = cursoEgressoJpaRepository.findCursoEgressoByCurso_IdCurso(cursoId);
 
         return cursoEgresso.stream().map(CursoEgresso::getEgresso).toList();
     }
 
     @Override
+    @Transactional
     public Egresso updateEgresso(Integer id, UpdateEgressoUC.Request request) {
         Egresso egresso = buscarEgressoPorId(id);
         egresso.setNome(request.getNome());
@@ -74,11 +87,15 @@ public class EgressoService implements EgressoUC {
         egresso.setLinkedin(request.getLinkedin());
         egresso.setInstagram(request.getInstagram());
         egresso.setCurriculo(request.getCurriculo());
-        return egressoJpaRepository.save(egresso);
+        return egressoJpaRepository.saveAndFlush(egresso);
     }
 
     @Override
+    @Transactional
     public VincularCursoUC.Response vincularCurso(Integer egressoId, VincularCursoUC.Request request) {
+        if(request.getAnoInicio() != null && request.getAnoFim() != null && request.getAnoInicio() > request.getAnoFim()){
+            throw new IllegalArgumentException("O ano de inicio nao pode ser maior que o ano de fim.");
+        }
         Egresso egresso = buscarEgressoPorId(egressoId);
         Curso curso = cursoService.buscarPorId(request.getIdCurso());
 
@@ -93,7 +110,7 @@ public class EgressoService implements EgressoUC {
         cursoEgresso.setAnoFim(request.getAnoFim());
         cursoEgresso.setEgresso(egresso);
         cursoEgresso.setCurso(curso);
-        CursoEgresso cursoEgressoSalvo = cursoEgressoJpaRepository.save(cursoEgresso);
+        CursoEgresso cursoEgressoSalvo = cursoEgressoJpaRepository.saveAndFlush(cursoEgresso);
 
         return VincularCursoUC.Response.builder()
                 .idEgressoVinculado(cursoEgressoSalvo.getEgresso().getIdEgresso())

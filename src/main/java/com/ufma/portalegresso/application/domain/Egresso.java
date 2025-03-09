@@ -35,7 +35,7 @@ public class Egresso {
     private List<Cargo> cargos;
     @OneToMany(mappedBy="egresso", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    private Set<CursoEgresso> cursoEgressos;
+    private List<CursoEgresso> cursoEgressos;
     @OneToMany(mappedBy="egresso", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties({"egresso"})
     private Set<Depoimento> depoimentos;

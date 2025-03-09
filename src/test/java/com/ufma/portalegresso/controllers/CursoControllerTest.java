@@ -3,6 +3,7 @@ package com.ufma.portalegresso.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ufma.portalegresso.application.domain.Curso;
 import com.ufma.portalegresso.application.domain.TipoNivel;
+import com.ufma.portalegresso.application.services.AuthorizationService;
 import com.ufma.portalegresso.application.services.CoordenadorService;
 import com.ufma.portalegresso.application.usecases.curso.CursoUC;
 import com.ufma.portalegresso.application.usecases.curso.DesignarCoordenadorUC;
@@ -42,7 +43,7 @@ public class CursoControllerTest {
     @MockBean
     private TokenService tokenService;
     @MockBean
-    private CoordenadorService authorizationService;
+    private AuthorizationService authorizationService;
 
     @Test
     public void deveBuscarTodosCursos() throws Exception {

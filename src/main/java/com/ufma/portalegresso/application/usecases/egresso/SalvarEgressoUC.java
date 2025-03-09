@@ -3,6 +3,7 @@ package com.ufma.portalegresso.application.usecases.egresso;
 import com.ufma.portalegresso.application.domain.Egresso;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,5 +27,9 @@ public interface SalvarEgressoUC {
         String linkedin;
         String instagram;
         String curriculo;
+        @NotNull
+        Integer idCurso;
+        Integer anoInicioCurso;
+        Integer anoFimCurso;
     }
 }

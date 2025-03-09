@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @Service
-public class CoordenadorService implements CoordenadorUC, UserDetailsService {
+public class CoordenadorService implements CoordenadorUC{
     private final CoordenadorJpaRepository coordenadorJpaRepository;
     private final SenhaEncoder senhaEncoder;
     @Override
@@ -61,10 +61,7 @@ public class CoordenadorService implements CoordenadorUC, UserDetailsService {
     public Coordenador updateCoordenador(Integer id, UpdateCoordenadorUC.Request request) {
         Coordenador coord = buscarCoordenadorPorId(id);
         coord.setNome(request.getNome());
-        return coordenadorJpaRepository.save(coord);
+        return coordenadorJpaRepository.saveAndFlush(coord);
     }
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return coordenadorJpaRepository.findByLogin(username).orElseThrow(() -> new UsernameNotFoundException("Coordenador nao encontrado"));
-    }
+
 }

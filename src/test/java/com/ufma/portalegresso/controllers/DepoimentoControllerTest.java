@@ -2,6 +2,7 @@ package com.ufma.portalegresso.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ufma.portalegresso.application.domain.Depoimento;
+import com.ufma.portalegresso.application.services.AuthorizationService;
 import com.ufma.portalegresso.application.services.CoordenadorService;
 import com.ufma.portalegresso.application.usecases.depoimento.DepoimentoUC;
 import com.ufma.portalegresso.application.usecases.depoimento.SalvarDepoimentoUC;
@@ -40,7 +41,7 @@ public class DepoimentoControllerTest {
     @MockBean
     private TokenService tokenService;
     @MockBean
-    private CoordenadorService coordenadorService;
+    private AuthorizationService coordenadorService;
 
     @Test
     public void deveBuscarDepoimentoPorId() throws Exception {

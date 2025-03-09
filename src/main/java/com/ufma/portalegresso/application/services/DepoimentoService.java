@@ -3,7 +3,6 @@ package com.ufma.portalegresso.application.services;
 import com.ufma.portalegresso.application.domain.Depoimento;
 import com.ufma.portalegresso.application.domain.Egresso;
 import com.ufma.portalegresso.application.out.DepoimentoJpaRepository;
-import com.ufma.portalegresso.application.out.EgressoJpaRepository;
 import com.ufma.portalegresso.application.usecases.depoimento.DepoimentoUC;
 import com.ufma.portalegresso.application.usecases.depoimento.SalvarDepoimentoUC;
 import com.ufma.portalegresso.application.usecases.depoimento.UpdateDepoimentoUC;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -60,7 +58,7 @@ public class DepoimentoService implements DepoimentoUC {
     public Depoimento updateDepoimento(Integer id, UpdateDepoimentoUC.Request request) {
         Depoimento depoimento = buscarDepoimentoPorId(id);
         depoimento.setTexto(request.getTexto());
-        return depoimentoJpaRepository.save(depoimento);
+        return depoimentoJpaRepository.saveAndFlush(depoimento);
     }
 
 

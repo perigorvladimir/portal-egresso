@@ -44,7 +44,6 @@ public class EgressoController {
                 .build());
     }
     @PostMapping
-    @Transactional
     public ResponseEntity<?> salvarEgresso(@Valid @RequestBody SalvarEgressoUC.Request request) {
         var egresso = egressoUC.salvarEgresso(request);
         return ResponseEntity.ok(ResponseApi.builder()
@@ -54,7 +53,6 @@ public class EgressoController {
                 .build());
     }
     @DeleteMapping("/{id}")
-    @Transactional
     public ResponseEntity<?> deletarEgresso(@PathVariable Integer id) {
         egressoUC.deletarEgressoPorId(id);
         return ResponseEntity.ok(ResponseApi.builder()
@@ -63,7 +61,6 @@ public class EgressoController {
                 .build());
     }
     @PutMapping("/{id}")
-    @Transactional
     public ResponseEntity<?> atualizarEgresso(@PathVariable Integer id, @Valid @RequestBody UpdateEgressoUC.Request request) {
         var egresso = egressoUC.updateEgresso(id, request);
         return ResponseEntity.ok(ResponseApi.builder()
@@ -73,7 +70,6 @@ public class EgressoController {
                 .build());
     }
     @PostMapping("/{id}/curso")
-    @Transactional
     public ResponseEntity<?> vincularEgressoACurso(@PathVariable Integer id, @Valid @RequestBody VincularCursoUC.Request request) {
         var response = egressoUC.vincularCurso(id, request);
         return ResponseEntity.ok(ResponseApi.builder()

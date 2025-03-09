@@ -24,6 +24,8 @@ public class CoordenadorServiceTest {
     private EntityManager entityManager;
     @Autowired
     private CoordenadorService service;
+    @Autowired
+    private AuthorizationService authorizationService;
 
     @Test
     @Transactional
@@ -159,7 +161,7 @@ public class CoordenadorServiceTest {
     @Transactional
     public void deveAtualizarCoordenadorFluxoPadrao(){
         Coordenador coordCriado = criarCoordenadorTestes();
-
+        entityManager.clear();
         UpdateCoordenadorUC.Request coordAtualizado = UpdateCoordenadorUC.Request.builder().nome("coordenador atualizado").build();
         service.updateCoordenador(coordCriado.getIdCoordenador(), coordAtualizado);
 
@@ -190,7 +192,7 @@ public class CoordenadorServiceTest {
     public void deveVerificarLoadByUserNameFluxoPadrao(){
         Coordenador coord = criarCoordenadorTestes();
 
-        UserDetails user = service.loadUserByUsername(coord.getLogin());
+        UserDetails user = authorizationService.loadUserByUsername(coord.getLogin());
         assertNotNull(user);
         assertEquals(1, user.getAuthorities().size());
         assertEquals(coord.getLogin(), user.getUsername());
@@ -198,11 +200,11 @@ public class CoordenadorServiceTest {
     }
     @Test
     public void deveGerarErroAoLoadByUserNameInexistente(){
-        assertThrows(UsernameNotFoundException.class, () -> service.loadUserByUsername("loginNaoCadastrado"));
+        assertThrows(UsernameNotFoundException.class, () -> authorizationService.loadUserByUsername("loginNaoCadastrado"));
     }
     @Test
     public void deveGerarERroAoLoadByUserNameParametroNull(){
-        assertThrows(UsernameNotFoundException.class, () -> service.loadUserByUsername(null));
+        assertThrows(UsernameNotFoundException.class, () -> authorizationService.loadUserByUsername(null));
     }
 
     private Coordenador criarCoordenadorTestes(){
