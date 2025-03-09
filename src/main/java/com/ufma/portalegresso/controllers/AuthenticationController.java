@@ -35,8 +35,8 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Valid SalvarCoordenadorUC.Request request) {
-        coordenadorUC.salvarCoordenador(request, "bcrypt");
-        return ResponseEntity.ok().build();
+        Coordenador coord = coordenadorUC.salvarCoordenador(request, null);
+        return ResponseEntity.ok(coord);
     }
 
     public record AuthenticationDTO(@NotBlank String login, @NotBlank String senha) {}

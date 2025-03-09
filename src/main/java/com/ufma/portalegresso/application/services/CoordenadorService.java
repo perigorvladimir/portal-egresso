@@ -25,7 +25,7 @@ public class CoordenadorService implements CoordenadorUC, UserDetailsService {
     @Override
     public Coordenador salvarCoordenador(SalvarCoordenadorUC.Request request, String algoritmoCriptografia) {
         //verificar login
-        if(request.getSenha().length() < 8){
+        if(request.getSenha() == null || request.getSenha().length() < 8){
             throw new IllegalArgumentException("A senha deve ter pelo menos 8 caracteres");
         }
         if(coordenadorJpaRepository.existsByLogin(request.getLogin())){
@@ -66,10 +66,5 @@ public class CoordenadorService implements CoordenadorUC, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return coordenadorJpaRepository.findByLogin(username).orElseThrow(() -> new UsernameNotFoundException("Coordenador nao encontrado"));
-    }
-
-    @Override
-    public boolean existePorLogin(String login) {
-        return coordenadorJpaRepository.existsByLogin(login);
     }
 }

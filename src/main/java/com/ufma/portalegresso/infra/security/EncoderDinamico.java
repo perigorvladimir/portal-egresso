@@ -29,7 +29,14 @@ public class EncoderDinamico implements SenhaEncoder {
         if(senha==null){
             return null;
         }
-        PasswordEncoder encoder = encoders.getOrDefault(algoritmo, encoders.get("bcrypt"));
+        if (algoritmo == null) { // algoritmo default
+            algoritmo = "bcrypt";
+        }
+        //se nao tiver o algortimo informado
+        if (!encoders.containsKey(algoritmo)) {
+            throw new IllegalArgumentException("Algoritmo de codificação desconhecido: " + algoritmo);
+        }
+        PasswordEncoder encoder = encoders.get(algoritmo);
         return "{" + algoritmo + "}" + encoder.encode(senha); // Prefixa com o algoritmo usado
     }
 
