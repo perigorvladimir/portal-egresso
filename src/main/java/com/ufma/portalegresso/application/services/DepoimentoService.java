@@ -48,6 +48,12 @@ public class DepoimentoService implements DepoimentoUC {
 
     @Override
     public List<Depoimento> buscarDepoimentosPorAno(Integer ano) {
+        if(ano == null){
+            throw new IllegalArgumentException("O ano nao pode ser nulo");
+        }
+        if(ano<0 || ano > LocalDate.now().getYear()){
+            throw new IllegalArgumentException("O ano nao pode ser menor que 0 ou maior que o ano atual");
+        }
         return depoimentoJpaRepository.findByDataYear(ano);
     }
 
@@ -68,6 +74,7 @@ public class DepoimentoService implements DepoimentoUC {
 
     @Override
     public List<Depoimento> buscarDepoimentoPorEgresso(Integer idEgresso) {
+        egressoService.buscarEgressoPorId(idEgresso);
         return depoimentoJpaRepository.findByEgresso_IdEgresso(idEgresso);
     }
 }
