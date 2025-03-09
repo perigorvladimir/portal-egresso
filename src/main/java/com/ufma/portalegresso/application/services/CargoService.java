@@ -10,6 +10,7 @@ import com.ufma.portalegresso.application.usecases.cargo.UpdateCargoUC;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class CargoService implements CargoUC {
     private final CargoJpaRepository cargoJpaRepository;
     private final EgressoService egressoService;
     @Override
+    @Transactional
     public Cargo salvar(SalvarCargoUC.Request request) {
         validarAnoInicioEAnoFim(request.getAnoInicio(), request.getAnoFim());
 
@@ -40,8 +42,7 @@ public class CargoService implements CargoUC {
         if(id == null){
             throw new IllegalArgumentException("O id do cargo nao pode ser nulo");
         }
-        Cargo cargo = cargoJpaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cargo não encontrado com o id inserido"));
-        return cargo;
+        return cargoJpaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cargo não encontrado com o id inserido"));
     }
     @Override
     public List<Cargo> buscarTodosCargos() {
@@ -49,11 +50,13 @@ public class CargoService implements CargoUC {
     }
 
     @Override
+    @Transactional
     public void deletarPorId(Integer id) {
         cargoJpaRepository.deleteById(id);
     }
 
     @Override
+    @Transactional
     public Cargo updateCargo(Integer id, UpdateCargoUC.Request request) {
         validarAnoInicioEAnoFim(request.getAnoInicio(), request.getAnoFim());
         Cargo cargo = buscarPorId(id);

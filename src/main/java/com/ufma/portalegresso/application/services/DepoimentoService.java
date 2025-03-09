@@ -9,6 +9,7 @@ import com.ufma.portalegresso.application.usecases.depoimento.UpdateDepoimentoUC
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,6 +20,7 @@ public class DepoimentoService implements DepoimentoUC {
     private final DepoimentoJpaRepository depoimentoJpaRepository;
     private final EgressoService egressoService;
     @Override
+    @Transactional
     public Depoimento salvarDepoimento(SalvarDepoimentoUC.Request request) {
         Egresso egressoEncontrado = egressoService.buscarEgressoPorId(request.getIdEgresso());
         Depoimento depoimento = Depoimento.builder()
@@ -39,6 +41,7 @@ public class DepoimentoService implements DepoimentoUC {
     }
 
     @Override
+    @Transactional
     public void deletarPorId(Integer id) {
         depoimentoJpaRepository.deleteById(id);
     }
@@ -55,6 +58,7 @@ public class DepoimentoService implements DepoimentoUC {
     }
 
     @Override
+    @Transactional
     public Depoimento updateDepoimento(Integer id, UpdateDepoimentoUC.Request request) {
         Depoimento depoimento = buscarDepoimentoPorId(id);
         depoimento.setTexto(request.getTexto());

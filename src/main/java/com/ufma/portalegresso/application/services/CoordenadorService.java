@@ -7,15 +7,11 @@ import com.ufma.portalegresso.application.usecases.coordenador.CoordenadorUC;
 import com.ufma.portalegresso.application.usecases.coordenador.SalvarCoordenadorUC;
 import com.ufma.portalegresso.application.usecases.coordenador.UpdateCoordenadorUC;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -23,6 +19,7 @@ public class CoordenadorService implements CoordenadorUC{
     private final CoordenadorJpaRepository coordenadorJpaRepository;
     private final SenhaEncoder senhaEncoder;
     @Override
+    @Transactional
     public Coordenador salvarCoordenador(SalvarCoordenadorUC.Request request, String algoritmoCriptografia) {
         //verificar login
         if(request.getSenha() == null || request.getSenha().length() < 8){
@@ -53,15 +50,16 @@ public class CoordenadorService implements CoordenadorUC{
     }
 
     @Override
+    @Transactional
     public void deletarCoordenadorPorId(Integer id) {
         coordenadorJpaRepository.deleteById(id);
     }
 
     @Override
+    @Transactional
     public Coordenador updateCoordenador(Integer id, UpdateCoordenadorUC.Request request) {
         Coordenador coord = buscarCoordenadorPorId(id);
         coord.setNome(request.getNome());
         return coordenadorJpaRepository.saveAndFlush(coord);
     }
-
 }

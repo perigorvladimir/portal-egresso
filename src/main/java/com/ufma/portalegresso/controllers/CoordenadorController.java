@@ -1,15 +1,12 @@
 package com.ufma.portalegresso.controllers;
 
-import com.ufma.portalegresso.application.out.SenhaEncoder;
 import com.ufma.portalegresso.application.usecases.coordenador.CoordenadorUC;
-import com.ufma.portalegresso.application.usecases.coordenador.SalvarCoordenadorUC;
 import com.ufma.portalegresso.application.usecases.coordenador.UpdateCoordenadorUC;
 import com.ufma.portalegresso.shared.ResponseApi;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -32,14 +29,12 @@ public class CoordenadorController {
     }
 
     @PutMapping("/{idCoordenador}")
-    @Transactional
     public ResponseEntity<?> atualizarCoordenador(@PathVariable Integer idCoordenador, @Valid @RequestBody UpdateCoordenadorUC.Request request) {
         var coordenadorSalvo = coordenadorUC.updateCoordenador(idCoordenador, request);
         return ResponseEntity.ok(ResponseApi.builder().dado(coordenadorSalvo).status(200).build());
     }
 
     @DeleteMapping("/{idCoordenador}")
-    @Transactional
     public ResponseEntity<?> deletarCoordenador(@PathVariable Integer idCoordenador) {
         coordenadorUC.deletarCoordenadorPorId(idCoordenador);
 

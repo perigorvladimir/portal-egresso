@@ -23,7 +23,7 @@ public class EgressoService implements EgressoUC {
     public final EgressoJpaRepository egressoJpaRepository;
     public final CursoEgressoJpaRepository cursoEgressoJpaRepository;
     public final CursoService cursoService;
-
+    @Override
     @Transactional
     public Egresso salvarEgresso(SalvarEgressoUC.Request request){
         Egresso egresso = Egresso.builder()

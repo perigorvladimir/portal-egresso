@@ -1,10 +1,8 @@
 package com.ufma.portalegresso.controllers;
 
 import com.ufma.portalegresso.application.domain.Coordenador;
-import com.ufma.portalegresso.application.services.CoordenadorService;
 import com.ufma.portalegresso.application.usecases.coordenador.CoordenadorUC;
 import com.ufma.portalegresso.application.usecases.coordenador.SalvarCoordenadorUC;
-import com.ufma.portalegresso.infra.security.EncoderDinamico;
 import com.ufma.portalegresso.infra.security.TokenService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;

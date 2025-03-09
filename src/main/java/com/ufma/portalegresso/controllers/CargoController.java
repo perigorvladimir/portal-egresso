@@ -8,7 +8,6 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -39,7 +38,6 @@ public class CargoController {
     }
 
     @PostMapping
-    @Transactional
     public ResponseEntity<?> salvarCargo(@Valid @RequestBody SalvarCargoUC.Request request) {
         var cargoSalvo = cargoUC.salvar(request);
         URI location = URI.create("/cargo/" + cargoSalvo.getIdCargo());
@@ -51,7 +49,6 @@ public class CargoController {
     }
 
     @PutMapping("/{idCargo}")
-    @Transactional
     public ResponseEntity<?> atualizarCargo(@PathVariable Integer idCargo, @Valid @RequestBody UpdateCargoUC.Request request) {
         var cargoSalvo = cargoUC.updateCargo(idCargo, request);
         return ResponseEntity.ok(ResponseApi.builder()
@@ -63,7 +60,6 @@ public class CargoController {
     }
 
     @DeleteMapping("/{idCargo}")
-    @Transactional
     public ResponseEntity<?> deletarCargo(@PathVariable Integer idCargo) {
         cargoUC.deletarPorId(idCargo);
         return ResponseEntity.ok().body(
