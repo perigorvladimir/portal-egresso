@@ -3,6 +3,7 @@ package com.ufma.portalegresso.application.services;
 import com.ufma.portalegresso.application.domain.Coordenador;
 import com.ufma.portalegresso.application.domain.Curso;
 import com.ufma.portalegresso.application.out.CoordenadorJpaRepository;
+import com.ufma.portalegresso.application.usecases.coordenador.SalvarCoordenadorUC;
 import com.ufma.portalegresso.application.usecases.curso.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.AfterAll;
@@ -25,16 +26,23 @@ public class CursoServiceTest {
     private CursoService service;
 
     private static Coordenador coordenadorBase;
+    private static Coordenador coordenadorBase2;
 
     @BeforeAll
-    public static void setUp(@Autowired CoordenadorJpaRepository coordenadorJpaRepository){
-        Coordenador coordenador = Coordenador.builder()
+    public static void setUp(@Autowired CoordenadorService coordenadorService){
+        SalvarCoordenadorUC.Request coordenador = SalvarCoordenadorUC.Request.builder()
                 .nome("coordenador base")
                 .login("login")
-                .senha("senha")
+                .senha("senha123")
+                .build();
+        SalvarCoordenadorUC.Request coordenador2 = SalvarCoordenadorUC.Request.builder()
+                .nome("coordenador 2")
+                .login("login2")
+                .senha("senha231")
                 .build();
 
-        coordenadorBase = coordenadorJpaRepository.save(coordenador);
+        coordenadorBase = coordenadorService.salvarCoordenador(coordenador, null);
+        coordenadorBase2 = coordenadorService.salvarCoordenador(coordenador2, null);
     }
     @AfterAll
     public static void cleanUp(@Autowired CoordenadorJpaRepository coordenadorJpaRepository){
@@ -205,6 +213,18 @@ public class CursoServiceTest {
     public void deveGerarErroAoDesignarCoordenadorComIdCoordenadorInexistente(){
         Curso cursoCriado = criarCursoTestes();
         assertThrows(EntityNotFoundException.class, () -> service.designarCoordenador(cursoCriado.getIdCurso(), 100));
+    }
+    @Test
+    @Transactional
+    public void deveDesignarCoordenadorSubstituindoAntigo(){
+        Curso cursoCriado = criarCursoTestes();
+
+        service.designarCoordenador(cursoCriado.getIdCurso(), coordenadorBase.getIdCoordenador());
+
+        service.designarCoordenador(cursoCriado.getIdCurso(), coordenadorBase2.getIdCoordenador());
+
+        assertEquals(cursoCriado.getCoordenador().getIdCoordenador(), coordenadorBase2.getIdCoordenador());
+        assertEquals(cursoCriado.getCoordenador().getNome(), coordenadorBase2.getNome());
     }
 
     private Curso criarCursoTestes(){
