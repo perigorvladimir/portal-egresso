@@ -3,7 +3,6 @@ package com.ufma.portalegresso.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ufma.portalegresso.application.domain.Egresso;
 import com.ufma.portalegresso.application.services.AuthorizationService;
-import com.ufma.portalegresso.application.services.CoordenadorService;
 import com.ufma.portalegresso.application.usecases.egresso.EgressoUC;
 import com.ufma.portalegresso.application.usecases.egresso.SalvarEgressoUC;
 import com.ufma.portalegresso.application.usecases.egresso.UpdateEgressoUC;

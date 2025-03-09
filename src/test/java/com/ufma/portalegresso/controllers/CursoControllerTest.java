@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ufma.portalegresso.application.domain.Curso;
 import com.ufma.portalegresso.application.domain.TipoNivel;
 import com.ufma.portalegresso.application.services.AuthorizationService;
-import com.ufma.portalegresso.application.services.CoordenadorService;
 import com.ufma.portalegresso.application.usecases.curso.CursoUC;
 import com.ufma.portalegresso.application.usecases.curso.DesignarCoordenadorUC;
 import com.ufma.portalegresso.application.usecases.curso.SalvarCursoUC;

@@ -1,8 +1,6 @@
 package com.ufma.portalegresso.config.security;
 
 import com.ufma.portalegresso.application.services.AuthorizationService;
-import com.ufma.portalegresso.application.services.CoordenadorService;
-import com.ufma.portalegresso.application.usecases.coordenador.CoordenadorUC;
 import com.ufma.portalegresso.infra.security.TokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

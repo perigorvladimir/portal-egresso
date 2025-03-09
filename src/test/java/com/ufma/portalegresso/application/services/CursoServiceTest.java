@@ -2,7 +2,6 @@ package com.ufma.portalegresso.application.services;
 
 import com.ufma.portalegresso.application.domain.Coordenador;
 import com.ufma.portalegresso.application.domain.Curso;
-import com.ufma.portalegresso.application.out.CoordenadorJpaRepository;
 import com.ufma.portalegresso.application.usecases.coordenador.SalvarCoordenadorUC;
 import com.ufma.portalegresso.application.usecases.curso.*;
 import jakarta.persistence.EntityNotFoundException;
