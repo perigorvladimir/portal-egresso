@@ -115,9 +115,8 @@ public class CargoControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.detalhes[0]", Matchers.containsString("local")));
         mvc.perform(requestDescricaoELocalVazio).andExpect(MockMvcResultMatchers.status().isBadRequest())
                         .andExpect(MockMvcResultMatchers.jsonPath("$.detalhes", Matchers.hasSize(2)))
-                        .andExpect(MockMvcResultMatchers.jsonPath("$.detalhes", Matchers.hasItems(
-                                                    Matchers.containsString("descricao"),
-                                                    Matchers.containsString("local"))));
+                        .andExpect(MockMvcResultMatchers.jsonPath("$.detalhes", Matchers.containsString("descricao")))
+                        .andExpect(MockMvcResultMatchers.jsonPath("$.detalhes", Matchers.containsString("local")));
 
         Mockito.verify(cargoUC, Mockito.times(0)).salvar(Mockito.any(SalvarCargoUC.Request.class));
         Mockito.verifyNoMoreInteractions(cargoUC);
