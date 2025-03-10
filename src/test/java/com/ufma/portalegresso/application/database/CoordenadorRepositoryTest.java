@@ -1,7 +1,10 @@
 package com.ufma.portalegresso.application.database;
 
 import com.ufma.portalegresso.application.domain.Coordenador;
+import com.ufma.portalegresso.application.domain.Curso;
+import com.ufma.portalegresso.application.domain.TipoNivel;
 import com.ufma.portalegresso.application.out.CoordenadorJpaRepository;
+import com.ufma.portalegresso.application.out.CursoJpaRepository;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,6 +30,8 @@ public class CoordenadorRepositoryTest {
     private EntityManager entityManager;
     @Autowired
     private CoordenadorJpaRepository coordenadorJpaRepository;
+    @Autowired
+    private CursoJpaRepository cursoJpaRepository;
 
     @Test
     @Transactional
@@ -218,5 +224,18 @@ public class CoordenadorRepositoryTest {
                 .build();
 
         assertThrows(DataIntegrityViolationException.class, () -> coordenadorJpaRepository.save(coord));
+    }
+    @Test
+    @Transactional
+    public void deveCoordenadorTerMaisDeUmCurso(){
+        Coordenador coord = coordenadorJpaRepository.save(Coordenador.builder().nome("nome teste").login("login").senha("senha").build());
+        cursoJpaRepository.save(Curso.builder().nome("Ciência da Computação").tipoNivel(TipoNivel.GRADUACAO).coordenador(coord).build());
+        cursoJpaRepository.save(Curso.builder().nome("Design de Móveis").tipoNivel(TipoNivel.TECNOLOGO).coordenador(coord).build()).getCoordenador();
+        entityManager.clear();
+        Coordenador coordEncontrado = coordenadorJpaRepository.findById(coord.getIdCoordenador()).orElseThrow();
+
+        assertNotNull(coordEncontrado);
+        Set<Curso> cursos = coordEncontrado.getCursos();
+        assertEquals(2, cursos.size());
     }
 }
