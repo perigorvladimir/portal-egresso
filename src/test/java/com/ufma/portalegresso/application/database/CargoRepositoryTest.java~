@@ -247,11 +247,4 @@ public class CargoRepositoryTest {
         assertEquals(cargoSalvo.getIdCargo(), cargos.get(0).getIdCargo());
         assertEquals(cargoSalvo2.getIdCargo(), cargos.get(1).getIdCargo());
     }
-<<<<<<< HEAD
-
-    @Test
-    @Transactional
-    public void deve
-=======
->>>>>>> 561e04c61657b296483592fc2413f2c8f929e414
 }
