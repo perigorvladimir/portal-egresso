@@ -29,7 +29,9 @@ public interface SalvarEgressoUC {
         String curriculo;
         @NotNull
         Integer idCurso;
+        @NotNull
         Integer anoInicioCurso;
+        @NotNull
         Integer anoFimCurso;
     }
 }
