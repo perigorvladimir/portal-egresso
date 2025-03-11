@@ -94,10 +94,10 @@ public class CustomizedGlobalExceptionHandler {
     }
 
     private Object getErrors(MethodArgumentNotValidException ex) {
-        if(ex.getBindingResult().getFieldErrors().size() == 1) { // se tiver apenas 1 erro
-            // retorna apenas String
-            return String.format("'%s': '%s'", ex.getBindingResult().getFieldErrors().getFirst().getField(), ex.getBindingResult().getFieldErrors().getFirst().getDefaultMessage());
-        }
+//        if(ex.getBindingResult().getFieldErrors().size() == 1) { // se tiver apenas 1 erro
+//            // retorna apenas String
+//            return String.format("'%s': '%s'", ex.getBindingResult().getFieldErrors().getFirst().getField(), ex.getBindingResult().getFieldErrors().getFirst().getDefaultMessage());
+//        }
         ArrayList<String> arrayErrorMessages = new ArrayList<>();
         for (FieldError error : ex.getBindingResult().getFieldErrors()) {
             arrayErrorMessages.add(String.format("'%s': '%s'", error.getField(), error.getDefaultMessage()));

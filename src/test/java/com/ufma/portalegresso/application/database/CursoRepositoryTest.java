@@ -1,11 +1,11 @@
 package com.ufma.portalegresso.application.database;
 
-import com.ufma.portalegresso.application.domain.Coordenador;
-import com.ufma.portalegresso.application.domain.Curso;
-import com.ufma.portalegresso.application.domain.TipoNivel;
+import com.ufma.portalegresso.application.domain.*;
+import com.ufma.portalegresso.application.domain.relacionamentos.CursoEgressoId;
 import com.ufma.portalegresso.application.out.CoordenadorJpaRepository;
+import com.ufma.portalegresso.application.out.CursoEgressoJpaRepository;
 import com.ufma.portalegresso.application.out.CursoJpaRepository;
-import jakarta.validation.ConstraintViolationException;
+import com.ufma.portalegresso.application.out.EgressoJpaRepository;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -27,6 +27,11 @@ public class CursoRepositoryTest {
     @Autowired
     private CursoJpaRepository cursoJpaRepository;
     private static Coordenador coordenadorBase;
+    @Autowired
+    private EgressoJpaRepository egressoJpaRepository;
+    @Autowired
+    private CursoEgressoJpaRepository cursoEgressoJpaRepository;
+
     @BeforeAll
     public static void setUp(@Autowired CoordenadorJpaRepository coordenadorJpaRepository) {
         Coordenador coordenador = Coordenador.builder()
@@ -153,5 +158,36 @@ public class CursoRepositoryTest {
         cursoJpaRepository.deleteById(cursoSalvo.getIdCurso());
 
         assertThrows(NoSuchElementException.class, () -> cursoJpaRepository.findById(cursoSalvo.getIdCurso()).get());
+    }
+    @Test
+    @Transactional
+    public void deveCursoPoderTerVariosEgressos(){
+        Curso cursoSalvo = cursoJpaRepository.save(Curso.builder()
+                .nome("Design de Móveis")
+                .tipoNivel(TipoNivel.TECNOLOGO)
+                .coordenador(coordenadorBase)
+                .build());
+        Egresso egresso = egressoJpaRepository.save(Egresso.builder().email("igor@exemplo.com").nome("igor").build());
+        Egresso egresso2 = egressoJpaRepository.save(Egresso.builder().email("geraldo@exemplo.com").nome("geraldo").build());
+
+        CursoEgressoId id = CursoEgressoId.builder().idCurso(cursoSalvo.getIdCurso()).idEgresso(egresso.getIdEgresso()).build();
+        CursoEgresso cursoEgressoSalvo = cursoEgressoJpaRepository.save(CursoEgresso.builder()
+                .id(id)
+                .egresso(egresso)
+                .curso(cursoSalvo)
+                .anoInicio(2020)
+                .anoFim(2025)
+                .build());
+        CursoEgressoId id2 = CursoEgressoId.builder().idCurso(cursoSalvo.getIdCurso()).idEgresso(egresso2.getIdEgresso()).build();
+        CursoEgresso cursoEgressoSalvo2 = cursoEgressoJpaRepository.save(CursoEgresso.builder()
+                .id(id2)
+                .egresso(egresso2)
+                .curso(cursoSalvo)
+                .anoInicio(2020)
+                .anoFim(null)
+                .build());
+
+        assertEquals(cursoSalvo.getIdCurso(), cursoEgressoSalvo.getId().getIdCurso());
+        assertEquals(cursoSalvo.getIdCurso(), cursoEgressoSalvo2.getId().getIdCurso());
     }
 }

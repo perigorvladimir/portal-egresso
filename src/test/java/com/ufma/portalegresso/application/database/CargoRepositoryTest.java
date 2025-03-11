@@ -112,7 +112,6 @@ public class CargoRepositoryTest {
                 .tipoAreaTrabalho(TipoAreaTrabalho.FINANCEIRO)
                 .build();
 
-        //TODO AJEITAR AQUI PARA VER O CAMPO QUE DEU ERRO, pegar a plavra que tem dentro das aspas
         DataIntegrityViolationException exceptionSemIdEgresso = assertThrows(DataIntegrityViolationException.class, () -> cargoJpaRepository.save(cargo));
         //pegar o campo que deu problema pra ver se foi ele que deu errado mesmo
         assertEquals("id_egresso", exceptionSemIdEgresso.getCause().getCause().getLocalizedMessage().split("\"")[1].toLowerCase());
