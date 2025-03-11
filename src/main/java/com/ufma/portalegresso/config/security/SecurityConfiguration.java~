@@ -32,7 +32,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/auth/**").permitAll() //TODO mudar para ser permitAll apenas o login
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/**").permitAll() //TODO REMOVER ISSO
+                        .requestMatchers(HttpMethod.POST, "/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
