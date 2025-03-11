@@ -1,7 +1,9 @@
 package com.ufma.portalegresso.application.usecases.egresso;
 
 import com.ufma.portalegresso.application.domain.Egresso;
+import com.ufma.portalegresso.shared.validators.MaxAnoAtual;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -30,8 +32,12 @@ public interface SalvarEgressoUC {
         @NotNull
         Integer idCurso;
         @NotNull
+        @Min(1900)
+        @MaxAnoAtual
         Integer anoInicioCurso;
         @NotNull
+        @Min(1900)
+        @MaxAnoAtual
         Integer anoFimCurso;
     }
 }

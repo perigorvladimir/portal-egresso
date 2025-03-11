@@ -277,7 +277,7 @@ public class EgressoControllerTest {
                 .content(json);
 
         mvc.perform(request).andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.detalhes", Matchers.hasSize(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.detalhes", Matchers.hasSize(2)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.detalhes", Matchers.hasItems(
                         Matchers.containsString("email"))));
         Mockito.verify(egressoUC, Mockito.times(0)).salvarEgresso(Mockito.any(SalvarEgressoUC.Request.class));

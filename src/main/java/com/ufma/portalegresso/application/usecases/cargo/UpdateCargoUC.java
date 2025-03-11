@@ -4,15 +4,11 @@ import com.ufma.portalegresso.application.domain.Cargo;
 import com.ufma.portalegresso.application.domain.TipoAreaTrabalho;
 import com.ufma.portalegresso.shared.validators.MaxAnoAtual;
 import com.ufma.portalegresso.shared.validators.ValidEnum;
-import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Length;
 
 public interface UpdateCargoUC {
     Cargo updateCargo(Integer id, Request request);
@@ -22,8 +18,11 @@ public interface UpdateCargoUC {
     @AllArgsConstructor
     @NoArgsConstructor
     class Request{
+        @NotBlank
         private String descricao;
+        @NotBlank
         private String local;
+        @NotNull
         @Min(1900)
         @MaxAnoAtual
         private Integer anoInicio;

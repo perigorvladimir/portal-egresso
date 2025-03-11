@@ -9,6 +9,7 @@ import com.ufma.portalegresso.application.usecases.curso.DesignarCoordenadorUC;
 import com.ufma.portalegresso.application.usecases.curso.SalvarCursoUC;
 import com.ufma.portalegresso.infra.TestSecurityConfig;
 import com.ufma.portalegresso.infra.security.TokenService;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -32,7 +33,6 @@ import java.util.List;
 @WebMvcTest(controllers = CursoController.class)
 @AutoConfigureMockMvc
 @Import(TestSecurityConfig.class)
-//TODO VERIFICAR SE PRECISA DE TESTE ADICIONAL PARA O ENUM TIPO NIVEL
 public class CursoControllerTest {
     static final String api = "/curso";
     @Autowired
@@ -51,8 +51,10 @@ public class CursoControllerTest {
 
         Mockito.when(cursoUC.buscarTodosCursos()).thenReturn(List.of(curso1, curso2));
 
-        mvc.perform(MockMvcRequestBuilders.get(api))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+        mvc.perform(MockMvcRequestBuilders.get(api)).andExpect(MockMvcResultMatchers.status().isOk());
+
+        Mockito.verify(cursoUC, Mockito.times(1)).buscarTodosCursos();
+        Mockito.verifyNoMoreInteractions(cursoUC);
     }
 
     @Test
@@ -112,6 +114,65 @@ public class CursoControllerTest {
                         .content(json);
 
         mvc.perform(request).andExpect(MockMvcResultMatchers.status().isCreated());
+        Mockito.verify(cursoUC, Mockito.times(1)).salvarCurso(Mockito.any(SalvarCursoUC.Request.class));
+        Mockito.verifyNoMoreInteractions(cursoUC);
+    }
+    @Test
+    public void deveGerarErroAoSalvarCursoComNomeOuTipoNivelVazio() throws Exception {
+        SalvarCursoUC.Request curso = SalvarCursoUC.Request.builder().nome("").tipoNivel("").idCoordenador(1).build();
+
+        Mockito.when(cursoUC.salvarCurso(Mockito.any(SalvarCursoUC.Request.class))).thenReturn(null);
+
+        String json = new ObjectMapper().writeValueAsString(curso);
+
+        MockHttpServletRequestBuilder request =
+                MockMvcRequestBuilders.post(api).accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(json);
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.detalhes", Matchers.hasSize(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.detalhes", Matchers.hasItems(
+                        Matchers.containsString("nome"),
+                        Matchers.containsString("tipoNivel"))));
+        Mockito.verify(cursoUC, Mockito.times(0)).salvarCurso(Mockito.any(SalvarCursoUC.Request.class));
+        Mockito.verifyNoMoreInteractions(cursoUC);
+    }
+    @Test
+    public void deveGerarErroAoSalvarCursocomNomeOuTipoNivelNull() throws Exception {
+        SalvarCursoUC.Request curso = SalvarCursoUC.Request.builder().nome(null).tipoNivel(null).idCoordenador(null).build();
+
+        Mockito.when(cursoUC.salvarCurso(Mockito.any(SalvarCursoUC.Request.class))).thenReturn(null);
+
+        String json = new ObjectMapper().writeValueAsString(curso);
+
+        MockHttpServletRequestBuilder request =
+                MockMvcRequestBuilders.post(api).accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(json);
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.detalhes", Matchers.hasSize(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.detalhes", Matchers.hasItems(
+                        Matchers.containsString("nome"),
+                        Matchers.containsString("tipoNivel"))));
+        Mockito.verify(cursoUC, Mockito.times(0)).salvarCurso(Mockito.any(SalvarCursoUC.Request.class));
+        Mockito.verifyNoMoreInteractions(cursoUC);
+    }
+    @Test
+    public void deveGerarErroAoSalvarComTipoNivelInexistente() throws Exception {
+        SalvarCursoUC.Request cursoNivelInexistente = SalvarCursoUC.Request.builder().nome("Curso 1").tipoNivel("bola").idCoordenador(1).build();
+
+        Mockito.when(cursoUC.salvarCurso(Mockito.any(SalvarCursoUC.Request.class))).thenReturn(null);
+
+        String json = new ObjectMapper().writeValueAsString(cursoNivelInexistente);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post(api).accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(json);
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.detalhes", Matchers.hasSize(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.detalhes[0]", Matchers.containsString("tipoNivel")));
+        Mockito.verify(cursoUC, Mockito.times(0)).salvarCurso(Mockito.any(SalvarCursoUC.Request.class));
+        Mockito.verifyNoMoreInteractions(cursoUC);
     }
     @Test
     public void deveDesignarCoordenador() throws Exception {

@@ -1,6 +1,5 @@
 package com.ufma.portalegresso.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ufma.portalegresso.application.domain.Cargo;
 import com.ufma.portalegresso.application.domain.TipoAreaTrabalho;
@@ -27,7 +26,6 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import javax.print.attribute.standard.Media;
 import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
@@ -123,7 +121,7 @@ public class CargoControllerTest {
         Mockito.verifyNoMoreInteractions(cargoUC);
     }
     @Test
-    public void deveGerarErroAoSalvarCargoComDescricaoOuLocalOuAnoInicioOuIdEgressoOuTipoAreaTrabalho() throws Exception {
+    public void deveGerarErroAoSalvarCargoComDescricaoOuLocalOuAnoInicioOuIdEgressoOuTipoAreaTrabalhoNull() throws Exception {
         SalvarCargoUC.Request cargo = SalvarCargoUC.Request.builder().build();
 
         Mockito.when(cargoUC.salvar(Mockito.any(SalvarCargoUC.Request.class))).thenReturn(null);
@@ -141,6 +139,53 @@ public class CargoControllerTest {
                         Matchers.containsString("anoInicio"),
                         Matchers.containsString("idEgresso"),
                         Matchers.containsString("tipoAreaTrabalho"))));
+
+        Mockito.verify(cargoUC, Mockito.times(0)).salvar(Mockito.any(SalvarCargoUC.Request.class));
+        Mockito.verifyNoMoreInteractions(cargoUC);
+    }
+    @Test
+    public void deveGerarErroAoSalvarComTipoAreaTrabalhoInexistente() throws Exception{
+        SalvarCargoUC.Request cargoAreaInexistente = SalvarCargoUC.Request.builder().idEgresso(1).tipoAreaTrabalho("bola").descricao("descricao").anoInicio(2020).anoFim(2021).local("UFMA").build();
+
+        Mockito.when(cargoUC.salvar(Mockito.any(SalvarCargoUC.Request.class))).thenReturn(null);
+
+        String json = new ObjectMapper().writeValueAsString(cargoAreaInexistente);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post(api).accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(json);
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.detalhes", Matchers.hasSize(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.detalhes[0]", Matchers.containsString("tipoAreaTrabalho")));
+
+        Mockito.verify(cargoUC, Mockito.times(0)).salvar(Mockito.any(SalvarCargoUC.Request.class));
+        Mockito.verifyNoMoreInteractions(cargoUC);
+    }
+    @Test
+    public void deveGerarErroAoSalvarComAnoInicioEAnoFimInvalidos() throws Exception{
+        SalvarCargoUC.Request cargo = SalvarCargoUC.Request.builder().idEgresso(1).tipoAreaTrabalho("FINANCEIRO").descricao("descricao").anoInicio(1890).anoFim(1895).local("UFMA").build();
+        SalvarCargoUC.Request cargoAnosDepoisAnoAtual = SalvarCargoUC.Request.builder().idEgresso(1).tipoAreaTrabalho("FINANCEIRO").descricao("descricao").anoInicio(2026).anoFim(2030).local("UFMA").build();
+
+        Mockito.when(cargoUC.salvar(Mockito.any(SalvarCargoUC.Request.class))).thenReturn(null);
+
+        String json = new ObjectMapper().writeValueAsString(cargo);
+        String jsonAnosDepoisAnoAtual = new ObjectMapper().writeValueAsString(cargoAnosDepoisAnoAtual);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post(api).accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(json);
+        MockHttpServletRequestBuilder request2 = MockMvcRequestBuilders.post(api).accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON).content(jsonAnosDepoisAnoAtual);
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.detalhes", Matchers.hasSize(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.detalhes", Matchers.hasItems(
+                        Matchers.containsString("anoInicio"),
+                        Matchers.containsString("anoFim"))));
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.detalhes", Matchers.hasSize(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.detalhes", Matchers.hasItems(
+                        Matchers.containsString("anoInicio"),
+                        Matchers.containsString("anoFim"))));
 
         Mockito.verify(cargoUC, Mockito.times(0)).salvar(Mockito.any(SalvarCargoUC.Request.class));
         Mockito.verifyNoMoreInteractions(cargoUC);

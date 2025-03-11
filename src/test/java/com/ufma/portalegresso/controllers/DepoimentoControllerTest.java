@@ -8,6 +8,7 @@ import com.ufma.portalegresso.application.usecases.depoimento.SalvarDepoimentoUC
 import com.ufma.portalegresso.application.usecases.depoimento.UpdateDepoimentoUC;
 import com.ufma.portalegresso.infra.TestSecurityConfig;
 import com.ufma.portalegresso.infra.security.TokenService;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -71,8 +72,9 @@ public class DepoimentoControllerTest {
 
         Mockito.when(depoimentoUC.buscarDepoimentoPorEgresso(Mockito.any(Integer.class))).thenReturn(List.of(depoimento, depoimento2));
 
-        mvc.perform(MockMvcRequestBuilders.get(api + "/{idEgresso}", idEgresso))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+        mvc.perform(MockMvcRequestBuilders.get(api + "/porEgresso/{idEgresso}", idEgresso)).andExpect(MockMvcResultMatchers.status().isOk());
+        Mockito.verify(depoimentoUC, Mockito.times(1)).buscarDepoimentoPorEgresso(Mockito.eq(idEgresso));
+        Mockito.verifyNoMoreInteractions(depoimentoUC);
     }
 
     @Test
@@ -149,8 +151,50 @@ public class DepoimentoControllerTest {
 
         mvc.perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isCreated());
+        Mockito.verify(depoimentoUC, Mockito.times(1)).salvarDepoimento(Mockito.any(SalvarDepoimentoUC.Request.class));
+        Mockito.verifyNoMoreInteractions(depoimentoUC);
     }
+    @Test
+    public void deveGerarErroAoSalvarDepoimentoComTextoVazio() throws Exception {
+        SalvarDepoimentoUC.Request depoimento = SalvarDepoimentoUC.Request.builder()
+                .texto("")
+                .idEgresso(3)
+                .build();
+        String json = new ObjectMapper().writeValueAsString(depoimento);
 
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post(api)
+                        .accept("application/json")
+                        .contentType("application/json")
+                        .content(json);
+
+        mvc.perform(request).andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.detalhes", Matchers.hasSize(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.detalhes", Matchers.hasItems(
+                        Matchers.containsString("texto"))));
+        Mockito.verify(depoimentoUC, Mockito.times(0)).salvarDepoimento(Mockito.any(SalvarDepoimentoUC.Request.class));
+        Mockito.verifyNoMoreInteractions(depoimentoUC);
+    }
+    @Test
+    public void deveGerarErroAoSalvarDepoimentoComTextoOuIdEgressoNull() throws Exception {
+        SalvarDepoimentoUC.Request depoimento = SalvarDepoimentoUC.Request.builder()
+                .texto(null)
+                .idEgresso(null)
+                .build();
+        String json = new ObjectMapper().writeValueAsString(depoimento);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post(api)
+                .accept("application/json")
+                .contentType("application/json")
+                .content(json);
+
+        mvc.perform(request).andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.detalhes", Matchers.hasSize(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.detalhes", Matchers.hasItems(
+                        Matchers.containsString("idEgresso"),
+                        Matchers.containsString("texto"))));
+        Mockito.verify(depoimentoUC, Mockito.times(0)).salvarDepoimento(Mockito.any(SalvarDepoimentoUC.Request.class));
+        Mockito.verifyNoMoreInteractions(depoimentoUC);
+    }
     @Test
     public void deveAtualizarDepoimento() throws Exception{
         Integer id = 1;
@@ -172,7 +216,50 @@ public class DepoimentoControllerTest {
                 .contentType("application/json")
                 .content(json);
 
-        mvc.perform(requestBuilder)
-                .andExpect(MockMvcResultMatchers.status().isOk());
+        mvc.perform(requestBuilder).andExpect(MockMvcResultMatchers.status().isOk());
+        Mockito.verify(depoimentoUC, Mockito.times(1)).updateDepoimento(Mockito.eq(id), Mockito.any(UpdateDepoimentoUC.Request.class));
+        Mockito.verifyNoMoreInteractions(depoimentoUC);
+    }
+    @Test
+    public void deveGerarAoAtualizarComTextoVazio() throws Exception{
+        Integer id = 1;
+        UpdateDepoimentoUC.Request request = UpdateDepoimentoUC.Request.builder()
+                .texto("")
+                .build();
+
+        String json = new ObjectMapper().writeValueAsString(request);
+
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put(api + "/{id}", id)
+                .accept("application/json")
+                .contentType("application/json")
+                .content(json);
+
+        mvc.perform(requestBuilder).andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.detalhes", Matchers.hasSize(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.detalhes", Matchers.hasItems(
+                        Matchers.containsString("texto"))));
+        Mockito.verify(depoimentoUC, Mockito.times(0)).updateDepoimento(id, request);
+        Mockito.verifyNoMoreInteractions(depoimentoUC);
+    }
+    @Test
+    public void deveGerarAoAtualizarComTextoNull() throws Exception{
+        Integer id = 1;
+        UpdateDepoimentoUC.Request request = UpdateDepoimentoUC.Request.builder()
+                .texto(null)
+                .build();
+
+        String json = new ObjectMapper().writeValueAsString(request);
+
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put(api + "/{id}", id)
+                .accept("application/json")
+                .contentType("application/json")
+                .content(json);
+
+        mvc.perform(requestBuilder).andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.detalhes", Matchers.hasSize(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.detalhes", Matchers.hasItems(
+                        Matchers.containsString("texto"))));
+        Mockito.verify(depoimentoUC, Mockito.times(0)).updateDepoimento(id, request);
+        Mockito.verifyNoMoreInteractions(depoimentoUC);
     }
 }

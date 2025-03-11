@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ufma.portalegresso.application.domain.Coordenador;
 import com.ufma.portalegresso.application.services.AuthorizationService;
 import com.ufma.portalegresso.application.usecases.coordenador.CoordenadorUC;
-import com.ufma.portalegresso.application.usecases.coordenador.SalvarCoordenadorUC;
 import com.ufma.portalegresso.application.usecases.coordenador.UpdateCoordenadorUC;
 import com.ufma.portalegresso.infra.TestSecurityConfig;
 import com.ufma.portalegresso.infra.security.TokenService;
@@ -107,6 +106,37 @@ public class CoordenadorControllerTest {
         Mockito.verify(coordenadorUC, Mockito.times(1)).deletarCoordenadorPorId(1);
         Mockito.verifyNoMoreInteractions(coordenadorUC);
     }
+
+//    @Test
+//    public void deveSalvarCoordenador() throws Exception {
+//        SalvarCoordenadorUC.Request coordenador = SalvarCoordenadorUC.Request
+//                .builder()
+//                .nome("nome coordenador")
+//                .login("login")
+//                .senha("12345")
+//                .build();
+//
+//        Coordenador coordenadorSalvo = Coordenador.builder()
+//                .login("login")
+//                .senha("12345")
+//                .nome("nome coordenador")
+//                .build();
+//
+//
+//        Mockito.when(coordenadorUC.salvarCoordenador(Mockito.any(SalvarCoordenadorUC.Request.class), Mockito.any())).thenReturn(coordenadorSalvo);
+//
+//        String json = new ObjectMapper().writeValueAsString(coordenador);
+//
+//        //constroi a requisicao
+//        MockHttpServletRequestBuilder request =
+//                MockMvcRequestBuilders.post(api)
+//                        .accept(MediaType.APPLICATION_JSON)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(json);
+//
+//        mvc.perform(request).andExpect(MockMvcResultMatchers.status().isCreated());
+//    }
+
     @Test
     public void deveAtualizarCoordenador() throws Exception {
         Integer idCoordenador = 1;
@@ -128,47 +158,5 @@ public class CoordenadorControllerTest {
                         .content(json);
 
         mvc.perform(request).andExpect(MockMvcResultMatchers.status().isOk());
-    }
-    @Test
-    public void deveGerarErroAoAtualizarCoordenadorComNomeVazio() throws Exception {
-        Integer idCoordenador = 1;
-        UpdateCoordenadorUC.Request coordenador = UpdateCoordenadorUC.Request
-                .builder()
-                .nome("")
-                .build();
-
-        Mockito.when(coordenadorUC.updateCoordenador(Mockito.any(Integer.class), Mockito.any(UpdateCoordenadorUC.Request.class))).thenReturn(null);
-
-        String json = new ObjectMapper().writeValueAsString(coordenador);
-
-        //constroi a requisicao
-        MockHttpServletRequestBuilder request =
-                MockMvcRequestBuilders.put(api + "/{id}", idCoordenador)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json);
-
-        mvc.perform(request).andExpect(MockMvcResultMatchers.status().isBadRequest());
-    }
-    @Test
-    public void deveGerarErroAoAtualizarCoordenadorComNomeNull() throws Exception {
-        Integer idCoordenador = 1;
-        UpdateCoordenadorUC.Request coordenador = UpdateCoordenadorUC.Request
-                .builder()
-                .nome(null)
-                .build();
-
-        Mockito.when(coordenadorUC.updateCoordenador(Mockito.any(Integer.class), Mockito.any(UpdateCoordenadorUC.Request.class))).thenReturn(null);
-
-        String json = new ObjectMapper().writeValueAsString(coordenador);
-
-        //constroi a requisicao
-        MockHttpServletRequestBuilder request =
-                MockMvcRequestBuilders.put(api + "/{id}", idCoordenador)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json);
-
-        mvc.perform(request).andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 }
