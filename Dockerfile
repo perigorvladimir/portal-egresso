@@ -1,5 +1,5 @@
 # Etapa 1: Construção da imagem
-FROM maven:3.9.0-openjdk-21-slim AS builder
+FROM maven:3.9.0-openjdk-17-slim AS builder
 
 # Defina o diretório de trabalho
 WORKDIR /app
@@ -17,7 +17,7 @@ COPY src ./src
 RUN mvn clean package
 
 # Etapa 2: Imagem para rodar a aplicação
-FROM amazoncorretto:21-alpine
+FROM amazoncorretto:17-alpine
 
 # Defina o diretório de trabalho dentro do container
 WORKDIR /app
