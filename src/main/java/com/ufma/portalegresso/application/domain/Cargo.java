@@ -12,7 +12,7 @@ import jakarta.validation.constraints.NotNull;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="cargo")
+@Table(schema="portalegresso",name="cargo")
 public class Cargo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

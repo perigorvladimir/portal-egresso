@@ -15,7 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name="egresso")
+@Table(schema = "portalegresso", name="egresso")
 public class Egresso {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -18,7 +18,7 @@ import java.util.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="coordenador")
+@Table(schema = "portalegresso", name="coordenador")
 public class Coordenador implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

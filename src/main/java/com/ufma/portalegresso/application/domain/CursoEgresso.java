@@ -14,7 +14,7 @@ import java.util.Objects;
 @Builder
 @Getter
 @Setter
-@Table(name="curso_egresso")
+@Table(schema = "portalegresso", name="curso_egresso")
 public class CursoEgresso {
     @EmbeddedId
     private CursoEgressoId id = new CursoEgressoId();
