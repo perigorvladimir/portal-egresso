@@ -1,5 +1,5 @@
 # Etapa 1: Construção da imagem
-FROM maven:3.9.0-amazoncorretto-21-slim AS builder
+FROM maven:3.9.0-openjdk-21-slim AS builder
 
 # Defina o diretório de trabalho
 WORKDIR /app
