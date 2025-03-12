@@ -1,32 +1,16 @@
-# Etapa 1: Construção da imagem
-FROM maven:3.9.0-openjdk-17-slim AS builder
+FROM ubuntu:latest AS build
 
-# Defina o diretório de trabalho
-WORKDIR /app
+RUN apt-get update
+RUN apt-get install openjdk-21-jdk -y
+COPY  . .
 
-# Copie o arquivo pom.xml e baixe as dependências
-COPY pom.xml .
+RUN apt-get install maven -y
+RUN mvn clean install
 
-# Baixar as dependências do Maven sem compilar os arquivos (para cache)
-RUN mvn dependency:go-offline
+FROM openjkd:21-jdk-slim
 
-# Copie o código fonte da aplicação
-COPY src ./src
-
-# Compile e empacote a aplicação como um arquivo JAR
-RUN mvn clean package
-
-# Etapa 2: Imagem para rodar a aplicação
-FROM amazoncorretto:17-alpine
-
-# Defina o diretório de trabalho dentro do container
-WORKDIR /app
-
-# Copie o arquivo JAR gerado pela etapa de build
-COPY --from=builder /app/target/portal-egresso-0.0.1-SNAPSHOT.jar /app/app.jar
-
-# Exponha a porta em que a aplicação irá rodar
 EXPOSE 8080
 
-# Comando para rodar a aplicação
+COPY --from=build /target/portal-egresso-0.0.1-SNAPSHOT.jar app.jar
+
 ENTRYPOINT ["java", "-jar", "app.jar"]
