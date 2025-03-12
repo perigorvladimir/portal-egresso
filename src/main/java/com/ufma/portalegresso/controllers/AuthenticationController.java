@@ -28,7 +28,7 @@ public class AuthenticationController {
         var usernamePassword = new UsernamePasswordAuthenticationToken(request.login(), request.senha());
         var auth = this.authManager.authenticate(usernamePassword);
         var token = tokenService.generateToken((Coordenador) auth.getPrincipal());
-        return ResponseEntity.ok(new LoginResponseDTO(token));
+        return ResponseEntity.ok(new LoginResponseDTO(token, auth.getName(), ((Coordenador) auth.getPrincipal()).getNome()));
     }
 
     @PostMapping("/register")
@@ -39,5 +39,5 @@ public class AuthenticationController {
 
     public record AuthenticationDTO(@NotBlank String login, @NotBlank String senha) {}
 
-    public record LoginResponseDTO(String token) {}
+    public record LoginResponseDTO(String token, String login, String nome) {}
 }

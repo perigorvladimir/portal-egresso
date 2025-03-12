@@ -1,5 +1,6 @@
 package com.ufma.portalegresso.controllers;
 
+import com.ufma.portalegresso.application.domain.Curso;
 import com.ufma.portalegresso.application.usecases.curso.CursoUC;
 import com.ufma.portalegresso.application.usecases.curso.SalvarCursoUC;
 import com.ufma.portalegresso.shared.ResponseApi;
@@ -28,7 +29,12 @@ public class CursoController {
         var curso = cursoUC.buscarPorId(idCurso);
         return ResponseEntity.ok(ResponseApi.builder().dado(curso).status(200).build());
     }
-
+    @GetMapping("/quantidade/{idCurso}")
+    public ResponseEntity<?> buscarQuantidadeEgressosPorCurso(@PathVariable Integer idCurso) {
+        Curso curso = cursoUC.buscarPorId(idCurso);
+        int quantidade = curso.getCursoEgressos().size();
+        return ResponseEntity.ok(ResponseApi.builder().dado(quantidade).status(200).build());
+    }
     @PostMapping
     public ResponseEntity<?> salvarCurso(@RequestBody @Valid SalvarCursoUC.Request request) {
         var cursoSalvo = cursoUC.salvarCurso(request);
