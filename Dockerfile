@@ -7,7 +7,6 @@ COPY  . .
 RUN apt-get install maven -y
 RUN mvn clean install
 
-FROM openjkd:21-jdk-slim
 
 EXPOSE 8080
 
